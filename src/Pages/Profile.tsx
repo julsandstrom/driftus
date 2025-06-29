@@ -1,17 +1,19 @@
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 type Form = {
+  id: string | undefined;
   username: string | undefined;
   email: string | undefined;
   avatar: string | undefined;
 };
-type FormField = "username" | "email" | "avatar";
 const Profile = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState<Form>({
+    id: user?.id,
     username: user?.user,
     email: user?.email,
     avatar: user?.avatar,
@@ -20,10 +22,38 @@ const Profile = () => {
   const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setForm((prevForm) => ({ ...prevForm, [name as FormField]: value }));
+    setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
-  const handleSave = () => {};
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+    if (!token) console.log("error, missing token");
+
+    const res = await fetch(`https://chatify-api.up.railway.app/user`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        userId: form.id,
+        updatedData: {
+          username: form.username,
+          email: form.email,
+          avatar: form.avatar,
+        },
+      }),
+    });
+
+    if (res.ok) {
+      // setForm((prevForm) => ({ ...prevForm, [key]: value }));
+      alert("Update was successful");
+    } else {
+      alert("Update failed.");
+    }
+  };
 
   const handleDelete = async () => {
     const confirm = window.confirm("You sure you want to delete this account?");

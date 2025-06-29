@@ -10,7 +10,7 @@ type DecodedToken = {
   iat: number;
   exp: number;
 };
-
+//julles
 type AuthContextType = {
   user: DecodedToken | null;
   login: (token: string) => void;
@@ -22,6 +22,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<DecodedToken | null>(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
