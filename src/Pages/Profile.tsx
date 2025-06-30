@@ -1,22 +1,22 @@
 import { useAuth } from "../context/AuthContext";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type Form = {
-  id: string | undefined;
-  username: string | undefined;
-  email: string | undefined;
-  avatar: string | undefined;
+  id: string;
+  username: string;
+  email: string;
+  avatar: string;
 };
 const Profile = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState<Form>({
-    id: user?.id,
-    username: user?.user,
-    email: user?.email,
-    avatar: user?.avatar,
+    id: user?.id ?? "",
+    username: user?.user ?? "",
+    email: user?.email ?? "",
+    avatar: user?.avatar ?? "",
   });
 
   const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +40,7 @@ const Profile = () => {
       body: JSON.stringify({
         userId: form.id,
         updatedData: {
-          username: form.username,
+          user: form.username,
           email: form.email,
           avatar: form.avatar,
         },
@@ -48,7 +48,6 @@ const Profile = () => {
     });
 
     if (res.ok) {
-      // setForm((prevForm) => ({ ...prevForm, [key]: value }));
       alert("Update was successful");
     } else {
       alert("Update failed.");

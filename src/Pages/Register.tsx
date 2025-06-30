@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 type User = {
   username: string;
   email: string;
@@ -14,7 +14,7 @@ const Register = () => {
     password: "",
     avatar: "",
   });
-
+  const navigate = useNavigate();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -47,7 +47,9 @@ const Register = () => {
       if (!res.ok) {
         throw new Error(data.message || "Registration failed");
       }
-      console.log("Registration went well! I believe...");
+      if (res.ok) {
+        navigate("/login");
+      }
     } catch {
       console.log("Something went wrong");
     }
