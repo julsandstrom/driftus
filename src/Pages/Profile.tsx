@@ -1,7 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { Form, useNavigate } from "react-router-dom";
+import ProfileForm from "../components/ProfileForm";
 type Form = {
   id: string;
   username: string;
@@ -9,7 +9,7 @@ type Form = {
   avatar: string;
 };
 const Profile = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, refreshUser } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState<Form>({
@@ -48,6 +48,7 @@ const Profile = () => {
     });
 
     if (res.ok) {
+      refreshUser();
       alert("Update was successful");
     } else {
       alert("Update failed.");
@@ -80,15 +81,7 @@ const Profile = () => {
 
   return (
     <div className="p-4">
-      <form onSubmit={handleSave}>
-        <label>Username: </label>
-        <input name="username" value={form.username} onChange={handleEdit} />
-        <label>Email: </label>
-        <input name="email" value={form.email} onChange={handleEdit} />
-        <label>Avatar: </label>
-        <input name="avatar" value={form.avatar} onChange={handleEdit} />
-        <button typeof="submit">Save Changes</button>
-      </form>
+      <ProfileForm form={form} onChange={handleEdit} onSubmit={handleSave} />
       <button onClick={handleDelete}>Delete Account</button>
     </div>
   );

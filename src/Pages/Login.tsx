@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 type User = {
   username: string;
@@ -15,7 +14,6 @@ const Login = () => {
   });
 
   const { login } = useAuth();
-  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -53,7 +51,6 @@ const Login = () => {
       const token = data.token;
 
       login(token);
-      navigate("/chat");
 
       console.log(login);
       console.log("login was successfull");

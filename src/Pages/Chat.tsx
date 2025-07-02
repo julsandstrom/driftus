@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { v4 as uuidv4 } from "uuid";
+import { sanitize } from "../utils/sanitize";
+import InputField from "../components/InputField";
+// import { isSafeText } from "../utils/sanitize";
 type Message = {
   id: string;
   text: string;
@@ -54,7 +57,9 @@ const Chat = () => {
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+
+    const cleanInput = sanitize(newMessage); //from utils => sanitize.ts
+    // if (!isSafeText(cleanInput)) return;
 
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -67,7 +72,7 @@ const Chat = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        text: newMessage,
+        text: cleanInput,
         conversationId,
       }),
     });
@@ -120,8 +125,9 @@ const Chat = () => {
         <p>Start a conversation</p>
       )}
       <form onSubmit={sendMessage}>
-        <input
-          type="text"
+        <InputField
+          label={user?.user}
+          name="chat"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
         />

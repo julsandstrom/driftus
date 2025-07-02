@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { useLocation } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
+//step2
 type DecodedToken = {
   id: string;
   user: string;
@@ -16,6 +16,7 @@ type AuthContextType = {
   user: DecodedToken | null;
   login: (token: string) => void;
   logout: () => void;
+  refreshUser: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -25,57 +26,70 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
-  useEffect(() => {
+  const refreshUser = async () => {
     const storedToken = localStorage.getItem("token");
 
-    const loadUser = async () => {
-      if (["/login", "/register"].includes(location.pathname)) {
-        setLoading(false);
-        return;
-      }
-      if (storedToken) {
-        const decoded: DecodedToken = jwtDecode(storedToken);
-        const now = Date.now() / 1000;
-
-        if (decoded.exp > now) {
-          try {
-            const res = await fetch(
-              `https://chatify-api.up.railway.app/users/${decoded?.id}`,
-              {
-                method: "GET",
-                headers: {
-                  Authorization: `Bearer ${storedToken}`,
-                },
-              }
-            );
-            const [fetchedUser] = await res.json();
-
-            setUser({
-              id: fetchedUser.id.toString(),
-              user: fetchedUser.username,
-              email: fetchedUser.email,
-              avatar: fetchedUser.avatar,
-              invite: fetchedUser.invite,
-              iat: decoded.iat,
-              exp: decoded.exp,
-            });
-          } catch (err) {
-            console.log(err);
-          }
-        } else {
-          console.log("token expired");
-          localStorage.removeItem("token");
-        }
-      }
+    if (!storedToken) {
+      console.log("Missing token");
+      navigate("/login");
       setLoading(false);
-    };
-    loadUser();
-  }, []);
-  const login = (token: string) => {
-    const decoded: DecodedToken = jwtDecode(token);
+      return;
+    }
+    const decoded: DecodedToken = jwtDecode(storedToken);
+    const now = Date.now() / 1000;
+
+    if (decoded.exp <= now) {
+      console.log("Token expired");
+      localStorage.removeItem("token");
+      navigate("/login");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `https://chatify-api.up.railway.app/users/${decoded?.id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        }
+      );
+      const [fetchedUser] = await res.json();
+
+      setUser({
+        id: fetchedUser.id.toString(),
+        user: fetchedUser.username,
+        email: fetchedUser.email,
+        avatar: fetchedUser.avatar,
+        invite: fetchedUser.invite,
+        iat: decoded.iat,
+        exp: decoded.exp,
+      });
+    } catch (err) {
+      console.log(err);
+      localStorage.removeItem("token");
+      navigate("/login");
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (["/login", "/register"].includes(location.pathname)) {
+      setLoading(false);
+      return;
+    }
+
+    refreshUser().finally(() => setLoading(false));
+  }, [location.pathname]);
+
+  const login = async (token: string) => {
     localStorage.setItem("token", token);
-    setUser(decoded);
+    await refreshUser();
+    navigate("/chat");
   };
 
   const logout = () => {
@@ -84,7 +98,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
   if (loading) return null;
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
@@ -95,6 +109,3 @@ export const useAuth = () => {
   if (!context) throw new Error("useAuth must be used inside AuthProvider");
   return context;
 };
-
-//user: asd
-//password: asd
