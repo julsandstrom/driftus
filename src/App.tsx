@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "./hooks/useAuth";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
 import Chat from "./Pages/Chat";

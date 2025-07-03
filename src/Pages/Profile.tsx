@@ -1,4 +1,4 @@
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
 import { Form, useNavigate } from "react-router-dom";
 import ProfileForm from "../components/ProfileForm";

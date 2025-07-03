@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import { v4 as uuidv4 } from "uuid";
 import { sanitize } from "../utils/sanitize";
 import InputField from "../components/InputField";
-// import { isSafeText } from "../utils/sanitize";
-type Message = {
-  id: string;
-  text: string;
-  createdAt: string;
-  userId: string;
-  conversationId: string;
-};
+import { isSafeText } from "../utils/sanitize";
+import ChatList from "../components/ChatList";
+import type { Message } from "../types";
 
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -58,8 +53,8 @@ const Chat = () => {
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const cleanInput = sanitize(newMessage); //from utils => sanitize.ts
-    // if (!isSafeText(cleanInput)) return;
+    const cleanInput = sanitize(newMessage);
+    if (!isSafeText(cleanInput)) return;
 
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -109,18 +104,12 @@ const Chat = () => {
       console.log("Failed to delete message", err);
     }
   };
-  const lastMessage = messages[messages.length - 1];
+  // const lastMessage = messages[messages.length - 1];
   return (
     <div>
       <img src={`${user?.avatar}`} />
-      {lastMessage ? (
-        <p
-          key={lastMessage.id}
-          onClick={() => removeMessage(lastMessage.id)}
-          style={{ border: "1px solid green" }}
-        >
-          {lastMessage.text}
-        </p>
+      {messages ? (
+        <ChatList messages={messages} deleteMessage={removeMessage} />
       ) : (
         <p>Start a conversation</p>
       )}

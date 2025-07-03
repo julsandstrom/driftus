@@ -1,25 +1,8 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, useLocation } from "react-router-dom";
-//step2
-type DecodedToken = {
-  id: string;
-  user: string;
-  email: string;
-  avatar: string;
-  invite: null;
-  iat: number;
-  exp: number;
-};
-
-type AuthContextType = {
-  user: DecodedToken | null;
-  login: (token: string) => void;
-  logout: () => void;
-  refreshUser: () => void;
-};
-
-const AuthContext = createContext<AuthContextType | null>(null);
+import type { DecodedToken } from "../types";
+import AuthContext from "./auth-context";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<DecodedToken | null>(null);
@@ -96,16 +79,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("token");
     setUser(null);
   };
+
   if (loading) return null;
+
   return (
     <AuthContext.Provider value={{ user, login, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used inside AuthProvider");
-  return context;
 };
