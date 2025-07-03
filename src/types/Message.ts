@@ -4,5 +4,4 @@ export type Message = {
   createdAt: string;
   userId: string;
   conversationId: string;
-  messages: string[];
 };

@@ -2,17 +2,22 @@ import type { Message } from "../types";
 
 type Props = {
   messages: Message[];
-  deleteMessage: (e: string) => void;
+  removeMessage: (id: string) => void;
 };
-
-const ChatList = ({ messages, deleteMessage }: Props) => {
+const ChatList = ({ messages, removeMessage }: Props) => {
   return (
     <ul>
-      {messages.map((msg) => (
-        <li key={msg.id} onClick={() => deleteMessage(msg.id)} role="button">
-          {msg.text}
-        </li>
-      ))}
+      {messages.map((msg) => {
+        return (
+          <li
+            key={msg.id}
+            onClick={() => removeMessage(msg.id)}
+            style={{ border: "1px solid white" }}
+          >
+            {msg.text}
+          </li>
+        );
+      })}
     </ul>
   );
 };
