@@ -1,7 +1,7 @@
 import ChatList from "./ChatList";
 import InputField from "./InputField";
 import { useAuth } from "../hooks/useAuth";
-import { useChat } from "../components/useChat";
+import { useChat } from "../hooks/useChat";
 import UserContainer from "./UserContainer";
 const ChatContainer = () => {
   const { user } = useAuth();
@@ -25,7 +25,7 @@ const ChatContainer = () => {
           name="chat"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-        />{" "}
+        />
         <button type="submit">Send</button>
       </form>
     </div>

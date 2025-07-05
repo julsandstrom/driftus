@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { isSafeText } from "../utils/sanitize";
+
 import type { Message } from "../types";
 import { v4 as uuidv4 } from "uuid";
 import { sanitize } from "../utils/sanitize";
+import { ValidateWithErrors } from "../utils/validator";
+import ChatContext from "./ChatContext";
 
-export const useChat = () => {
+export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
+  const [inputError, setInputError] = useState("");
 
   const [conversationId] = useState(() => {
     const saved = localStorage.getItem("conversationId");
@@ -41,7 +44,13 @@ export const useChat = () => {
     e.preventDefault();
 
     const cleanInput = sanitize(newMessage);
-    if (!isSafeText(cleanInput)) return;
+    const errorMessage = ValidateWithErrors(cleanInput);
+
+    if (errorMessage.length > 0) {
+      setInputError(errorMessage[0]);
+      console.log("Displaying error Message");
+      return;
+    }
 
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -61,6 +70,7 @@ export const useChat = () => {
 
     try {
       setNewMessage("");
+
       await fetchMessages();
     } catch {
       const err = res.json();
@@ -93,11 +103,18 @@ export const useChat = () => {
       console.log("Failed to delete message", err);
     }
   };
-  return {
-    messages,
-    newMessage,
-    setNewMessage,
-    sendMessage,
-    removeMessage,
-  };
+  return (
+    <ChatContext.Provider
+      value={{
+        messages,
+        newMessage,
+        setNewMessage,
+        sendMessage,
+        removeMessage,
+        inputError,
+      }}
+    >
+      {children}
+    </ChatContext.Provider>
+  );
 };

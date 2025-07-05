@@ -6,6 +6,7 @@ import Login from "./Pages/Login";
 import Chat from "./Pages/Chat";
 import Profile from "./Pages/Profile";
 import ProtectedRoute from "./router/ProtectedRoute";
+import { ChatProvider } from "./context/ChatProvider";
 
 function App() {
   const { user } = useAuth();
@@ -22,7 +23,9 @@ function App() {
           <ProtectedRoute>
             <div>
               <Profile />
-              <Chat />
+              <ChatProvider>
+                <Chat />
+              </ChatProvider>
             </div>
           </ProtectedRoute>
         }
