@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ValidateField } from "../utils/registerValidator";
+import type { RegisterField } from "../utils/registerValidator";
 type User = {
   username: string;
   email: string;
@@ -14,6 +16,7 @@ const Register = () => {
     password: "",
     avatar: "",
   });
+  const [showError, setShowError] = useState<Record<string, string[]>>({});
   const navigate = useNavigate();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,6 +24,20 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const allErrors = Object.entries(form).reduce((acc, [field, value]) => {
+      const errors = ValidateField(field as RegisterField, value);
+      if (errors.length > 0) {
+        acc[field] = errors;
+      }
+      return acc;
+    }, {} as Record<string, string[]>);
+
+    if (Object.keys(allErrors).length > 0) {
+      console.log("Validation errors", allErrors);
+      setShowError(allErrors);
+      return;
+    }
 
     try {
       const csrfRes = await fetch("https://chatify-api.up.railway.app/csrf", {
@@ -54,12 +71,15 @@ const Register = () => {
       console.log("Something went wrong");
     }
   };
-
+  ///CONTAINER PRESENTER FIX
   return (
     <>
       <h1 className="text-3xl text-bold mb-10">Register User</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-2">
         <label>User </label>
+        {showError.username?.map((c, idx) => (
+          <p key={idx}>{c}</p>
+        ))}
         <input
           name="username"
           type="text"

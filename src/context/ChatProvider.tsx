@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import type { Message } from "../types";
 import { v4 as uuidv4 } from "uuid";
 import { sanitize } from "../utils/sanitize";
-import { ValidateWithErrors } from "../utils/validator";
+import { ValidateWithErrors } from "../utils/chatValidator";
 import ChatContext from "./ChatContext";
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {

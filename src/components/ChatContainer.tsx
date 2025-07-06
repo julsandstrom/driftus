@@ -16,8 +16,8 @@ const ChatContainer = () => {
 
   return (
     <div>
-      <img src={`${user?.avatar}`} />
-      <UserContainer />
+      {user?.avatar && <img src={`${user?.avatar}`} alt="avatar" />}
+      User: <UserContainer />
       <ChatList messages={messages} removeMessage={removeMessage} />
       <form onSubmit={handleSubmit}>
         <InputField

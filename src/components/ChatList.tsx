@@ -10,24 +10,18 @@ const ChatList = ({ messages, removeMessage }: Props) => {
   return (
     <div>
       {inputError && (
-        <h1
-          style={{ fontSize: "36px", border: "5px solid green", color: "red" }}
-        >
-          {inputError}
-        </h1>
+        <h1 style={{ fontSize: "16px", color: "red" }}>{inputError}</h1>
       )}
       <ul>
         {messages.map((msg) => {
           return (
-            <>
-              <li
-                key={msg.id}
-                onClick={() => removeMessage(msg.id)}
-                style={{ border: "1px solid white" }}
-              >
-                {msg.text}
-              </li>
-            </>
+            <li
+              key={msg.id}
+              onClick={() => removeMessage(msg.id)}
+              style={{ border: "1px solid white" }}
+            >
+              {msg.text}
+            </li>
           );
         })}
       </ul>
