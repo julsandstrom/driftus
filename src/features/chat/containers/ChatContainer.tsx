@@ -1,8 +1,8 @@
-import ChatList from "./ChatList";
-import InputField from "./InputField";
-import { useAuth } from "../hooks/useAuth";
+import ChatList from "../components/ChatList";
+import InputField from "../../../shared/components/InputField";
+import { useAuth } from "../../../shared/hooks/useAuth";
 import { useChat } from "../hooks/useChat";
-import UserContainer from "./UserContainer";
+import UserContainer from "../../user/containers/UserContainer";
 const ChatContainer = () => {
   const { user } = useAuth();
 

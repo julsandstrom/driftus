@@ -1,4 +1,4 @@
-import type { DecodedToken } from "../types";
+import type { DecodedToken } from "../../../shared/types";
 
 type Props = {
   user: DecodedToken;

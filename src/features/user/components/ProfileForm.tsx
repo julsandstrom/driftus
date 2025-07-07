@@ -1,4 +1,4 @@
-import InputField from "./InputField";
+import InputField from "../../../shared/components/InputField";
 type FormProps = {
   form: {
     username: string;

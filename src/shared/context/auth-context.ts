@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { DecodedToken } from "../types/DecodedToken";
+import type { DecodedToken } from "../shared/types/DecodedToken";
 
 export type AuthContextType = {
   user: DecodedToken | null;

@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
-import { useAuth } from "./hooks/useAuth";
-import Register from "./Pages/Register";
-import Login from "./Pages/Login";
-import Chat from "./Pages/Chat";
-import Profile from "./Pages/Profile";
+import { useAuth } from "./shared/hooks/useAuth";
+import Register from "./features/auth/pages/Register";
+import Login from "./features/auth/pages/Login";
+import Chat from "./features/chat/pages/Chat";
+import Profile from "./features/user/pages/Profile";
 import ProtectedRoute from "./router/ProtectedRoute";
-import { ChatProvider } from "./context/ChatProvider";
+import { ChatProvider } from "./features/chat/context/ChatProvider";
 
 function App() {
   const { user } = useAuth();

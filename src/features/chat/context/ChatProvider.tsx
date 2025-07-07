@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import type { Message } from "../types";
+import type { Message } from "../../../shared/types";
 import { v4 as uuidv4 } from "uuid";
-import { sanitize } from "../utils/sanitize";
-import { ValidateWithErrors } from "../utils/chatValidator";
+import { sanitize } from "../../../shared/utils/sanitize";
+import { ValidateWithErrors } from "../validators/chatValidator";
 import ChatContext from "./ChatContext";
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
@@ -51,6 +51,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("Displaying error Message");
       return;
     }
+    setInputError("");
 
     const token = localStorage.getItem("token");
     if (!token) return;

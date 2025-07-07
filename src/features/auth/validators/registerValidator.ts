@@ -1,4 +1,4 @@
-import type { ValidatorRule } from "./chatValidator";
+import type { ValidatorRule } from "../../chat/validators/chatValidator";
 
 export type RegisterField = "username" | "password" | "email" | "avatar";
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ValidateField } from "../utils/registerValidator";
-import type { RegisterField } from "../utils/registerValidator";
+import { ValidateField } from "../validators/registerValidator";
+import type { RegisterField } from "../validators/registerValidator";
 type User = {
   username: string;
   email: string;

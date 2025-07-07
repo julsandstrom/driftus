@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../../shared/hooks/useAuth";
 
 type User = {
   username: string;

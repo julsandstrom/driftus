@@ -1,5 +1,5 @@
-import { useAuth } from "../hooks/useAuth";
-import UserProfile from "./UserProfile";
+import { useAuth } from "../../../shared/hooks/useAuth";
+import UserProfile from "../components/UserProfile";
 
 const UserContainer = () => {
   const { user } = useAuth();

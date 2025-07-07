@@ -20,7 +20,7 @@ export const ValidatorRules: ValidatorRule[] = [
   },
   { fn: (input) => input.length < 30, error: "Max 30 characters per message" },
   {
-    fn: (input) => /<[^>]+>/.test(input),
+    fn: (input) => !/<[^>]+>/.test(input),
     error: "<> symbols are not allowed",
   },
 ];

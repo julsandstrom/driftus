@@ -1,4 +1,4 @@
-import type { Message } from "../types";
+import type { Message } from "../../../shared/types";
 import { useChat } from "../hooks/useChat";
 type Props = {
   messages: Message[];

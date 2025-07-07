@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { Message } from "../types";
+import type { Message } from "../../types";
 
 type ChatContextType = {
   messages: Message[];

@@ -1,4 +1,4 @@
-import ChatContainer from "../components/ChatContainer";
+import ChatContainer from "../containers/ChatContainer";
 
 const Chat = () => {
   // const lastMessage = messages[messages.length - 1];
