@@ -1,12 +1,14 @@
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useState } from "react";
-import { Form, useNavigate } from "react-router-dom";
+import { Form, useNavigate, Link } from "react-router-dom";
 import ProfileForm from "../components/ProfileForm";
+
 type Form = {
   id: string;
   username: string;
   email: string;
   avatar: string;
+  password: string;
 };
 const Profile = () => {
   const { user, logout, refreshUser } = useAuth();
@@ -17,6 +19,7 @@ const Profile = () => {
     username: user?.user ?? "",
     email: user?.email ?? "",
     avatar: user?.avatar ?? "",
+    password: user?.password ?? "",
   });
 
   const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +46,7 @@ const Profile = () => {
           user: form.username,
           email: form.email,
           avatar: form.avatar,
+          password: form.password,
         },
       }),
     });
@@ -81,7 +85,15 @@ const Profile = () => {
 
   return (
     <div className="p-4">
-      <ProfileForm form={form} onChange={handleEdit} onSubmit={handleSave} />
+      <ProfileForm
+        form={form}
+        onChange={handleEdit}
+        onSubmit={handleSave}
+        fieldsToRender={["username", "email", "avatar", "password"]}
+      />
+      <Link to="/chat">
+        <span>Chat</span>
+      </Link>
       <button onClick={handleDelete}>Delete Account</button>
     </div>
   );

@@ -1,38 +1,43 @@
 import InputField from "../../../shared/components/InputField";
+import { fieldConfig } from "../../auth/constants/registerFieldConfig";
+
 type FormProps = {
   form: {
     username: string;
     email: string;
+    password: string;
     avatar: string;
   };
+  fieldsToRender: (typeof fieldConfig)[number]["name"][];
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
 };
 
-const ProfileForm = ({ form, onChange, onSubmit }: FormProps) => {
+const ProfileForm = ({
+  form,
+  onChange,
+  onSubmit,
+  fieldsToRender,
+}: FormProps) => {
   return (
     <div className="p-4">
       <form onSubmit={onSubmit}>
-        <InputField
-          label="username"
-          name="username"
-          value={form.username}
-          onChange={onChange}
-        />
-        <InputField
-          label="email"
-          name="email"
-          value={form.email}
-          onChange={onChange}
-        />
-        <InputField
-          label="avatar"
-          name="avatar"
-          value={form.avatar}
-          onChange={onChange}
-        />
+        {fieldConfig
+          .filter((field) => fieldsToRender.includes(field.name))
+          .map((field) => (
+            <InputField
+              key={field.name}
+              label={field.name}
+              name={field.name}
+              placeholder={field.placeholder}
+              value={form[field.name]}
+              onChange={onChange}
+              icon={field.icon}
+              autoComplete={field.autoComplete}
+            />
+          ))}
 
-        <button typeof="submit">Save Changes</button>
+        <button type="submit">Save Changes</button>
       </form>
     </div>
   );

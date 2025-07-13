@@ -3,6 +3,7 @@ import InputField from "../../../shared/components/InputField";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useChat } from "../hooks/useChat";
 import UserContainer from "../../user/containers/UserContainer";
+import SideNav from "../../../shared/components/sideNav";
 const ChatContainer = () => {
   const { user } = useAuth();
 
@@ -15,7 +16,8 @@ const ChatContainer = () => {
   };
 
   return (
-    <div>
+    <>
+      <SideNav />
       {user?.avatar && <img src={`${user?.avatar}`} alt="avatar" />}
       User: <UserContainer />
       <ChatList messages={messages} removeMessage={removeMessage} />
@@ -28,7 +30,7 @@ const ChatContainer = () => {
         />
         <button type="submit">Send</button>
       </form>
-    </div>
+    </>
   );
 };
 

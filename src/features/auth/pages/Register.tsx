@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ValidateField } from "../validators/registerValidator";
 import type { RegisterField } from "../validators/registerValidator";
+import InputField from "../../../shared/components/InputField";
+import { fieldConfig } from "../constants/registerFieldConfig";
+
 type User = {
   username: string;
   email: string;
@@ -71,51 +74,25 @@ const Register = () => {
       console.log("Something went wrong");
     }
   };
-  ///CONTAINER PRESENTER FIX
+
   return (
     <>
-      <h1 className="text-3xl text-bold mb-10">Register User</h1>
+      <h1 className="text-3xl text-bold mb-10">Register User</h1>{" "}
       <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-        <label>User </label>
-        {showError.username?.map((c, idx) => (
-          <p key={idx}>{c}</p>
+        {fieldConfig.map((field) => (
+          <InputField
+            key={field.name}
+            label={field.label}
+            name={field.name}
+            type={field.type}
+            placeholder={field.placeholder}
+            value={form[field.name]}
+            onChange={handleChange}
+            errorMessages={showError[field.name]?.[0]}
+            icon={field.icon}
+            autoComplete={field.autoComplete}
+          />
         ))}
-        <input
-          name="username"
-          type="text"
-          placeholder="Username"
-          onChange={handleChange}
-          required
-          className="w-300 p-2 border"
-        />
-
-        <label>Email</label>
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-          className="w-300 p-2 border"
-        />
-        <label>Password</label>
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-          className="w-300 p-2 border"
-        />
-
-        <label>Avatar</label>
-        <input
-          name="avatar"
-          placeholder="Avatar URL(optional)"
-          onChange={handleChange}
-          className="w-300 p-2 border"
-        />
-
         <button
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 mt-10 w-80 mb-20"
