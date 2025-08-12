@@ -6,4 +6,5 @@ export type DecodedToken = {
   invite: null;
   iat: number;
   exp: number;
+  password: string;
 };

@@ -1,17 +1,4 @@
-// const notEmpty = (str: string) => str.trim().length > 0; //trim to remove white spaces when counting?
-// const maxLength = (max: number) => (str: string) => str.length < max; //why not trim()
-// const noHtmlTags = (str: string) => !/<[^>]+>/.test(str);
-// const pipeValidator =
-//   (...fns: Validator[]) =>
-//   (input: string): boolean =>
-//     fns.every((fn) => fn(input));
-
-// export const validator = pipeValidator(notEmpty, maxLength(3), noHtmlTags);
-
-export type ValidatorRule = {
-  fn: (input: string) => boolean;
-  error: string;
-};
+import type { ValidatorRule } from "../../../shared/types/ValidatorRule";
 
 export const ValidatorRules: ValidatorRule[] = [
   {

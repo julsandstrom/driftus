@@ -1,5 +1,4 @@
 const trim = (b: string) => b.trim();
-// const stripTags = (b: string) => b.replace(/<[^>]+>/g, "");
 
 const pipe =
   (...fns: ((arg: string) => string)[]) =>
