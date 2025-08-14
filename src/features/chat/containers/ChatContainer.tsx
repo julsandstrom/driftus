@@ -1,18 +1,17 @@
 import ChatList from "../components/ChatList";
 import InputField from "../../../shared/components/InputField";
-// import { useAuth } from "../../../shared/hooks/useAuth";
+
 import { useChat } from "../hooks/useChat";
 import UserContainer from "../../user/containers/UserContainer";
 import SideNav from "../../../shared/components/sideNav";
 import { BarChart3, UserCircle } from "lucide-react";
 import { SidebarItem } from "../../../shared/components/sideNav";
-import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "../../../shared/hooks/useAuth";
 const ChatContainer = () => {
-  // const { user } = useAuth();
-  const navigate = useNavigate();
   const { messages, newMessage, setNewMessage, sendMessage, removeMessage } =
     useChat();
+
+  const { logout } = useAuth();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,14 +25,20 @@ const ChatContainer = () => {
           <SidebarItem
             icon={<BarChart3 size={20} />}
             text="Profile"
-            onClick={() => navigate("/profile")}
+            to="/profile"
+            end
           />{" "}
           <SidebarItem
             icon={<UserCircle size={20} />}
             text="Chat"
-            onClick={() => navigate("/chat")}
+            to="/chat"
+            end
           />
-          <SidebarItem icon={<UserCircle size={20} />} text="Log Out" />
+          <SidebarItem
+            icon={<UserCircle size={20} />}
+            text="Log Out"
+            onClick={logout}
+          />
         </SideNav>
 
         <main className="flex-1 overflow-y-auto p-4">

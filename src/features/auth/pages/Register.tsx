@@ -100,6 +100,13 @@ const Register = () => {
           Submit
         </button>
       </form>
+      <br />
+      <div className="flex justify-center space-x-3 ">
+        <h2 className="m-0 p-0">Already have an account?</h2>
+        <button className="m-0 p-1 " onClick={() => navigate("/login")}>
+          Login
+        </button>
+      </div>
     </>
   );
 };

@@ -51,6 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         invite: fetchedUser.invite,
         iat: decoded.iat,
         exp: decoded.exp,
+        password: decoded.password,
       });
     } catch (err) {
       console.log(err);
@@ -72,18 +73,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = async (token: string) => {
     localStorage.setItem("token", token);
     await refreshUser();
-    navigate("/chat");
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    console.log("Deleting token");
     setUser(null);
   };
 
   if (loading) return null;
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, refreshUser }}>
+    <AuthContext.Provider value={{ user, login, logout, refreshUser, loading }}>
       {children}
     </AuthContext.Provider>
   );

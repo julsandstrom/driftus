@@ -1,6 +1,7 @@
 import { ChevronFirst, ChevronLast } from "lucide-react";
 import { useContext, useState } from "react";
 import { createContext } from "react";
+import { NavLink } from "react-router-dom";
 
 type SidebarContext = {
   expanded: boolean;
@@ -58,38 +59,38 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
 export function SidebarItem({
   icon,
   text,
-  active,
-  alert,
+  to,
   onClick,
+  alert,
+  end,
 }: {
   icon: React.ReactNode;
   text: string;
-  active?: boolean;
-  alert?: boolean;
+  to?: string;
   onClick?: () => void;
+
+  alert?: boolean;
+  end?: boolean;
 }) {
   const ctx = useContext(SidebarContext);
   if (!ctx) throw new Error("SidebarItem must be used within <SideNav />");
   const { expanded } = ctx;
 
-  return (
-    <li
-      className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
-        active
-          ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-          : "hover:bg-indigo-50 text-gray-100"
-      }`}
-      onClick={onClick}
-    >
-      {icon}
+  const base = `relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group`;
+  const active =
+    "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800";
+  const inactive = "hover:bg-indigo-50 text-gray-100";
 
+  const inner = (
+    <>
+      {icon}{" "}
       <span
         className={`overflow-hidden transition-all ${
           expanded ? "w-52 ml-3" : "w-0"
         }`}
       >
         {text}
-      </span>
+      </span>{" "}
       {alert && (
         <div
           className={`absolute right-2 top-2 w-2 h-2 rounded bg-indigo-400`}
@@ -106,6 +107,34 @@ export function SidebarItem({
           {text}
         </div>
       )}
+    </>
+  );
+
+  if (to) {
+    return (
+      <li>
+        <NavLink
+          to={to}
+          end={end}
+          className={({ isActive }) =>
+            `${base} ${isActive ? active : inactive}`
+          }
+        >
+          {inner}
+        </NavLink>
+      </li>
+    );
+  }
+
+  return (
+    <li>
+      <button
+        type="button"
+        onClick={onClick}
+        className={`${base} ${inactive} w-full text-left`}
+      >
+        {inner}
+      </button>
     </li>
   );
 }

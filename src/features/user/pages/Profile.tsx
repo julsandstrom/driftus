@@ -1,6 +1,6 @@
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useState } from "react";
-import { Form, useNavigate, Link } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import SideNav from "../../../shared/components/sideNav";
 import { BarChart3, UserCircle } from "lucide-react";
 import { SidebarItem } from "../../../shared/components/sideNav";
@@ -79,9 +79,9 @@ const Profile = () => {
 
     if (res.ok) {
       refreshUser();
-      alert("Update was successful");
+      console.log("Update was successful");
     } else {
-      alert("Update failed.");
+      console.log("Update failed.");
     }
   };
 
@@ -116,14 +116,20 @@ const Profile = () => {
         <SidebarItem
           icon={<BarChart3 size={20} />}
           text="Profile"
-          onClick={() => navigate("/profile")}
+          to="/profile"
+          end
         />{" "}
         <SidebarItem
           icon={<UserCircle size={20} />}
           text="Chat"
-          onClick={() => navigate("/chat")}
+          to="/chat"
+          end
         />
-        <SidebarItem icon={<UserCircle size={20} />} text="Log Out" />
+        <SidebarItem
+          icon={<UserCircle size={20} />}
+          text="Log Out"
+          onClick={logout}
+        />
       </SideNav>
       <div className="p-4">
         <form onSubmit={handleSubmit}>

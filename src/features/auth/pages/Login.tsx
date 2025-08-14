@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../../shared/hooks/useAuth";
 
 type User = {
@@ -7,13 +7,19 @@ type User = {
   password: string;
 };
 
+type FromState = { from?: { pathname: string } };
+
 const Login = () => {
   const [form, setForm] = useState<User>({
     username: "",
     password: "",
   });
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const { login } = useAuth();
+
+  const from = (location.state as FromState)?.from?.pathname ?? "/chat";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -28,6 +34,7 @@ const Login = () => {
         credentials: "include",
       });
 
+      if (!csrfRes.ok) throw new Error("Failed to get CSRF token");
       const csrfData = await csrfRes.json();
 
       const res = await fetch("https://chatify-api.up.railway.app/auth/token", {
@@ -42,17 +49,16 @@ const Login = () => {
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
 
-      if (!res.ok) {
-        throw new Error(data.message || "Something went wrong");
-      }
+      if (!res.ok) throw new Error(data?.message ?? `HTTP ${res.status}`);
 
       const token = data.token;
 
-      login(token);
+      await login(token);
 
-      console.log(login);
+      navigate(from, { replace: true });
+
       console.log("login was successfull");
     } catch {
       console.log("Login failed!");
@@ -66,7 +72,7 @@ const Login = () => {
           name="username"
           type="text"
           required
-          className="w-300 p-2 border"
+          className="w-[300px] p-2 border"
           onChange={handleChange}
         />
 
@@ -80,6 +86,13 @@ const Login = () => {
         />
         <button type="submit">Login</button>
       </form>
+      <br />
+      <div className="flex justify-center space-x-3 ">
+        <h2 className="m-0 p-0">Create a new account</h2>
+        <button className="m-0 p-1 " onClick={() => navigate("/register")}>
+          Register
+        </button>
+      </div>
     </div>
   );
 };
