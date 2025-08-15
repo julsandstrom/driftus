@@ -16,7 +16,7 @@ const ChatList = ({ messages, removeMessage }: Props) => {
         {messages.map((msg) => {
           return (
             <li
-              key={msg.id}
+              key={`${msg.conversationId}:${msg.id}`}
               onClick={() => removeMessage(msg.id)}
               style={{ border: "1px solid white" }}
             >

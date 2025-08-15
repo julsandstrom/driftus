@@ -51,7 +51,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         invite: fetchedUser.invite,
         iat: decoded.iat,
         exp: decoded.exp,
-        password: decoded.password,
       });
     } catch (err) {
       console.log(err);

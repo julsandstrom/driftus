@@ -2,6 +2,8 @@ import { ChevronFirst, ChevronLast } from "lucide-react";
 import { useContext, useState } from "react";
 import { createContext } from "react";
 import { NavLink } from "react-router-dom";
+import { useConversations } from "../context/ConversationsContext";
+import ConversationItem from "./ConversationItem";
 
 type SidebarContext = {
   expanded: boolean;
@@ -12,6 +14,13 @@ type SidebarContext = {
 const SidebarContext = createContext<SidebarContext | null>(null);
 
 export default function SideNav({ children }: { children: React.ReactNode }) {
+  const {
+    conversations,
+    activeId,
+    setActiveId,
+    createConversation,
+    deleteConversation,
+  } = useConversations();
   const [expanded, setExpanded] = useState(true);
   const [activeKey, setActiveKey] = useState<string | null>(null);
 
@@ -25,6 +34,22 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
       `}
     >
       <nav className="h-full flex flex-col">
+        <button
+          onClick={() => createConversation()}
+          className="w-full text-left"
+        >
+          ➕ Ny konversation
+        </button>
+
+        {conversations.map((c) => (
+          <ConversationItem
+            key={c.id}
+            conv={c}
+            isActive={activeId === c.id}
+            setActiveId={setActiveId}
+            onDelete={deleteConversation}
+          />
+        ))}
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src="https://i.pravatar.cc/200"

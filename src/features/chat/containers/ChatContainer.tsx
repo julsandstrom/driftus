@@ -7,9 +7,12 @@ import SideNav from "../../../shared/components/sideNav";
 import { BarChart3, UserCircle } from "lucide-react";
 import { SidebarItem } from "../../../shared/components/sideNav";
 import { useAuth } from "../../../shared/hooks/useAuth";
+import { useConversations } from "../../../shared/context/ConversationsContext";
 const ChatContainer = () => {
   const { messages, newMessage, setNewMessage, sendMessage, removeMessage } =
     useChat();
+
+  const { conversations } = useConversations();
 
   const { logout } = useAuth();
 
@@ -47,15 +50,17 @@ const ChatContainer = () => {
           </div>
 
           <ChatList messages={messages} removeMessage={removeMessage} />
-          <form onSubmit={handleSubmit} className="flex justify-center">
-            <InputField
-              name="chat"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Try writing something"
-            />
-            <button type="submit">Send</button>
-          </form>
+          {conversations.length > 0 && (
+            <form onSubmit={handleSubmit} className="flex justify-center">
+              <InputField
+                name="chat"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Try writing something"
+              />
+              <button type="submit">Send</button>
+            </form>
+          )}
         </main>
       </div>
     </>

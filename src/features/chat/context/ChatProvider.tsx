@@ -1,106 +1,73 @@
 import React, { useEffect, useState } from "react";
 
 import type { Message } from "../../../shared/types";
-import { v4 as uuidv4 } from "uuid";
+
 import { sanitize } from "../../../shared/utils/sanitize";
 import { ValidateWithErrors } from "../validators/chatValidator";
 import ChatContext from "./ChatContext";
+import { useConversations } from "../../../shared/context/ConversationsContext";
+import {
+  getMessages,
+  createMessage,
+  deleteMessage,
+} from "../../../shared/api/chatify";
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [inputError, setInputError] = useState("");
-
-  const [conversationId] = useState(() => {
-    const saved = localStorage.getItem("conversationId");
-    const newId = saved || uuidv4();
-    if (!saved) localStorage.setItem("conversationId", newId);
-
-    return newId;
-  });
+  const { activeId } = useConversations();
 
   const fetchMessages = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const res = await fetch(
-      `https://chatify-api.up.railway.app/messages?conversationId=${conversationId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    const data = await res.json();
-    console.log("Fetched messages raw response:", data);
-    setMessages(data);
+    if (!activeId) return;
+    try {
+      const data = await getMessages(activeId);
+      setMessages(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.log("Failed to load messages", err);
+      setMessages([]);
+    }
   };
 
   useEffect(() => {
     fetchMessages();
-  }, []);
+  }, [activeId]);
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!activeId) {
+      alert("no active id");
+      return;
+    }
+    alert(activeId);
 
     const cleanInput = sanitize(newMessage);
     const errorMessage = ValidateWithErrors(cleanInput);
 
     if (errorMessage.length > 0) {
       setInputError(errorMessage[0]);
-      console.log("Displaying error Message");
       return;
     }
+
     setInputError("");
 
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const res = await fetch("https://chatify-api.up.railway.app/messages", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-type": "Application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        text: cleanInput,
-        conversationId,
-      }),
-    });
-
     try {
+      const sent = await createMessage(cleanInput, activeId);
       setNewMessage("");
+      setMessages((prev) => [...prev, sent]);
 
-      await fetchMessages();
-    } catch {
-      const err = res.json();
+      console.log("message sent", sent.text);
+    } catch (err) {
       console.log("failed to send", err);
-    } finally {
-      console.log("message sent and refetched!");
     }
   };
 
   const removeMessage = async (id: string) => {
-    console.log("removeMessage called with ID:", id);
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const res = await fetch(
-      `https://chatify-api.up.railway.app/messages/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (res.ok) {
-      setMessages((prevMessages) =>
-        prevMessages.filter((msg) => msg.id !== id)
-      );
-    } else {
-      const err = await res.json();
+    try {
+      await deleteMessage(id);
+      setMessages((prev) => prev.filter((m) => String(m.id) !== String(id)));
+    } catch (err) {
       console.log("Failed to delete message", err);
     }
   };
