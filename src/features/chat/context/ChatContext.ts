@@ -8,6 +8,8 @@ type ChatContextType = {
   inputError: string;
   sendMessage: (e: React.FormEvent) => void;
   removeMessage: (id: string) => void;
+  fetchMessages: () => void;
+  peerName: string;
 };
 
 const ChatContext = createContext<ChatContextType | null>(null);

@@ -1,11 +1,18 @@
+import { useConversations } from "../../../shared/context/ConversationsContext";
 import type { Message } from "../../../shared/types";
+import { useAuth } from "../../../shared/hooks/useAuth";
 import { useChat } from "../hooks/useChat";
 type Props = {
   messages: Message[];
   removeMessage: (id: string) => void;
 };
 const ChatList = ({ messages, removeMessage }: Props) => {
-  const { inputError } = useChat();
+  const { inputError, fetchMessages } = useChat();
+
+  const { activeId } = useConversations();
+  const { user } = useAuth();
+
+  if (!activeId) return null;
 
   return (
     <div>
@@ -14,17 +21,28 @@ const ChatList = ({ messages, removeMessage }: Props) => {
       )}
       <ul>
         {messages.map((msg) => {
+          const mine = String(msg.userId) === String(user?.id);
+
           return (
             <li
               key={`${msg.conversationId}:${msg.id}`}
-              onClick={() => removeMessage(msg.id)}
               style={{ border: "1px solid white" }}
             >
-              {msg.text}
+              <span> {msg.text}</span>{" "}
+              {mine && (
+                <button
+                  type="button"
+                  onClick={() => removeMessage(msg.id)}
+                  className="ml-2 opacity-70 hover:opacity-100"
+                >
+                  🗑️
+                </button>
+              )}
             </li>
           );
         })}
       </ul>
+      <button onClick={fetchMessages}>Load Messages</button>
     </div>
   );
 };

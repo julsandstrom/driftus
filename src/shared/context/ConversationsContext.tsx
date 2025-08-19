@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 export type Conversation = { id: string; title: string };
 
@@ -14,6 +8,8 @@ type Ctx = {
   setActiveId: (id: string) => void;
   createConversation: (title?: string) => Conversation;
   deleteConversation: (id: string) => void;
+  ensureConversation: (id: string, title: string) => void;
+
   setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
 };
 
@@ -46,7 +42,7 @@ export function ConversationsProvider({
     if (!activeId && conversations.length > 0) setActiveId(conversations[0].id);
   }, [activeId, conversations]);
 
-  function createConversation(title = "Ny konversation") {
+  function createConversation(title = "Conversation") {
     const id = crypto.randomUUID();
     const conv = { id, title };
     setConversations((cs) => [conv, ...cs]);
@@ -55,24 +51,34 @@ export function ConversationsProvider({
   }
 
   function deleteConversation(id: string) {
+    console.log("Deleting conv", id);
+
     setConversations((prev) => {
       const updatedConv = prev.filter((s) => s.id !== id);
+
       setActiveId((curr) => (curr === id ? updatedConv[0]?.id ?? "" : curr));
       return updatedConv;
     });
   }
 
-  const value = useMemo(
-    () => ({
-      conversations,
-      activeId,
-      setActiveId,
-      createConversation,
-      setConversations,
-      deleteConversation,
-    }),
-    [conversations, activeId]
-  );
+  function ensureConversation(id: string, title = "Shared Conversation") {
+    setConversations((prev) => {
+      if (prev.some((c) => c.id === id)) return prev;
+      return [{ id, title }, ...prev];
+    });
+    setActiveId(id);
+  }
+
+  const value = {
+    conversations,
+    activeId,
+    setActiveId,
+
+    createConversation,
+    setConversations,
+    deleteConversation,
+    ensureConversation,
+  };
 
   return (
     <ConversationsContext.Provider value={value}>

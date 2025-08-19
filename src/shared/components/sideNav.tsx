@@ -4,7 +4,7 @@ import { createContext } from "react";
 import { NavLink } from "react-router-dom";
 import { useConversations } from "../context/ConversationsContext";
 import ConversationItem from "./ConversationItem";
-
+import UserContainer from "../../features/user/containers/UserContainer";
 type SidebarContext = {
   expanded: boolean;
   toggle: () => void;
@@ -20,9 +20,19 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
     setActiveId,
     createConversation,
     deleteConversation,
+    ensureConversation,
   } = useConversations();
   const [expanded, setExpanded] = useState(true);
   const [activeKey, setActiveKey] = useState<string | null>(null);
+
+  const joinById = () => {
+    const id = prompt("Klistra in conversationId (GUID):")?.trim();
+    if (!id) return;
+
+    if (!(id.length === 36 && id.split("-").length === 5))
+      return alert("Ogiltigt ID");
+    ensureConversation(id, "Delad konvo");
+  };
 
   return (
     <aside
@@ -38,9 +48,11 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
           onClick={() => createConversation()}
           className="w-full text-left"
         >
-          ➕ Ny konversation
+          ➕ New Conversation
         </button>
-
+        <button onClick={() => joinById()} className="w-full text-left">
+          Join By ID
+        </button>
         {conversations.map((c) => (
           <ConversationItem
             key={c.id}
@@ -57,7 +69,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
               expanded ? "w-32" : "w-0"
             }`}
             alt=""
-          />
+          />{" "}
           <button
             onClick={() => setExpanded((c) => !c)}
             className="p-1.5 rounded-lg hover:bg-gray-600"
@@ -65,6 +77,10 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
+        <span>
+          {" "}
+          <UserContainer />
+        </span>
 
         <SidebarContext.Provider
           value={{

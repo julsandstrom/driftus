@@ -13,9 +13,10 @@ type CreateMessageRes = {
   latestMessage: ApiMessage;
 };
 
-function authHeader() {
+function authHeader(): Record<string, string> {
   const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  if (!token) return {};
+  return { Authorization: `Bearer ${token}` };
 }
 
 async function ensureCsrf() {
@@ -23,10 +24,11 @@ async function ensureCsrf() {
 }
 
 export async function getMessages(conversationId: string) {
+  await ensureCsrf();
   const res = await fetch(
     `${BASE}/messages?conversationId=${encodeURIComponent(conversationId)}`,
     {
-      headers: { ...authHeader() },
+      headers: authHeader(),
       credentials: "include",
     }
   );
@@ -62,4 +64,15 @@ export async function deleteMessage(id: number | string) {
     credentials: "include",
   });
   if (!res.ok) throw new Error("Message could not be deleted.");
+}
+
+export async function getUserById(id: string) {
+  const res = await fetch(`https://chatify-api.up.railway.app/users/${id}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Failed to load user");
+  const data = await res.json();
+  return Array.isArray(data) ? data[0] : data;
 }

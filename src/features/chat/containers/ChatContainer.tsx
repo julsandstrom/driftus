@@ -2,15 +2,22 @@ import ChatList from "../components/ChatList";
 import InputField from "../../../shared/components/InputField";
 
 import { useChat } from "../hooks/useChat";
-import UserContainer from "../../user/containers/UserContainer";
+
 import SideNav from "../../../shared/components/sideNav";
 import { BarChart3, UserCircle } from "lucide-react";
 import { SidebarItem } from "../../../shared/components/sideNav";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useConversations } from "../../../shared/context/ConversationsContext";
+
 const ChatContainer = () => {
-  const { messages, newMessage, setNewMessage, sendMessage, removeMessage } =
-    useChat();
+  const {
+    messages,
+    newMessage,
+    setNewMessage,
+    sendMessage,
+    removeMessage,
+    peerName,
+  } = useChat();
 
   const { conversations } = useConversations();
 
@@ -45,9 +52,9 @@ const ChatContainer = () => {
         </SideNav>
 
         <main className="flex-1 overflow-y-auto p-4">
-          <div className="mb-4 flex">
-            <UserContainer />
-          </div>
+          {peerName && (
+            <div className="mb-4 flex">Conversation with: {peerName}</div>
+          )}
 
           <ChatList messages={messages} removeMessage={removeMessage} />
           {conversations.length > 0 && (
@@ -59,6 +66,7 @@ const ChatContainer = () => {
                 placeholder="Try writing something"
               />
               <button type="submit">Send</button>
+              <span></span>
             </form>
           )}
         </main>
