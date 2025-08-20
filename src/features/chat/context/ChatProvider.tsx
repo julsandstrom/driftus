@@ -78,7 +78,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       const list = Array.isArray(data) ? data : [];
       updatePeerName(list);
       setMessages(list);
-      showFlash("success", "Loaded messages!", 2000);
+      if (list.length >= 1) {
+        showFlash("success", "Loaded messages!", 2000);
+      }
     } catch (err) {
       console.log("Failed to load messages", err);
       showFlash("error", "Failed to load messages", 2000);
@@ -160,6 +162,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         peerName,
         flashKind,
         flashText,
+        showFlash,
       }}
     >
       {children}

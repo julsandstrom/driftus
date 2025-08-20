@@ -88,7 +88,9 @@ const ChatContainer = () => {
                 <button type="submit">Send</button>
                 <span></span>
               </form>
-              <button onClick={fetchMessages}>Load Messages</button>
+              {messages.length >= 1 && (
+                <button onClick={fetchMessages}>Load Messages</button>
+              )}
             </>
           )}
         </main>

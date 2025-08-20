@@ -14,6 +14,7 @@ type ChatContextType = {
   peerName: string;
   flashKind: FlashKind;
   flashText: string | null;
+  showFlash: (kind: FlashKind, text: string) => void;
 };
 
 const ChatContext = createContext<ChatContextType | null>(null);

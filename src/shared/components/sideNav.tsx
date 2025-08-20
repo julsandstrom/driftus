@@ -66,7 +66,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
                 onDelete={deleteConversation}
                 expanded={expanded}
               />
-            ))}
+            ))}{" "}
             <div className="p-4 pb-2 flex justify-between items-center">
               <img
                 src="https://i.pravatar.cc/200"
@@ -86,7 +86,6 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
               {" "}
               <UserContainer />
             </span>
-
             <SidebarContext.Provider
               value={{
                 expanded,
@@ -97,7 +96,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
             >
               <ul className="flex-1 px-3">{children}</ul>
             </SidebarContext.Provider>
-          </nav>
+          </nav>{" "}
         </aside>
       ) : (
         <button

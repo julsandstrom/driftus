@@ -40,7 +40,7 @@ function ConversationItem({
             <div className="flex">
               <button
                 onClick={select}
-                className={`w-full text-left ${isActive ? "bg-gray-700" : ""}`}
+                className={`w-full text-left ${isActive ? "bg-green-700" : ""}`}
                 title={conv.id}
               >
                 {conv.title}

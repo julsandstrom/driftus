@@ -26,6 +26,7 @@ const Profile = () => {
   const [showError, setShowError] = useState<
     Partial<Record<RegisterField, string[]>>
   >({});
+  const [showSuccessMsg, setShowSuccessMsg] = useState(false);
 
   const [form, setForm] = useState<Form>({
     id: user?.id ?? "",
@@ -79,8 +80,10 @@ const Profile = () => {
 
     if (res.ok) {
       refreshUser();
+      setShowSuccessMsg(true);
       console.log("Update was successful");
     } else {
+      setShowSuccessMsg(false);
       console.log("Update failed.");
     }
   };
@@ -144,7 +147,9 @@ const Profile = () => {
 
           <button type="submit">Save Changes</button>
         </form>
-        <button onClick={handleDelete}>Delete Account</button>{" "}
+        <button onClick={handleDelete}>Delete Account</button> <br />
+        <br />
+        {showSuccessMsg && <span>User setting saved successfully.</span>}
       </div>
     </div>
   );
