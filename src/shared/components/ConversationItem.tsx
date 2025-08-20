@@ -8,7 +8,6 @@ type Props = {
   setActiveId: (id: string) => void;
   onDelete?: (id: string) => void;
   expanded: boolean;
-  isShared: boolean;
 };
 
 function ConversationItem({
