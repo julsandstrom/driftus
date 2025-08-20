@@ -7,7 +7,7 @@ type Props = {
   removeMessage: (id: string) => void;
 };
 const ChatList = ({ messages, removeMessage }: Props) => {
-  const { inputError, fetchMessages } = useChat();
+  const { inputError } = useChat();
 
   const { activeId } = useConversations();
   const { user } = useAuth();
@@ -15,7 +15,7 @@ const ChatList = ({ messages, removeMessage }: Props) => {
   if (!activeId) return null;
 
   return (
-    <div>
+    <div className="flex-col">
       {inputError && (
         <h1 style={{ fontSize: "16px", color: "red" }}>{inputError}</h1>
       )}
@@ -24,10 +24,7 @@ const ChatList = ({ messages, removeMessage }: Props) => {
           const mine = String(msg.userId) === String(user?.id);
 
           return (
-            <li
-              key={`${msg.conversationId}:${msg.id}`}
-              style={{ border: "1px solid white" }}
-            >
+            <li key={`${msg.conversationId}:${msg.id}`}>
               <span> {msg.text}</span>{" "}
               {mine && (
                 <button
@@ -42,7 +39,6 @@ const ChatList = ({ messages, removeMessage }: Props) => {
           );
         })}
       </ul>
-      <button onClick={fetchMessages}>Load Messages</button>
     </div>
   );
 };

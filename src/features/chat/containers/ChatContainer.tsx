@@ -8,6 +8,10 @@ import { BarChart3, UserCircle } from "lucide-react";
 import { SidebarItem } from "../../../shared/components/sideNav";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useConversations } from "../../../shared/context/ConversationsContext";
+import { StatusBar } from "../components/StatusBar";
+
+import type { Message } from "../../../shared/types";
+import { useMemo } from "react";
 
 const ChatContainer = () => {
   const {
@@ -17,6 +21,9 @@ const ChatContainer = () => {
     sendMessage,
     removeMessage,
     peerName,
+    flashKind,
+    flashText,
+    fetchMessages,
   } = useChat();
 
   const { conversations } = useConversations();
@@ -27,6 +34,24 @@ const ChatContainer = () => {
     e.preventDefault();
     sendMessage(e);
   };
+
+  function latestPerUser(msgs: Message[]): Message[] {
+    const seen = new Set<string>();
+    const out: Message[] = [];
+
+    for (let i = msgs.length - 1; i >= 0; i--) {
+      const m = msgs[i];
+      const uid = String((m as any).userId ?? "");
+      if (!uid) continue;
+      if (!seen.has(uid)) {
+        seen.add(uid);
+        out.push(m);
+      }
+    }
+
+    return out.reverse();
+  }
+  const uniqueLatest = useMemo(() => latestPerUser(messages), [messages]);
 
   return (
     <>
@@ -40,12 +65,6 @@ const ChatContainer = () => {
           />{" "}
           <SidebarItem
             icon={<UserCircle size={20} />}
-            text="Chat"
-            to="/chat"
-            end
-          />
-          <SidebarItem
-            icon={<UserCircle size={20} />}
             text="Log Out"
             onClick={logout}
           />
@@ -56,20 +75,24 @@ const ChatContainer = () => {
             <div className="mb-4 flex">Conversation with: {peerName}</div>
           )}
 
-          <ChatList messages={messages} removeMessage={removeMessage} />
+          <ChatList messages={uniqueLatest} removeMessage={removeMessage} />
           {conversations.length > 0 && (
-            <form onSubmit={handleSubmit} className="flex justify-center">
-              <InputField
-                name="chat"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Try writing something"
-              />
-              <button type="submit">Send</button>
-              <span></span>
-            </form>
+            <>
+              <form onSubmit={handleSubmit} className="flex justify-center">
+                <InputField
+                  name="chat"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Try writing something"
+                />
+                <button type="submit">Send</button>
+                <span></span>
+              </form>
+              <button onClick={fetchMessages}>Load Messages</button>
+            </>
           )}
         </main>
+        <StatusBar text={flashText} kind={flashKind} />
       </div>
     </>
   );

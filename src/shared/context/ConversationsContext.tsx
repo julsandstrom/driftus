@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-export type Conversation = { id: string; title: string };
+export type Conversation = { id: string; title: string; shared?: boolean };
 
 type Ctx = {
   conversations: Conversation[];
@@ -42,7 +42,7 @@ export function ConversationsProvider({
     if (!activeId && conversations.length > 0) setActiveId(conversations[0].id);
   }, [activeId, conversations]);
 
-  function createConversation(title = "Conversation") {
+  function createConversation(title = "Chat") {
     const id = crypto.randomUUID();
     const conv = { id, title };
     setConversations((cs) => [conv, ...cs]);
@@ -51,8 +51,6 @@ export function ConversationsProvider({
   }
 
   function deleteConversation(id: string) {
-    console.log("Deleting conv", id);
-
     setConversations((prev) => {
       const updatedConv = prev.filter((s) => s.id !== id);
 

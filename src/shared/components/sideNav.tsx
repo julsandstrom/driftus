@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import { useConversations } from "../context/ConversationsContext";
 import ConversationItem from "./ConversationItem";
 import UserContainer from "../../features/user/containers/UserContainer";
+
 type SidebarContext = {
   expanded: boolean;
   toggle: () => void;
@@ -31,69 +32,83 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
 
     if (!(id.length === 36 && id.split("-").length === 5))
       return alert("Ogiltigt ID");
-    ensureConversation(id, "Delad konvo");
+
+    ensureConversation(id, "Shared Conversation");
   };
 
   return (
-    <aside
-      className={`
-        h-screen shrink-0 border-r 
+    <>
+      {expanded ? (
+        <aside
+          className={`
+        h-screen shrink-0 border-r
         transition-[width] duration-200 
         ${expanded ? "w-64" : "w-16"}
         sticky top-0 left-0
       `}
-    >
-      <nav className="h-full flex flex-col">
-        <button
-          onClick={() => createConversation()}
-          className="w-full text-left"
         >
-          ➕ New Conversation
-        </button>
-        <button onClick={() => joinById()} className="w-full text-left">
-          Join By ID
-        </button>
-        {conversations.map((c) => (
-          <ConversationItem
-            key={c.id}
-            conv={c}
-            isActive={activeId === c.id}
-            setActiveId={setActiveId}
-            onDelete={deleteConversation}
-          />
-        ))}
-        <div className="p-4 pb-2 flex justify-between items-center">
-          <img
-            src="https://i.pravatar.cc/200"
-            className={`overflow-hidden transition-all ${
-              expanded ? "w-32" : "w-0"
-            }`}
-            alt=""
-          />{" "}
-          <button
-            onClick={() => setExpanded((c) => !c)}
-            className="p-1.5 rounded-lg hover:bg-gray-600"
-          >
-            {expanded ? <ChevronFirst /> : <ChevronLast />}
-          </button>
-        </div>
-        <span>
-          {" "}
-          <UserContainer />
-        </span>
+          <nav className="h-full flex flex-col">
+            <button
+              onClick={() => createConversation()}
+              className="w-full text-left"
+            >
+              ➕ New Conversation
+            </button>
+            <button onClick={() => joinById()} className="w-full text-left">
+              Join By ID
+            </button>
+            {conversations.map((c) => (
+              <ConversationItem
+                key={c.id}
+                conv={c}
+                isActive={activeId === c.id}
+                setActiveId={setActiveId}
+                onDelete={deleteConversation}
+                expanded={expanded}
+                isShared={!!c.shared}
+              />
+            ))}
+            <div className="p-4 pb-2 flex justify-between items-center">
+              <img
+                src="https://i.pravatar.cc/200"
+                className={`overflow-hidden transition-all ${
+                  expanded ? "w-32" : "w-0"
+                }`}
+                alt=""
+              />{" "}
+              <button
+                onClick={() => setExpanded((c) => !c)}
+                className="p-1.5 rounded-lg hover:bg-gray-600"
+              >
+                {expanded ? <ChevronFirst /> : <ChevronLast />}
+              </button>
+            </div>
+            <span>
+              {" "}
+              <UserContainer />
+            </span>
 
-        <SidebarContext.Provider
-          value={{
-            expanded,
-            toggle: () => setExpanded((c) => !c),
-            activeKey,
-            setActiveKey,
-          }}
+            <SidebarContext.Provider
+              value={{
+                expanded,
+                toggle: () => setExpanded((c) => !c),
+                activeKey,
+                setActiveKey,
+              }}
+            >
+              <ul className="flex-1 px-3">{children}</ul>
+            </SidebarContext.Provider>
+          </nav>
+        </aside>
+      ) : (
+        <button
+          onClick={() => setExpanded((c) => !c)}
+          className="p-1.5 rounded-lg hover:bg-gray-600"
         >
-          <ul className="flex-1 px-3">{children}</ul>
-        </SidebarContext.Provider>
-      </nav>
-    </aside>
+          {expanded ? <ChevronFirst /> : <ChevronLast />}
+        </button>
+      )}
+    </>
   );
 }
 
@@ -119,7 +134,7 @@ export function SidebarItem({
 
   const base = `relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group`;
   const active =
-    "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800";
+    "bg-gradient-to-tr from-green-200 to-green-400 text-indigo-800";
   const inactive = "hover:bg-indigo-50 text-gray-100";
 
   const inner = (
@@ -158,7 +173,7 @@ export function SidebarItem({
           to={to}
           end={end}
           className={({ isActive }) =>
-            `${base} ${isActive ? active : inactive}`
+            `${base} ${isActive ? active : inactive}  w-full text-left`
           }
         >
           {inner}
@@ -168,14 +183,8 @@ export function SidebarItem({
   }
 
   return (
-    <li>
-      <button
-        type="button"
-        onClick={onClick}
-        className={`${base} ${inactive} w-full text-left`}
-      >
-        {inner}
-      </button>
+    <li onClick={onClick} className={`${base} ${inactive} w-full text-left`}>
+      {inner}
     </li>
   );
 }

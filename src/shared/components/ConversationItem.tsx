@@ -1,16 +1,28 @@
 import type { Conversation } from "../context/ConversationsContext";
 
 import { useNavigate } from "react-router-dom";
-
+import { useConversations } from "../context/ConversationsContext";
 type Props = {
   conv: Conversation;
   isActive: boolean;
   setActiveId: (id: string) => void;
   onDelete?: (id: string) => void;
+  expanded: boolean;
+  isShared: boolean;
 };
 
-function ConversationItem({ conv, isActive, setActiveId, onDelete }: Props) {
+function ConversationItem({
+  conv,
+  isActive,
+  setActiveId,
+  onDelete,
+  expanded,
+  isShared,
+}: Props) {
   const navigate = useNavigate();
+
+  const { conversations } = useConversations();
+
   const select = () => {
     setActiveId(conv.id);
     navigate(`/chat?conversationID=${conv.id}`);
@@ -20,32 +32,78 @@ function ConversationItem({ conv, isActive, setActiveId, onDelete }: Props) {
     alert("Länk kopierad");
   };
 
+  const sharedConversation = conversations[0].title === "Chat";
+
   return (
-    <li>
-      <div className="flex">
+    <>
+      {expanded ? (
+        <li>
+          {sharedConversation ? (
+            <div className="flex">
+              <button
+                onClick={select}
+                className={`w-full text-left ${isActive ? "bg-gray-700" : ""}`}
+                title={conv.id}
+              >
+                {conv.title}
+              </button>{" "}
+              <button
+                onClick={() => copyLink(conv.id)}
+                className="w-full text-left"
+              >
+                Copy Link
+              </button>
+              {onDelete && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(conv.id);
+                  }}
+                  title="Ta bort"
+                >
+                  Delete
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="flex">
+              <button
+                onClick={select}
+                className={`w-full text-left ${isActive ? "bg-green-700" : ""}`}
+                title={conv.id}
+              >
+                {conv.title}
+              </button>{" "}
+              <button
+                onClick={() => copyLink(conv.id)}
+                className="w-full text-left"
+              >
+                Copy Link
+              </button>
+              {onDelete && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(conv.id);
+                  }}
+                  title="Ta bort"
+                >
+                  Delete
+                </button>
+              )}
+            </div>
+          )}
+        </li>
+      ) : (
         <button
           onClick={select}
-          className={`w-full text-left ${isActive ? "bg-gray-700" : ""}`}
+          className={`w-full text-left ${isActive ? "bg-green-700" : ""}`}
           title={conv.id}
         >
           {conv.title}
-        </button>{" "}
-        <button onClick={() => copyLink(conv.id)} className="w-full text-left">
-          Copy Link
         </button>
-        {onDelete && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(conv.id);
-            }}
-            title="Ta bort"
-          >
-            Delete
-          </button>
-        )}
-      </div>
-    </li>
+      )}
+    </>
   );
 }
 

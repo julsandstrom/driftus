@@ -121,12 +121,6 @@ const Profile = () => {
         />{" "}
         <SidebarItem
           icon={<UserCircle size={20} />}
-          text="Chat"
-          to="/chat"
-          end
-        />
-        <SidebarItem
-          icon={<UserCircle size={20} />}
           text="Log Out"
           onClick={logout}
         />

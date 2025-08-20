@@ -5,7 +5,11 @@ type Props = {
 };
 
 const UserProfile = ({ user }: Props) => {
-  return <div>{user.user}</div>;
+  return (
+    <div className=" w-full text-left ml-10 text-lg text-green-500 ">
+      {user.user}
+    </div>
+  );
 };
 
 export default UserProfile;

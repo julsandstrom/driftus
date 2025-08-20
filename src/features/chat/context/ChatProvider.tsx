@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import type { Message } from "../../../shared/types";
+import type { FlashKind } from "./ChatContext";
 import { useSearchParams } from "react-router-dom";
 import { sanitize } from "../../../shared/utils/sanitize";
 import { ValidateWithErrors } from "../validators/chatValidator";
@@ -14,18 +15,24 @@ import {
 } from "../../../shared/api/chatify";
 import { useAuth } from "../../../shared/hooks/useAuth";
 
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [inputError, setInputError] = useState("");
-  const { activeId, ensureConversation } = useConversations();
+  const { activeId, setConversations } = useConversations();
   const [peerName, setPeerName] = useState<string>("");
+
+  const [flashText, setFlashText] = useState<string | null>(null);
+  const [flashKind, setFlashKind] = useState<FlashKind>("info");
 
   const [sp, setSp] = useSearchParams();
   const { user } = useAuth();
+
+  function showFlash(kind: FlashKind, text: string, ms = 1500): void {
+    setFlashKind(kind);
+    setFlashText(text);
+    if (ms > 0) setTimeout(() => setFlashText(null), ms);
+  }
 
   async function updatePeerName(msgs: Message[]) {
     const myId = String(user?.id ?? "");
@@ -41,6 +48,20 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         const u = await getUserById(others[0]);
         const name = u?.username ?? u?.user ?? "";
         setPeerName(name);
+        setConversations((prev) =>
+          prev.map((c) =>
+            c.id === activeId && !c.shared
+              ? {
+                  ...c,
+                  shared: true,
+                  title:
+                    c.title === "Chat" || c.title === "Shared Conversation"
+                      ? name
+                      : c.title,
+                }
+              : c
+          )
+        );
       } catch {
         setPeerName("");
       }
@@ -57,26 +78,23 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       const list = Array.isArray(data) ? data : [];
       updatePeerName(list);
       setMessages(list);
+      showFlash("success", "Loaded messages!", 2000);
     } catch (err) {
       console.log("Failed to load messages", err);
+      showFlash("error", "Failed to load messages", 2000);
       setMessages([]);
-      setPeerName("Ny konversation");
+      setPeerName("");
     }
   };
 
   useEffect(() => {
     const cid = sp.get("conversationID");
-
-    if (!cid || !UUID_RE.test(cid)) return;
-
     if (activeId && cid !== activeId) {
-      setSp({ cid: activeId }, { replace: true });
+      setSp({ conversationID: activeId }, { replace: true });
     } else if (!activeId && cid) {
       setSp({}, { replace: true });
     }
-
-    ensureConversation(cid, "Shared Conversation");
-  }, [sp, activeId, ensureConversation]);
+  }, [activeId]);
 
   useEffect(() => {
     if (!activeId) {
@@ -85,6 +103,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     }
     fetchMessages();
     setInputError("");
+    console.log("fetched messages");
   }, [activeId]);
 
   const sendMessage = async (e: React.FormEvent) => {
@@ -111,9 +130,10 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       setNewMessage("");
       setMessages((prev) => [...prev, sent]);
       await fetchMessages();
-      console.log("message sent", sent.text);
+      showFlash("success", "Sent successfully", 1200);
     } catch (err) {
       console.log("failed to send", err);
+      showFlash("error", "Failed to send", 2000);
     }
   };
 
@@ -121,7 +141,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await deleteMessage(id);
       setMessages((prev) => prev.filter((m) => String(m.id) !== String(id)));
+      showFlash("success", "Deleted message!");
     } catch (err) {
+      showFlash("error", "Failed to delete message...");
       console.log("Failed to delete message", err);
     }
   };
@@ -136,9 +158,23 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         inputError,
         fetchMessages,
         peerName,
+        flashKind,
+        flashText,
       }}
     >
       {children}
     </ChatContext.Provider>
   );
 };
+
+// useEffect(() => {
+//   const cid = sp.get("conversationID");
+
+//   if (!cid || !UUID_RE.test(cid)) return;
+//   if (activeId !== cid) setActiveId(cid);
+
+//   if (conversations.some((c) => c.id == cid)) {
+//     console.log("here ");
+//     ensureConversation(cid, "Shared Conversation");
+//   }
+// }, [sp.toString()]);
