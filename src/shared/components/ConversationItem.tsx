@@ -17,7 +17,6 @@ function ConversationItem({
   setActiveId,
   onDelete,
   expanded,
-  isShared,
 }: Props) {
   const navigate = useNavigate();
 
