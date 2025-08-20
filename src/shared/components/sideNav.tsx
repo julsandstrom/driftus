@@ -65,7 +65,6 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
                 setActiveId={setActiveId}
                 onDelete={deleteConversation}
                 expanded={expanded}
-                isShared={!!c.shared}
               />
             ))}
             <div className="p-4 pb-2 flex justify-between items-center">
