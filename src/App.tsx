@@ -29,7 +29,7 @@ function App() {
         path="/chat"
         element={
           <ProtectedRoute>
-            <div>
+            <div className="">
               <ChatProvider>
                 <Chat />
               </ChatProvider>

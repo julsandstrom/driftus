@@ -95,6 +95,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       setSp({ conversationID: activeId }, { replace: true });
     } else if (!activeId && cid) {
       setSp({}, { replace: true });
+      setPeerName("");
     }
   }, [activeId]);
 
@@ -169,15 +170,3 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     </ChatContext.Provider>
   );
 };
-
-// useEffect(() => {
-//   const cid = sp.get("conversationID");
-
-//   if (!cid || !UUID_RE.test(cid)) return;
-//   if (activeId !== cid) setActiveId(cid);
-
-//   if (conversations.some((c) => c.id == cid)) {
-//     console.log("here ");
-//     ensureConversation(cid, "Shared Conversation");
-//   }
-// }, [sp.toString()]);

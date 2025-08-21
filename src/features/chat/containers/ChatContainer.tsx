@@ -1,4 +1,3 @@
-import ChatList from "../components/ChatList";
 import InputField from "../../../shared/components/InputField";
 
 import { useChat } from "../hooks/useChat";
@@ -21,7 +20,7 @@ const ChatContainer = () => {
     newMessage,
     setNewMessage,
     sendMessage,
-    removeMessage,
+    // removeMessage,
     peerName,
     flashKind,
     flashText,
@@ -42,6 +41,8 @@ const ChatContainer = () => {
   const { logout, user } = useAuth();
 
   const myId = String(user?.id ?? "");
+
+  const pinClass = moodColor(sentiment, energy);
 
   async function suggestReply(source: string, maxWords = 12) {
     const r = await fetch("/.netlify/functions/suggest-reply", {
@@ -74,7 +75,10 @@ const ChatContainer = () => {
   function getLatestMessage(messages: Message[], myId: string) {
     let lastMine: Message | null = null;
     let lastTheirs: Message | null = null;
-
+    setTips([]);
+    setSentiment("");
+    setEnergy(0);
+    moodColor("", 0);
     for (let i = messages.length - 1; i >= 0; i--) {
       const m = messages[i];
       const uid = String(m.userId ?? "");
@@ -94,30 +98,34 @@ const ChatContainer = () => {
   );
 
   function moodColor(sentiment: string | undefined, energy: number) {
-    if (sentiment === "negative" && energy >= 0.5) return "bg-red-500";
+    if (sentiment === "negative" && energy >= 0.5) return "text-red-500";
+    if (sentiment === "negative" && energy >= 0.01) return "text-yellow-500";
 
-    if (sentiment === "negative") return "bg-yellow-500";
-    if (sentiment === "neutral" && energy >= 0.5) return "bg-yellow-500";
-    if (sentiment === "positive" && energy >= 0.1) return "bg-green-500";
+    if (sentiment === "neutral" && energy >= 0.5) return "text-yellow-500";
+    if (sentiment === "neutral" && energy >= 0.01) return "text-yellow-500";
 
-    return "bg-green-500";
+    if (sentiment === "positive" && energy >= 0.1) return "text-green-500";
+    if (sentiment === "positive" && energy >= 0.5) return "text-green-500";
+
+    return "text-zinc-500";
   }
 
   function moodLabel(sentiment: string | undefined, energy: number) {
     if (sentiment === "negative" && energy >= 0.5)
-      return "Irritated tone — respond warmly.";
-    if (sentiment === "negative")
-      return "Critical tone — stay calm and factual.";
-    if (sentiment === "neutral" && energy >= 0.5)
-      return "Slightly tense tone — reply calmly and clearly.";
-    if (sentiment === "positive" && energy >= 0.6)
-      return "Positive and excited — match it but keep it brief.";
-    if (energy >= 0.5 && sentiment === "positive")
-      return "Positive — show you're open to talk.";
-    if (energy >= 0.01 && sentiment !== "negative")
-      return "Neutral — try to guide the conversation.";
+      return "Critical tone - stay calm.";
+    if (sentiment === "negative" && energy >= 0.01)
+      return "Irritated tone - show empathy";
 
-    if (sentiment === "positive") return "Positive energy — match it.";
+    if (sentiment === "neutral" && energy >= 0.5)
+      return "Slightly tense tone - reply calmly and clearly.";
+    if (sentiment === "neutral" && energy >= 0.1)
+      return "Neutral - here are some suggestions:";
+
+    if (sentiment === "positive" && energy >= 0.5)
+      return "Positive and excited - match it but keep it brief.";
+    if (sentiment === "positive" && energy >= 0.01)
+      return "Positive - try to keep the same energy.";
+
     return "";
   }
 
@@ -137,32 +145,25 @@ const ChatContainer = () => {
             onClick={logout}
           />
         </SideNav>
-
-        <main className="flex-1 overflow-y-auto p-4">
+      </div>
+      <div className="pl-56 grid min-h-dvh place-items-center">
+        <main className="flex-1 overflow-y-auto p-4 ml-11 ">
           {peerName && (
             <div className="mb-4 flex">Conversation with: {peerName}</div>
           )}
-          <ul>
-            {lastTheirs && (
-              <>
-                {" "}
-                <li className="mr-auto bg-gray-700 p-2 rounded max-w-[75%]">
-                  {lastTheirs.text}
-                </li>
-              </>
-            )}
-            {lastMine && (
-              <>
-                {" "}
-                <li
-                  className="ml-auto bg-blue-600 p-2 rounded max-w-[75%]"
-                  onClick={() => removeMessage(lastMine.id)}
-                >
-                  {lastMine.text}
-                </li>
-                <ChatBubble text={lastMine?.text} side="right" />
-              </>
-            )}
+          <ul className="flex flex-col gap-11 ">
+            <li>
+              <ChatBubble
+                text={lastTheirs?.text}
+                side="left"
+                showPin={true}
+                pinClassName={pinClass || "text-green-500"}
+              />
+            </li>
+
+            <li className="mt-11">
+              <ChatBubble text={lastMine?.text} side="right" />
+            </li>
           </ul>
           {/* <ChatList messages={messages} removeMessage={removeMessage} /> */}
           {conversations.length > 0 && (
@@ -178,7 +179,7 @@ const ChatContainer = () => {
                 <span></span>
               </form>
 
-              <button onClick={fetchMessages}>Load Messages</button>
+              <button onClick={fetchMessages}>Load Message</button>
             </>
           )}{" "}
           <div className="flex-row">
@@ -214,6 +215,7 @@ const ChatContainer = () => {
                           energy
                         )}`}
                       />
+
                       <span className="text-sm opacity-80">
                         {moodLabel(sentiment, energy)}
                       </span>
