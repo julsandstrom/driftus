@@ -2,6 +2,7 @@ import { useConversations } from "../../../shared/context/ConversationsContext";
 import type { Message } from "../../../shared/types";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useChat } from "../hooks/useChat";
+import ChatBubble from "./ChatBubble";
 type Props = {
   messages: Message[];
   removeMessage: (id: string) => void;

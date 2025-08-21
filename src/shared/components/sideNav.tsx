@@ -77,7 +77,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
               />{" "}
               <button
                 onClick={() => setExpanded((c) => !c)}
-                className="p-1.5 rounded-lg hover:bg-gray-600"
+                className="p-1.5 rounded-lg hover:bg-green-100"
               >
                 {expanded ? <ChevronFirst /> : <ChevronLast />}
               </button>
@@ -101,7 +101,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
       ) : (
         <button
           onClick={() => setExpanded((c) => !c)}
-          className="p-1.5 rounded-lg hover:bg-gray-600"
+          className="p-1.5 rounded-lg hover:bg-green-100"
         >
           {expanded ? <ChevronFirst /> : <ChevronLast />}
         </button>
@@ -133,7 +133,7 @@ export function SidebarItem({
   const base = `relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group`;
   const active =
     "bg-gradient-to-tr from-green-200 to-green-400 text-indigo-800";
-  const inactive = "hover:bg-indigo-50 text-gray-100";
+  const inactive = "hover:bg-red-500 text-gray-100";
 
   const inner = (
     <>
