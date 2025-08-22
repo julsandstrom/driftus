@@ -26,26 +26,30 @@ const InputField = ({
   autoComplete,
 }: InputFieldProps) => {
   return (
-    <>
-      {" "}
-      <div className="flex mb-4 gap-2 flex-row items-start ">
+    <div className="flex flex-row gap-8 justify-between items-end mt-9 h-[40px]">
+      <div className="flex gap-2">
+        {" "}
         {Icon && <Icon />}
-        {label && <label htmlFor={name}>{label}</label>}
-        <div className="w-full">
-          {" "}
-          <input
-            type={type}
-            name={name}
-            value={value}
-            onChange={onChange}
-            placeholder={!errorMessages ? placeholder : `${errorMessages}`}
-            className={`${classname} rounded-lg px-2 w-full`}
-            autoComplete={autoComplete}
-          />{" "}
-        </div>
-        {errorMessages && <p style={{ color: "red" }}>*</p>}{" "}
+        {label && (
+          <label htmlFor={name} className="text-xl font-medium">
+            {label}
+          </label>
+        )}{" "}
       </div>
-    </>
+      <div className="flex flex-col justify-between">
+        {" "}
+        {errorMessages && <p className="text-red-600">{errorMessages}</p>}{" "}
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={!errorMessages ? placeholder : `${errorMessages}`}
+          className={`${classname} text-zinc-700 h-9 rounded-lg px-2 w-[210px] text-xl leading-none bg-white/90 shadow-sm ring-1 ring-zing-300 placeholder:text-black-400 transition focus:outline-none focus:ring-2 focus: ring-green-500/95`}
+          autoComplete={autoComplete}
+        />{" "}
+      </div>
+    </div>
   );
 };
 

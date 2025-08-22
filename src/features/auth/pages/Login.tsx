@@ -70,39 +70,40 @@ const Login = () => {
       <img
         src={logoUrl}
         alt="DriftUs — Feel the message."
-        className="block mx-auto w-[min(90vw,720px)]"
+        className="block mx-auto w-[min(90vw,720px)] mb-11"
       />
       <form
         onSubmit={handleSubmit}
         className="flex flex-col mx-auto justify-center"
       >
         <div className="flex flex-col justify-center items-center gap-5">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <label>Username</label>
             <input
               name="username"
               type="text"
               placeholder="Username"
               required
-              className="w-[150px] p-2 rounded-lg "
+              className="text-zinc-700 h-9 rounded-lg px-2 w-[210px] text-xl leading-none bg-white/90 shadow-sm ring-1 ring-zing-300 placeholder:text-zinc-400 transition focus:outline-none focus:ring-2 focus: ring-green-500/95 "
               onChange={handleChange}
             />
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <label>Password</label>
             <input
               name="password"
               type="password"
               placeholder="Password"
               required
-              className="w-[150px] p-2 rounded-lg "
+              className="text-zinc-700 h-9 rounded-lg px-2 w-[210px] text-xl leading-none bg-white/90 shadow-sm ring-1 ring-zing-300 placeholder:text-zinc-400 transition focus:outline-none focus:ring-2 focus: ring-green-500/95"
               onChange={handleChange}
             />
           </div>
           <button
             type="submit"
-            className=" bg-yellow-500 text-black px-4 py-2 mt-5 w-50"
+            className=" bg-yellow-500 text-black px-4 py-2 mt-5 w-[150px] rounded-xl transition ease-out duration-200 hover:ring-2 hover:ring-white/95
+            hover:-translate-y-0.5"
           >
             Login
           </button>
@@ -110,7 +111,7 @@ const Login = () => {
       </form>
       <br />
       <div className="flex justify-center items-center ">
-        <h2 className="m-0 p-0">Create a new account:</h2>
+        <h2 className="m-0 p-0 text-xl">No account?</h2>
         <button
           className="m-0 p-1 hover:underline"
           onClick={() => navigate("/register")}
