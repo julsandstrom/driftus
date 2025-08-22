@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../../shared/hooks/useAuth";
+import logoUrl from "../../../assets/DriftusLogo.svg";
 
 type User = {
   username: string;
@@ -66,30 +67,54 @@ const Login = () => {
   };
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label>Username</label>
-        <input
-          name="username"
-          type="text"
-          required
-          className="w-[300px] p-2 border"
-          onChange={handleChange}
-        />
+      <img
+        src={logoUrl}
+        alt="DriftUs — Feel the message."
+        className="block mx-auto w-[min(90vw,720px)]"
+      />
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col mx-auto justify-center"
+      >
+        <div className="flex flex-col justify-center items-center gap-5">
+          <div className="flex flex-col gap-2">
+            <label>Username</label>
+            <input
+              name="username"
+              type="text"
+              placeholder="Username"
+              required
+              className="w-[150px] p-2 rounded-lg "
+              onChange={handleChange}
+            />
+          </div>
 
-        <label>Password</label>
-        <input
-          name="password"
-          type="password"
-          required
-          className="w-300 p-2 border"
-          onChange={handleChange}
-        />
-        <button type="submit">Login</button>
+          <div className="flex flex-col gap-2">
+            <label>Password</label>
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              required
+              className="w-[150px] p-2 rounded-lg "
+              onChange={handleChange}
+            />
+          </div>
+          <button
+            type="submit"
+            className=" bg-yellow-500 text-black px-4 py-2 mt-5 w-50"
+          >
+            Login
+          </button>
+        </div>
       </form>
       <br />
-      <div className="flex justify-center space-x-3 ">
-        <h2 className="m-0 p-0">Create a new account</h2>
-        <button className="m-0 p-1 " onClick={() => navigate("/register")}>
+      <div className="flex justify-center items-center ">
+        <h2 className="m-0 p-0">Create a new account:</h2>
+        <button
+          className="m-0 p-1 hover:underline"
+          onClick={() => navigate("/register")}
+        >
           Register
         </button>
       </div>

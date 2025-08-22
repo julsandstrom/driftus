@@ -21,20 +21,11 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
     setActiveId,
     createConversation,
     deleteConversation,
-    ensureConversation,
+
+    joinById,
   } = useConversations();
   const [expanded, setExpanded] = useState(true);
   const [activeKey, setActiveKey] = useState<string | null>(null);
-
-  const joinById = () => {
-    const id = prompt("Klistra in conversationId (GUID):")?.trim();
-    if (!id) return;
-
-    if (!(id.length === 36 && id.split("-").length === 5))
-      return alert("Ogiltigt ID");
-
-    ensureConversation(id, "Shared Conversation");
-  };
 
   return (
     <>

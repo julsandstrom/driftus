@@ -16,6 +16,7 @@ function App() {
       <Route path="/" element={<Navigate to={user ? "/chat" : "/login"} />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
+
       <Route
         path="/profile"
         element={
@@ -24,7 +25,6 @@ function App() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/chat"
         element={

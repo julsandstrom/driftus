@@ -4,6 +4,7 @@ import { ValidateField } from "../validators/registerValidator";
 import type { RegisterField } from "../validators/registerValidator";
 import InputField from "../../../shared/components/InputField";
 import { fieldConfig } from "../constants/registerFieldConfig";
+import logoUrl from "../../../assets/DriftusLogo.svg";
 
 type User = {
   username: string;
@@ -77,33 +78,49 @@ const Register = () => {
 
   return (
     <>
-      <h1 className="text-3xl text-bold mb-10">Register User</h1>{" "}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-        {fieldConfig.map((field) => (
-          <InputField
-            key={field.name}
-            label={field.label}
-            name={field.name}
-            type={field.type}
-            placeholder={field.placeholder}
-            value={form[field.name]}
-            onChange={handleChange}
-            errorMessages={showError[field.name]?.[0]}
-            icon={field.icon}
-            autoComplete={field.autoComplete}
-          />
-        ))}
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 mt-10 w-80 mb-20"
+      {" "}
+      <img
+        src={logoUrl}
+        alt="DriftUs — Feel the message."
+        className="block mx-auto w-[min(90vw,720px)] mb-11"
+      />
+      <div className="flex justify-center w-full">
+        {" "}
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col mx-auto gap-2 justify-center"
         >
-          Submit
-        </button>
-      </form>
+          {fieldConfig.map((field) => (
+            <InputField
+              key={field.name}
+              label={field.label}
+              name={field.name}
+              type={field.type}
+              placeholder={field.placeholder}
+              value={form[field.name]}
+              onChange={handleChange}
+              errorMessages={showError[field.name]?.[0]}
+              icon={field.icon}
+              autoComplete={field.autoComplete}
+            />
+          ))}
+          <div>
+            <button
+              type="submit"
+              className=" bg-yellow-500 text-black px-4 py-2 mt-10 w-50"
+            >
+              Register Account
+            </button>
+          </div>
+        </form>
+      </div>
       <br />
-      <div className="flex justify-center space-x-3 ">
+      <div className="flex justify-center items-center">
         <h2 className="m-0 p-0">Already have an account?</h2>
-        <button className="m-0 p-1 " onClick={() => navigate("/login")}>
+        <button
+          className="m-0 hover:underline "
+          onClick={() => navigate("/login")}
+        >
           Login
         </button>
       </div>

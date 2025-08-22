@@ -7,13 +7,13 @@ export const RegisterFieldRules = {
   username: [
     {
       fn: (n) => n.length > 0,
-      error: "Field can't be empty",
+      error: "Username is empty",
     },
-    { fn: (n) => n.length <= 15, error: "Max 15 characters for name" },
+    { fn: (n) => n.length <= 15, error: "Max 15 characters" },
   ],
   email: [
-    { fn: (e) => e.length > 0, error: "Email field can't be empty" },
-    { fn: (e) => e.length <= 20, error: "Max 20 characters for email" },
+    { fn: (e) => e.length > 0, error: "Email is empty" },
+    { fn: (e) => e.length <= 20, error: "Max 20 characters" },
     {
       fn: (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e),
       error: "Invalid email format",
@@ -22,7 +22,7 @@ export const RegisterFieldRules = {
   password: [
     {
       fn: (p) => p.length >= 6,
-      error: "Password has to be at least 6 characters",
+      error: "Minimum 6 characters",
     },
   ],
   avatar: [],

@@ -13,6 +13,7 @@ import type { Message } from "../../../shared/types";
 import { useMemo } from "react";
 import { useState } from "react";
 import ChatBubble from "../components/ChatBubble";
+import logoUrl from "../../../assets/DriftusLogo.svg";
 
 const ChatContainer = () => {
   const {
@@ -146,28 +147,38 @@ const ChatContainer = () => {
           />
         </SideNav>
       </div>
+      {conversations.length <= 0 && (
+        <>
+          <img
+            src={logoUrl}
+            alt="DriftUs — Feel the message."
+            className="block mx-auto w-[min(90vw,720px)]"
+          />
+        </>
+      )}
       <div className="pl-56 grid min-h-dvh place-items-center">
-        <main className="flex-1 overflow-y-auto p-4 ml-11 ">
+        <main className="flex-1 overflow-y-auto p-4 ">
           {peerName && (
             <div className="mb-4 flex">Conversation with: {peerName}</div>
           )}
-          <ul className="flex flex-col gap-11 ">
-            <li>
-              <ChatBubble
-                text={lastTheirs?.text}
-                side="left"
-                showPin={true}
-                pinClassName={pinClass || "text-green-500"}
-              />
-            </li>
-
-            <li className="mt-11">
-              <ChatBubble text={lastMine?.text} side="right" />
-            </li>
-          </ul>
-          {/* <ChatList messages={messages} removeMessage={removeMessage} /> */}
           {conversations.length > 0 && (
             <>
+              <ul className="flex flex-col gap-11 ">
+                <li>
+                  <ChatBubble
+                    text={lastTheirs?.text}
+                    side="left"
+                    showPin={true}
+                    pinClassName={pinClass || "text-green-500"}
+                  />
+                </li>
+
+                <li className="mt-11 ">
+                  <ChatBubble text={lastMine?.text} side="right" />
+                </li>
+              </ul>
+              {/* <ChatList messages={messages} removeMessage={removeMessage} /> */}
+
               <form onSubmit={handleSubmit} className="flex justify-center">
                 <InputField
                   name="chat"

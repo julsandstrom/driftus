@@ -12,6 +12,7 @@ import {
 import type { RegisterField } from "../../auth/validators/registerValidator";
 import InputField from "../../../shared/components/InputField";
 import { fieldConfig } from "../../auth/constants/registerFieldConfig";
+import logoUrl from "../../../assets/DriftusLogo.svg";
 
 type Form = {
   id: string;
@@ -113,23 +114,30 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex h-screen fixed left-0 top-0 ml-[width]">
-      {" "}
-      <SideNav>
-        <SidebarItem
-          icon={<BarChart3 size={20} />}
-          text="Profile"
-          to="/profile"
-          end
-        />{" "}
-        <SidebarItem
-          icon={<UserCircle size={20} />}
-          text="Log Out"
-          onClick={logout}
+    <>
+      <div className="flex h-screen fixed left-0 top-0 ml-[width]">
+        {" "}
+        <SideNav>
+          <SidebarItem
+            icon={<BarChart3 size={20} />}
+            text="Profile"
+            to="/profile"
+            end
+          />{" "}
+          <SidebarItem
+            icon={<UserCircle size={20} />}
+            text="Log Out"
+            onClick={logout}
+          />
+        </SideNav>{" "}
+      </div>
+      <main className="flex flex-col w-full justify-center items-center">
+        <img
+          src={logoUrl}
+          alt="DriftUs — Feel the message."
+          className="block mx-auto w-[min(90vw,720px)]"
         />
-      </SideNav>
-      <div className="p-4">
-        <form onSubmit={handleSubmit}>
+        <form className="flex flex-col justify-center mb-5">
           {fieldConfig.map((field) => (
             <InputField
               key={field.name}
@@ -144,14 +152,25 @@ const Profile = () => {
               autoComplete={field.autoComplete}
             />
           ))}
-
-          <button type="submit">Save Changes</button>
         </form>
-        <button onClick={handleDelete}>Delete Account</button> <br />
-        <br />
+        <div className="flex gap-11">
+          <button
+            onClick={handleSubmit}
+            className=" bg-yellow-500 text-black px-4 py-2 mt-5 w-50"
+          >
+            Save Changes
+          </button>
+          <button
+            onClick={handleDelete}
+            className=" bg-red-500 text-black px-4 py-2 mt-5 w-50"
+          >
+            Delete Account
+          </button>{" "}
+        </div>
+
         {showSuccessMsg && <span>User setting saved successfully.</span>}
-      </div>
-    </div>
+      </main>
+    </>
   );
 };
 

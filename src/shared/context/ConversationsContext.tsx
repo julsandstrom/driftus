@@ -9,7 +9,7 @@ type Ctx = {
   createConversation: (title?: string) => Conversation;
   deleteConversation: (id: string) => void;
   ensureConversation: (id: string, title: string) => void;
-
+  joinById: () => void;
   setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
 };
 
@@ -42,6 +42,16 @@ export function ConversationsProvider({
     if (!activeId && conversations.length > 0) setActiveId(conversations[0].id);
   }, [activeId, conversations]);
 
+  const joinById = () => {
+    const id = prompt("Klistra in conversationId (GUID):")?.trim();
+    if (!id) return;
+
+    if (!(id.length === 36 && id.split("-").length === 5))
+      return alert("Ogiltigt ID");
+
+    ensureConversation(id, "Shared Conversation");
+  };
+
   function createConversation(title = "Chat") {
     const id = crypto.randomUUID();
     const conv = { id, title };
@@ -71,7 +81,7 @@ export function ConversationsProvider({
     conversations,
     activeId,
     setActiveId,
-
+    joinById,
     createConversation,
     setConversations,
     deleteConversation,

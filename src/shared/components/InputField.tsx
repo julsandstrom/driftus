@@ -26,20 +26,26 @@ const InputField = ({
   autoComplete,
 }: InputFieldProps) => {
   return (
-    <div className="flex mb-4 gap-2 flex-row  ">
-      {Icon && <Icon />}
-      {label && <label htmlFor={name}>{label}</label>}
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        className={classname}
-        autoComplete={autoComplete}
-      />{" "}
-      {errorMessages && <p style={{ color: "red" }}>{errorMessages}</p>}{" "}
-    </div>
+    <>
+      {" "}
+      <div className="flex mb-4 gap-2 flex-row items-start ">
+        {Icon && <Icon />}
+        {label && <label htmlFor={name}>{label}</label>}
+        <div className="w-full">
+          {" "}
+          <input
+            type={type}
+            name={name}
+            value={value}
+            onChange={onChange}
+            placeholder={!errorMessages ? placeholder : `${errorMessages}`}
+            className={`${classname} rounded-lg px-2 w-full`}
+            autoComplete={autoComplete}
+          />{" "}
+        </div>
+        {errorMessages && <p style={{ color: "red" }}>*</p>}{" "}
+      </div>
+    </>
   );
 };
 
