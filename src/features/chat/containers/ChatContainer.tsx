@@ -157,37 +157,45 @@ const ChatContainer = () => {
         </>
       )}
       <div className="pl-56 grid min-h-dvh place-items-center">
-        <main className="flex-1 overflow-y-auto p-4 ">
+        <main className="flex-1 overflow-y-auto p-4 w-full">
           {peerName && (
             <div className="mb-4 flex">Conversation with: {peerName}</div>
           )}
           {conversations.length > 0 && (
             <>
-              <ul className="flex flex-col gap-11 ">
-                <li>
+              <ul className="flex flex-col gap-11 justify-center items-center">
+                <li className="mr-96 min-h-[200px] max-h-[200px] min-w-[300px] max-w-[300px] ">
                   <ChatBubble
                     text={lastTheirs?.text}
                     side="left"
                     showPin={true}
-                    pinClassName={pinClass || "text-green-500"}
+                    pinClassName={pinClass || "text-green-500 "}
                   />
                 </li>
 
-                <li className="mt-11 ">
+                <li className=" min-h-[200px] max-h-[200px] min-w-[300px] max-w-[300px] ">
                   <ChatBubble text={lastMine?.text} side="right" />
                 </li>
               </ul>
               {/* <ChatList messages={messages} removeMessage={removeMessage} /> */}
 
-              <form onSubmit={handleSubmit} className="flex justify-center">
+              <form
+                onSubmit={handleSubmit}
+                className="flex justify-center items-end gap-3 mt-0"
+              >
                 <InputField
                   name="chat"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Try writing something"
                 />
-                <button type="submit">Send</button>
-                <span></span>
+                <button
+                  type="submit"
+                  className="bg-[#BE9C3D] text-black px-4 py-2 mt-5 w-[80px] rounded-xl transition ease-out duration-200 hover:ring-2 hover:ring-white/95
+            hover:-translate-y-0.5"
+                >
+                  Send
+                </button>
               </form>
 
               <button onClick={fetchMessages}>Load Message</button>

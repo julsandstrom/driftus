@@ -107,7 +107,7 @@ const Register = () => {
           <div>
             <button
               type="submit"
-              className="bg-yellow-500 text-black px-4 py-2 mt-11 w-[180px] rounded-xl transition ease-out duration-200 hover:ring-2 hover:ring-white/95
+              className="bg-[#BE9C3D] text-black px-4 py-2 mt-11 w-[180px] rounded-xl transition ease-out duration-200 hover:ring-2 hover:ring-white/95
             hover:-translate-y-0.5"
             >
               Register Account

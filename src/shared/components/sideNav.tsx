@@ -32,20 +32,23 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
       {expanded ? (
         <aside
           className={`
-        h-screen shrink-0 border-r
-        transition-[width] duration-200 
+        h-screen shrink-0 border-r border-zinc-600
+        transition-[width] duration-200 pr-4 
         ${expanded ? "w-64" : "w-16"}
         sticky top-0 left-0
       `}
         >
-          <nav className="h-full flex flex-col">
+          <nav className="h-full flex flex-col pl-3">
             <button
               onClick={() => createConversation()}
-              className="w-full text-left"
+              className="w-full text-left h-12 hover:bg-red-700 px-1 pl-2 rounded-xl"
             >
               ➕ New Conversation
             </button>
-            <button onClick={() => joinById()} className="w-full text-left">
+            <button
+              onClick={() => joinById()}
+              className="w-full text-left h-12 hover:bg-red-700 px-2 pl-4 rounded-xl"
+            >
               Join By ID
             </button>
             {conversations.map((c) => (
@@ -58,7 +61,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
                 expanded={expanded}
               />
             ))}{" "}
-            <div className="p-4 pb-2 flex justify-between items-center">
+            <div className="p-4 pb-2 flex justify-between items-center mt-11">
               <img
                 src="https://i.pravatar.cc/200"
                 className={`overflow-hidden transition-all ${
@@ -121,24 +124,24 @@ export function SidebarItem({
   if (!ctx) throw new Error("SidebarItem must be used within <SideNav />");
   const { expanded } = ctx;
 
-  const base = `relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group`;
+  const base = `text-xl relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group`;
   const active =
-    "bg-gradient-to-tr from-green-200 to-green-400 text-indigo-800";
-  const inactive = "hover:bg-red-500 text-gray-100";
+    "bg-gradient-to-tr from-green-200 to-green-400 text-indigo-800 text-xl";
+  const inactive = "hover:bg-red-500 text-gray-100 text-xl";
 
   const inner = (
     <>
       {icon}{" "}
       <span
         className={`overflow-hidden transition-all ${
-          expanded ? "w-52 ml-3" : "w-0"
+          expanded ? "w-52 ml-3 " : "w-0"
         }`}
       >
         {text}
       </span>{" "}
       {alert && (
         <div
-          className={`absolute right-2 top-2 w-2 h-2 rounded bg-indigo-400`}
+          className={`absolute right-2 top-2 w-2 h-2 rounded bg-indigo-400 `}
         />
       )}
       {!expanded && (
@@ -162,7 +165,7 @@ export function SidebarItem({
           to={to}
           end={end}
           className={({ isActive }) =>
-            `${base} ${isActive ? active : inactive}  w-full text-left`
+            `${base} ${isActive ? active : inactive}  w-full text-left text-xl`
           }
         >
           {inner}
@@ -172,7 +175,10 @@ export function SidebarItem({
   }
 
   return (
-    <li onClick={onClick} className={`${base} ${inactive} w-full text-left`}>
+    <li
+      onClick={onClick}
+      className={`${base} ${inactive} w-full text-left text-xl`}
+    >
       {inner}
     </li>
   );

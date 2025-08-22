@@ -156,13 +156,13 @@ const Profile = () => {
         <div className="flex gap-11">
           <button
             onClick={handleSubmit}
-            className=" bg-yellow-500 text-black px-4 py-2 mt-5 w-50"
+            className=" bg-yellow-500 text-black px-4 py-2 mt-5 w-50 rounded-xl"
           >
             Save Changes
           </button>
           <button
             onClick={handleDelete}
-            className=" bg-red-500 text-black px-4 py-2 mt-5 w-50"
+            className=" bg-red-500 text-black px-4 py-2 mt-5 w-50 rounded-xl"
           >
             Delete Account
           </button>{" "}

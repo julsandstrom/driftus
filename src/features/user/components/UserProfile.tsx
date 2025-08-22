@@ -6,7 +6,7 @@ type Props = {
 
 const UserProfile = ({ user }: Props) => {
   return (
-    <div className=" w-full text-left ml-10 text-lg text-green-500 ">
+    <div className=" w-full text-left ml-10 text-xl text-yellow-500 font-semibold mb-5">
       {user.user}
     </div>
   );

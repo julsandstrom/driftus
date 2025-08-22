@@ -102,7 +102,7 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className=" bg-yellow-500 text-black px-4 py-2 mt-5 w-[150px] rounded-xl transition ease-out duration-200 hover:ring-2 hover:ring-white/95
+            className=" bg-[#BE9C3D] text-black px-4 py-2 mt-5 w-[150px] rounded-xl transition ease-out duration-200 hover:ring-2 hover:ring-white/95
             hover:-translate-y-0.5"
           >
             Login
@@ -113,7 +113,7 @@ const Login = () => {
       <div className="flex justify-center items-center ">
         <h2 className="m-0 p-0 text-xl">No account?</h2>
         <button
-          className="m-0 p-1 hover:underline"
+          className="m-0 p-1 hover:underline text-xl"
           onClick={() => navigate("/register")}
         >
           Register

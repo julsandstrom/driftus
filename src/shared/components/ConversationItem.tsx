@@ -35,19 +35,21 @@ function ConversationItem({
   return (
     <>
       {expanded ? (
-        <li>
+        <li className="">
           {sharedConversation ? (
-            <div className="flex">
+            <div className="flex h-11">
               <button
                 onClick={select}
-                className={`w-full text-left ${isActive ? "bg-green-700" : ""}`}
+                className={`w-full text-left px-2 rounded-xl  ${
+                  isActive ? "bg-green-700 " : ""
+                }`}
                 title={conv.id}
               >
                 {conv.title}
               </button>{" "}
               <button
                 onClick={() => copyLink(conv.id)}
-                className="w-full text-left"
+                className="w-full text-left px-2"
               >
                 Copy Link
               </button>

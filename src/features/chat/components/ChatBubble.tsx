@@ -16,12 +16,16 @@ export default function ChatBubble({
 
   return (
     <div
-      className={`relative max-w-[900px] mb-11 ${
-        isRight ? "ml-auto text-zinc-900" : "mr-auto"
+      className={`relative mb-11 flex justify-center min-h-[150px] max-h-[220px] min-w-[300px] max-w-[300px]${
+        isRight ? "ml-auto text-zinc-900 mr-11" : "mr-auto"
       }`}
     >
-      <div className="relative z-20 px-8 py-10 md:px-12 md:py-12">
-        <p className="text-2xl md:text-3xl leading-relaxed text-zinc-900 whitespace-pre-wrap break-words">
+      <div className="relative z-20 px-11 py-10 md:px-12 md:py-9 min-h-[150px] max-h-[220px] min-w-[300px] max-w-[300px]">
+        <p
+          className={`text-2xl md:text-3xl leading-relaxed text-zinc-900 whitespace-pre-wrap break-words py-3 ${
+            isRight && "text-zinc-400"
+          }`}
+        >
           {text}
         </p>
       </div>
