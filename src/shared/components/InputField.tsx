@@ -11,6 +11,8 @@ type InputFieldProps = {
   placeholder?: string;
   icon?: LucideIcon;
   autoComplete?: string;
+  onFocus?: React.FocusEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 };
 
 const InputField = ({
@@ -24,6 +26,8 @@ const InputField = ({
   classname,
   placeholder,
   autoComplete,
+  onBlur,
+  onFocus,
 }: InputFieldProps) => {
   return (
     <>
@@ -45,8 +49,10 @@ const InputField = ({
           value={value}
           onChange={onChange}
           placeholder={!errorMessages ? placeholder : `${errorMessages}`}
-          className={`${classname} text-zinc-700 h-9 rounded-lg px-2 w-[210px] text-xl leading-none bg-white/90 shadow-sm ring-1 ring-zing-300 placeholder:text-black-400 transition focus:outline-none focus:ring-2 focus: ring-green-500/95`}
+          className={`${classname} bg-black text-white h-9 rounded-lg px-2 w-[210px] text-xl leading-none bg-white/90 shadow-sm ring-1 ring-zing-300 placeholder:text-black-400 transition focus:outline-none focus:ring-2 focus: ring-green-500/95`}
           autoComplete={autoComplete}
+          onFocus={onFocus}
+          onBlur={onBlur}
         />{" "}
       </div>
     </>

@@ -5,12 +5,14 @@ type Props = {
   side?: "left" | "right";
   pinClassName?: string;
   showPin?: boolean;
+  glow?: boolean;
 };
 
 export default function ChatBubble({
   text,
   side = "left",
   pinClassName,
+  glow,
 }: Props) {
   const isRight = side === "right";
 
@@ -20,9 +22,9 @@ export default function ChatBubble({
         isRight ? "ml-auto text-zinc-900 mr-11" : "mr-auto"
       }  w-[300px] md:w-[320px] aspect-[309/200] `}
     >
-      <div className="relative z-20 px-11 py-10 md:px-12 md:py-9  w-[300px] md:w-[320px] aspect-[309/148]  ">
+      <div className="relative z-20 px-11 py-10 md:px-12 md:py-9  w-[300px] md:w-[320px] aspect-[309/148] flex justify-center items-center ">
         <p
-          className={`text-2xl md:text-3xl leading-relaxed text-zinc-900 whitespace-pre-wrap break-words py-3 ${
+          className={`text-2xl font-semibold md:text-3xl leading-relaxed text-zinc-900 whitespace-pre-wrap break-words text-center  ${
             isRight && "text-zinc-400"
           }`}
         >
@@ -44,8 +46,8 @@ export default function ChatBubble({
               fill="#D7D7D7"
             />
           </svg>{" "}
-          <div className="absolute left-5 -bottom-2 ">
-            <Pin className={pinClassName} glow />
+          <div className="absolute left-5 -bottom-1 ">
+            <Pin className={pinClassName} glow={glow} />
           </div>
         </>
       ) : (

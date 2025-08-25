@@ -36,15 +36,18 @@ function ConversationItem({
   return (
     <>
       {expanded ? (
-        <li className="">
+        <li
+          className={`w-full rounded-xl h-11  text-[#1A1A1A] pr-4 mb-2 list-none ${
+            isActive ? "bg-[#BE9C3D]  text-[#1A1A1A] " : "bg-white"
+          }`}
+        >
           {sharedConversation ? (
             <div className="flex h-11">
               <Button
-                variant="ghost"
+                variant="subtle"
                 size="md"
                 onClick={select}
-                className={`w-full text-left rounded-xl h-11 flex justify-center mr-2${
-                  isActive ? "bg-green-800 " : ""
+                className={`w-full text-left rounded-xl h-11 flex justify-center mr-2
                 }`}
                 title={conv.id}
               >
@@ -53,7 +56,7 @@ function ConversationItem({
               </Button>
 
               <Button
-                variant="ghost"
+                variant="subtle"
                 size="md"
                 onClick={() => copyLink(conv.id)}
                 className="w-full text-left rounded-xl "
@@ -65,7 +68,7 @@ function ConversationItem({
                   variant="destructiveIcon"
                   size="icon"
                   aria-label={`Delete conversation${
-                    conv.title ? ` “${conv.title}”` : ""
+                    conv.title ? ` "${conv.title}"` : ""
                   }`}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -110,7 +113,7 @@ function ConversationItem({
                   variant="destructiveIcon"
                   size="icon"
                   aria-label={`Delete conversation${
-                    conv.title ? ` “${conv.title}”` : ""
+                    conv.title ? ` "${conv.title}"` : ""
                   }`}
                   onClick={(e) => {
                     e.stopPropagation();

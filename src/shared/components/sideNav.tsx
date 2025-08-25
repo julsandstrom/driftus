@@ -1,10 +1,11 @@
-import { ChevronFirst, ChevronLast } from "lucide-react";
+import { SquareChevronLeft, ChevronLast } from "lucide-react";
 import { useContext, useState } from "react";
 import { createContext } from "react";
 import { NavLink } from "react-router-dom";
 import { useConversations } from "../context/ConversationsContext";
 import ConversationItem from "./ConversationItem";
 import UserContainer from "../../features/user/containers/UserContainer";
+import { Button } from "./Button";
 
 type SidebarContext = {
   expanded: boolean;
@@ -39,29 +40,26 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
       `}
         >
           <nav className="h-full flex flex-col pl-3">
-            <button
-              onClick={() => createConversation()}
-              className="w-full text-left h-12 hover:bg-red-700 px-1 pl-2 rounded-xl"
-            >
-              ➕ New Conversation
-            </button>
-            <button
-              onClick={() => joinById()}
-              className="w-full text-left h-12 hover:bg-red-700 px-2 pl-4 rounded-xl"
-            >
-              Join By ID
-            </button>
-            {conversations.map((c) => (
-              <ConversationItem
-                key={c.id}
-                conv={c}
-                isActive={activeId === c.id}
-                setActiveId={setActiveId}
-                onDelete={deleteConversation}
-                expanded={expanded}
-              />
-            ))}{" "}
-            <div className="p-4 pb-2 flex justify-between items-center mt-11">
+            <main className="flex flex-col pl-3">
+              {" "}
+              <Button
+                variant="subtle"
+                size="lg"
+                onClick={() => createConversation()}
+                className="bg-white text-black w-40 mt-2 h-12 "
+              >
+                New Conversation
+              </Button>
+              <Button
+                variant="subtle"
+                size="lg"
+                onClick={() => joinById()}
+                className="bg-white text-black w-40 mt-5 mb-11 h-12 "
+              >
+                Join by ID
+              </Button>
+            </main>
+            <div className="p-4 pb-2 flex justify-between items-center ">
               <img
                 src="https://i.pravatar.cc/200"
                 className={`overflow-hidden transition-all ${
@@ -73,13 +71,14 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
                 onClick={() => setExpanded((c) => !c)}
                 className="p-1.5  rounded-lg hover:bg-red-600"
               >
-                {expanded ? <ChevronFirst /> : <ChevronLast />}
+                {expanded ? <SquareChevronLeft /> : <ChevronLast />}
               </button>
             </div>
             <span>
               {" "}
               <UserContainer />
             </span>
+
             <SidebarContext.Provider
               value={{
                 expanded,
@@ -90,6 +89,19 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
             >
               <ul className="flex-1 px-3">{children}</ul>
             </SidebarContext.Provider>
+            <div className="h-full mt-11">
+              {" "}
+              {conversations.map((c) => (
+                <ConversationItem
+                  key={c.id}
+                  conv={c}
+                  isActive={activeId === c.id}
+                  setActiveId={setActiveId}
+                  onDelete={deleteConversation}
+                  expanded={expanded}
+                />
+              ))}
+            </div>
           </nav>{" "}
         </aside>
       ) : (
@@ -97,9 +109,9 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
           onClick={() => setExpanded((c) => !c)}
           className="p-1.5 rounded-lg border-r-2 border-zinc-600 hover:bg-green-600"
         >
-          {expanded ? <ChevronFirst /> : <ChevronLast />}
+          {expanded ? <SquareChevronLeft /> : <ChevronLast />}
         </button>
-      )}
+      )}{" "}
     </>
   );
 }
@@ -122,29 +134,31 @@ export function SidebarItem({
 }) {
   const ctx = useContext(SidebarContext);
   if (!ctx) throw new Error("SidebarItem must be used within <SideNav />");
-  const { expanded } = ctx;
+  // const { expanded } = ctx;
 
-  const base = `text-xl relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group`;
-  const active =
-    "bg-gradient-to-tr from-green-200 to-green-400 text-indigo-800 text-xl";
-  const inactive = "hover:bg-red-500 text-gray-100 text-xl";
+  const base = `text-xl h-11 relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group`;
+  const active = "bg-[#BE9C3D]  text-zinc-700 text-xl";
+  const inactive =
+    "transition ease-out duration-200 hover:bg-white hover:text-black text-xl";
 
   const inner = (
     <>
-      {icon}{" "}
-      <span
-        className={`overflow-hidden transition-all ${
-          expanded ? "w-52 ml-3 " : "w-0"
-        }`}
-      >
+      <Button variant="default" size="lg" className="">
+        <span aria-hidden="true" className="w-8 h-8 pt-1">
+          {" "}
+          {icon}
+        </span>{" "}
         {text}
-      </span>{" "}
+      </Button>
       {alert && (
         <div
-          className={`absolute right-2 top-2 w-2 h-2 rounded bg-indigo-400 `}
+          className={`absolute right-2 top-2 w-2 h-2 rounded bg-indigo-400`}
         />
-      )}
-      {!expanded && (
+      )}{" "}
+    </>
+  );
+  {
+    /* {!expanded && (
         <div
           className={`
             absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100
@@ -154,9 +168,8 @@ export function SidebarItem({
         >
           {text}
         </div>
-      )}
-    </>
-  );
+      )} */
+  }
 
   if (to) {
     return (
@@ -164,6 +177,7 @@ export function SidebarItem({
         <NavLink
           to={to}
           end={end}
+          onClick={onClick}
           className={({ isActive }) =>
             `${base} ${isActive ? active : inactive}  w-full text-left text-xl`
           }
@@ -179,7 +193,13 @@ export function SidebarItem({
       onClick={onClick}
       className={`${base} ${inactive} w-full text-left text-xl`}
     >
-      {inner}
+      <Button variant="default" size="lg" className="">
+        <span aria-hidden="true" className="w-8 h-8 pt-1">
+          {" "}
+          {icon}
+        </span>{" "}
+        {text}
+      </Button>
     </li>
   );
 }

@@ -10,7 +10,7 @@ import { useConversations } from "../../../shared/context/ConversationsContext";
 import { StatusBar } from "../components/StatusBar";
 
 import type { Message } from "../../../shared/types";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useState } from "react";
 import ChatBubble from "../components/ChatBubble";
 import logoUrl from "../../../assets/DriftusLogo.svg";
@@ -37,6 +37,9 @@ const ChatContainer = () => {
   const [aiLoading, setAiLoading] = useState(false);
 
   const [showAiError, setShowAiError] = useState(false);
+  const [glow, setGlow] = useState(false);
+
+  const [isFocused, setIsFocused] = useState(false);
 
   const { conversations } = useConversations();
 
@@ -47,6 +50,7 @@ const ChatContainer = () => {
   const pinClass = moodColor(sentiment, energy);
 
   async function suggestReply(source: string, maxWords = 12) {
+    setGlow(true);
     const r = await fetch("/.netlify/functions/suggest-reply", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -72,7 +76,26 @@ const ChatContainer = () => {
     setTips([]);
     setSentiment("");
     setEnergy(0);
+    setGlow(false);
   };
+
+  useEffect(() => {
+    console.log(isFocused);
+    if (!isFocused) return;
+
+    const interval = setInterval(() => {
+      fetchMessages();
+    }, 5000);
+
+    const timeout = setTimeout(() => {
+      setIsFocused(false);
+    }, 60_000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [isFocused, fetchMessages]);
 
   function getLatestMessage(messages: Message[], myId: string) {
     let lastMine: Message | null = null;
@@ -131,11 +154,14 @@ const ChatContainer = () => {
     return "";
   }
 
+  const handleSelection = () => {};
+
   return (
     <>
       <div className="flex h-screen fixed left-0 top-0 ml-[width]">
         <SideNav>
           <SidebarItem
+            onClick={handleSelection}
             icon={<BarChart3 size={20} />}
             text="Profile"
             to="/profile"
@@ -158,7 +184,7 @@ const ChatContainer = () => {
         </>
       )}
       <div className=" grid min-h-dvh place-items-center justify-center w-full">
-        <main className="flex-1 overflow-y-auto p-4 w-full">
+        <main className="flex-1 p-4 w-full">
           {peerName && (
             <div className="mb-4 flex">Conversation with: {peerName}</div>
           )}
@@ -171,6 +197,7 @@ const ChatContainer = () => {
                     side="left"
                     showPin={true}
                     pinClassName={pinClass || "text-green-500 "}
+                    glow={glow}
                   />
                 </li>
 
@@ -189,10 +216,13 @@ const ChatContainer = () => {
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Try writing something"
+                  classname="w-[310px] h-[50px]"
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
                 />
                 <button
                   type="submit"
-                  className="bg-[#BE9C3D] text-black px-4 py-2 mt-5 w-[80px] rounded-xl transition ease-out duration-200 hover:ring-2 hover:ring-white/95
+                  className="bg-[#BE9C3D] text-black px-4 py-2 mt-5 h-[50px] rounded-xl transition ease-out duration-200 hover:ring-2 hover:ring-white/95
             hover:-translate-y-0.5"
                 >
                   Send
@@ -242,11 +272,8 @@ const ChatContainer = () => {
                     </div>
                   </>
                 )}
-                <span className="mt-3 flex items-center gap-2 mb-6">
-                  positive: Critical tone - stay calm.
-                </span>
                 <div className="mt-2 flex gap-2 flex-wrap flex-col justify-start items-start">
-                  {/* {tips.map((t, i) => (
+                  {tips.map((t, i) => (
                     <button
                       key={i}
                       type="button"
@@ -255,10 +282,7 @@ const ChatContainer = () => {
                     >
                       {t}
                     </button>
-                  ))} */}
-                  <button>Xasgsgagsa</button>
-                  <button>Xvxzvxz</button>
-                  <button>Xaffasfsasfafsafsafsa</button>
+                  ))}
                 </div>
               </>
             )}

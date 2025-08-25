@@ -1,6 +1,7 @@
 type PinProps = { className?: string; glow?: boolean };
 
-export function Pin({ className = "text-green-500", glow = true }: PinProps) {
+export function Pin({ className = "text-green-500", glow = false }: PinProps) {
+  console.log(glow);
   return (
     <div className={`relative ${className}`} aria-hidden>
       {glow && (
