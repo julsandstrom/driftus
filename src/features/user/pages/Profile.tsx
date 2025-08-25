@@ -13,6 +13,7 @@ import type { RegisterField } from "../../auth/validators/registerValidator";
 import InputField from "../../../shared/components/InputField";
 import { fieldConfig } from "../../auth/constants/registerFieldConfig";
 import logoUrl from "../../../assets/DriftusLogo.svg";
+import { Button } from "../../../shared/components/Button";
 
 type Form = {
   id: string;
@@ -137,7 +138,7 @@ const Profile = () => {
           alt="DriftUs — Feel the message."
           className="block mx-auto w-[min(90vw,720px)]"
         />
-        <form className="flex flex-col justify-center mb-5">
+        <form className="flex flex-col mx-auto gap-8 justify-center items-center mt-11">
           {fieldConfig.map((field) => (
             <InputField
               key={field.name}
@@ -153,19 +154,13 @@ const Profile = () => {
             />
           ))}
         </form>
-        <div className="flex gap-11">
-          <button
-            onClick={handleSubmit}
-            className=" bg-yellow-500 text-black px-4 py-2 mt-5 w-50 rounded-xl"
-          >
+        <div className="flex gap-11 mt-8">
+          <Button onClick={handleSubmit} variant="primary" size="md">
             Save Changes
-          </button>
-          <button
-            onClick={handleDelete}
-            className=" bg-red-500 text-black px-4 py-2 mt-5 w-50 rounded-xl"
-          >
+          </Button>
+          <Button onClick={handleDelete} variant="destructive" size="md">
             Delete Account
-          </button>{" "}
+          </Button>
         </div>
 
         {showSuccessMsg && <span>User setting saved successfully.</span>}

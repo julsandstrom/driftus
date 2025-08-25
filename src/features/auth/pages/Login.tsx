@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import logoUrl from "../../../assets/DriftusLogo.svg";
+import InputField from "../../../shared/components/InputField";
+import { UserIcon, LockIcon } from "lucide-react";
+import { Button } from "../../../shared/components/Button";
 
 type User = {
   username: string;
@@ -15,6 +18,9 @@ const Login = () => {
     username: "",
     password: "",
   });
+
+  const [errorMessage, setErrorMessage] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -24,10 +30,15 @@ const Login = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setErrorMessage(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (errorMessage) return;
+    if (form.username.length <= 0 || form.password.length <= 0) {
+      setErrorMessage(true);
+    }
 
     try {
       const csrfRes = await fetch("https://chatify-api.up.railway.app/csrf", {
@@ -74,43 +85,37 @@ const Login = () => {
       />
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col mx-auto justify-center"
+        className="flex flex-col mx-auto gap-6 justify-center items-center"
       >
-        <div className="flex flex-col justify-center items-center gap-5">
-          <div className="flex flex-col">
-            <label>Username</label>
-            <input
-              name="username"
-              type="text"
-              placeholder="Username"
-              required
-              className="text-zinc-700 h-9 rounded-lg px-2 w-[210px] text-xl leading-none bg-white/90 shadow-sm ring-1 ring-zing-300 placeholder:text-zinc-400 transition focus:outline-none focus:ring-2 focus: ring-green-500/95 "
-              onChange={handleChange}
-            />
-          </div>
+        <InputField
+          type={"text"}
+          name="username"
+          icon={UserIcon}
+          label="Username"
+          placeholder={"username"}
+          value={form.username}
+          onChange={handleChange}
+        />
 
-          <div className="flex flex-col">
-            <label>Password</label>
-            <input
-              name="password"
-              type="password"
-              placeholder="Password"
-              required
-              className="text-zinc-700 h-9 rounded-lg px-2 w-[210px] text-xl leading-none bg-white/90 shadow-sm ring-1 ring-zing-300 placeholder:text-zinc-400 transition focus:outline-none focus:ring-2 focus: ring-green-500/95"
-              onChange={handleChange}
-            />
-          </div>
-          <button
-            type="submit"
-            className=" bg-[#BE9C3D] text-black px-4 py-2 mt-5 w-[150px] rounded-xl transition ease-out duration-200 hover:ring-2 hover:ring-white/95
-            hover:-translate-y-0.5"
-          >
-            Login
-          </button>
-        </div>
+        <InputField
+          type={"password"}
+          label={"Password"}
+          icon={LockIcon}
+          name="password"
+          placeholder={"password"}
+          value={form.password}
+          onChange={handleChange}
+        />
+
+        <Button type="submit" size="md" variant="primary">
+          Login
+        </Button>
       </form>
+      {errorMessage && (
+        <span className="text-red-600">Fields can't be left empty</span>
+      )}
       <br />
-      <div className="flex justify-center items-center ">
+      <div className="flex justify-center items-center mt-8">
         <h2 className="m-0 p-0 text-xl">No account?</h2>
         <button
           className="m-0 p-1 hover:underline text-xl"

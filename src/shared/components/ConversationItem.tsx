@@ -1,7 +1,8 @@
 import type { Conversation } from "../context/ConversationsContext";
-
+import { Trash2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useConversations } from "../context/ConversationsContext";
+import { Button } from "./Button";
 type Props = {
   conv: Conversation;
   isActive: boolean;
@@ -38,70 +39,109 @@ function ConversationItem({
         <li className="">
           {sharedConversation ? (
             <div className="flex h-11">
-              <button
+              <Button
+                variant="ghost"
+                size="md"
                 onClick={select}
-                className={`w-full text-left px-2 rounded-xl  ${
-                  isActive ? "bg-green-700 " : ""
+                className={`w-full text-left rounded-xl h-11 flex justify-center mr-2${
+                  isActive ? "bg-green-800 " : ""
                 }`}
                 title={conv.id}
               >
+                {" "}
                 {conv.title}
-              </button>{" "}
-              <button
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="md"
                 onClick={() => copyLink(conv.id)}
-                className="w-full text-left px-2"
+                className="w-full text-left rounded-xl "
               >
                 Copy Link
-              </button>
+              </Button>
               {onDelete && (
-                <button
+                <Button
+                  variant="destructiveIcon"
+                  size="icon"
+                  aria-label={`Delete conversation${
+                    conv.title ? ` “${conv.title}”` : ""
+                  }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     onDelete(conv.id);
                   }}
-                  title="Ta bort"
+                  title="Delete"
+                  className="bg-none"
                 >
-                  Delete
-                </button>
+                  <Trash2Icon
+                    aria-hidden="true"
+                    focusable="false"
+                    className="w-8 h-8"
+                  />
+                </Button>
               )}
             </div>
           ) : (
-            <div className="flex">
-              <button
+            <div className="flex rounded-xl flex-row gap-2">
+              <Button
+                variant="primary"
+                size="md"
                 onClick={select}
-                className={`w-full text-left ${isActive ? "bg-green-700" : ""}`}
+                className={`w-full text-left rounded-xl h-11 flex justify-center  ${
+                  isActive ? "bg-green-800 " : ""
+                }`}
                 title={conv.id}
               >
+                {" "}
                 {conv.title}
-              </button>{" "}
-              <button
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="md"
                 onClick={() => copyLink(conv.id)}
-                className="w-full text-left"
+                className="w-full text-left rounded-xl hover:bg-yellow-600"
               >
                 Copy Link
-              </button>
+              </Button>
               {onDelete && (
-                <button
+                <Button
+                  variant="destructiveIcon"
+                  size="icon"
+                  aria-label={`Delete conversation${
+                    conv.title ? ` “${conv.title}”` : ""
+                  }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     onDelete(conv.id);
                   }}
-                  title="Ta bort"
+                  title="Delete"
+                  className="bg-none"
                 >
-                  Delete
-                </button>
+                  <Trash2Icon
+                    aria-hidden="true"
+                    focusable="false"
+                    className="w-8 h-8"
+                  />
+                </Button>
               )}
             </div>
           )}
         </li>
       ) : (
-        <button
+        <Button
+          variant="primary"
+          size="md"
           onClick={select}
-          className={`w-full text-left ${isActive ? "bg-green-700" : ""}`}
+          className={`w-full text-left rounded-xl h-11 flex justify-center  ${
+            isActive ? "bg-green-800 " : ""
+          }`}
           title={conv.id}
         >
+          {" "}
           {conv.title}
-        </button>
+        </Button>
       )}
     </>
   );

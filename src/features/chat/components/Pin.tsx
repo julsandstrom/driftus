@@ -1,8 +1,28 @@
 type PinProps = { className?: string; glow?: boolean };
 
-export function Pin({ className = "text-green-500" }: PinProps) {
+export function Pin({ className = "text-green-500", glow = true }: PinProps) {
   return (
     <div className={`relative ${className}`} aria-hidden>
+      {glow && (
+        <>
+          <div
+            className="pointer-events-none absolute -z-10 left-1/2 top-1/2
+                       -translate-x-1/2 -translate-y-1/2 h-32 w-32 rounded-full
+                       opacity-80 blur-3xl mix-blend-screen"
+            style={{
+              background:
+                "radial-gradient(circle, currentColor 10%, transparent 70%)",
+            }}
+          />
+
+          <div
+            className="pointer-events-none absolute -z-10 left-1/2 top-1/2
+                       -translate-x-1/2 -translate-y-1/2 h-16 w-16 rounded-full
+                       opacity-70 blur"
+            style={{ backgroundColor: "currentColor" }}
+          />
+        </>
+      )}
       <svg
         viewBox="0 0 36 46"
         className="relative block h-11 w-11"

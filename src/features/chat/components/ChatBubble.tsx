@@ -16,11 +16,11 @@ export default function ChatBubble({
 
   return (
     <div
-      className={`relative mb-11 flex justify-center min-h-[150px] max-h-[220px] min-w-[300px] max-w-[300px]${
+      className={`relative mb-11 flex justify-center ${
         isRight ? "ml-auto text-zinc-900 mr-11" : "mr-auto"
-      }`}
+      }  w-[300px] md:w-[320px] aspect-[309/200] `}
     >
-      <div className="relative z-20 px-11 py-10 md:px-12 md:py-9 min-h-[150px] max-h-[220px] min-w-[300px] max-w-[300px]">
+      <div className="relative z-20 px-11 py-10 md:px-12 md:py-9  w-[300px] md:w-[320px] aspect-[309/148]  ">
         <p
           className={`text-2xl md:text-3xl leading-relaxed text-zinc-900 whitespace-pre-wrap break-words py-3 ${
             isRight && "text-zinc-400"
@@ -34,7 +34,7 @@ export default function ChatBubble({
           {" "}
           <svg
             viewBox="0 0 309 148"
-            preserveAspectRatio="none"
+            preserveAspectRatio="xMidYMid meet"
             className="pointer-events-none absolute inset-0 h-full w-full 
                    [filter:drop-shadow(0_4px_8px_rgba(0,0,0,0.25))] z-10"
             aria-hidden="true"
@@ -44,14 +44,14 @@ export default function ChatBubble({
               fill="#D7D7D7"
             />
           </svg>{" "}
-          <div className="absolute left-5 -bottom-8 ">
+          <div className="absolute left-5 -bottom-2 ">
             <Pin className={pinClassName} glow />
           </div>
         </>
       ) : (
         <svg
           viewBox="0 0 309 148"
-          preserveAspectRatio="none"
+          preserveAspectRatio="xMidYMid meet"
           className="pointer-events-none absolute inset-0 h-full w-full 
                    [filter:drop-shadow(0_4px_8px_rgba(0,0,0,0.25))]"
           aria-hidden="true"

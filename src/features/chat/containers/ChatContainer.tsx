@@ -26,6 +26,7 @@ const ChatContainer = () => {
     flashKind,
     flashText,
     fetchMessages,
+    inputError,
   } = useChat();
 
   const [tips, setTips] = useState<string[]>([]);
@@ -156,7 +157,7 @@ const ChatContainer = () => {
           />
         </>
       )}
-      <div className="pl-56 grid min-h-dvh place-items-center">
+      <div className=" grid min-h-dvh place-items-center justify-center w-full">
         <main className="flex-1 overflow-y-auto p-4 w-full">
           {peerName && (
             <div className="mb-4 flex">Conversation with: {peerName}</div>
@@ -164,7 +165,7 @@ const ChatContainer = () => {
           {conversations.length > 0 && (
             <>
               <ul className="flex flex-col gap-11 justify-center items-center">
-                <li className="mr-96 min-h-[200px] max-h-[200px] min-w-[300px] max-w-[300px] ">
+                <li className="mr-96 ">
                   <ChatBubble
                     text={lastTheirs?.text}
                     side="left"
@@ -173,7 +174,7 @@ const ChatContainer = () => {
                   />
                 </li>
 
-                <li className=" min-h-[200px] max-h-[200px] min-w-[300px] max-w-[300px] ">
+                <li className="">
                   <ChatBubble text={lastMine?.text} side="right" />
                 </li>
               </ul>
@@ -197,7 +198,7 @@ const ChatContainer = () => {
                   Send
                 </button>
               </form>
-
+              <span className="text-red-600">{inputError}</span>
               <button onClick={fetchMessages}>Load Message</button>
             </>
           )}{" "}
@@ -241,8 +242,11 @@ const ChatContainer = () => {
                     </div>
                   </>
                 )}
-                <div className="mt-2 flex gap-2 flex-wrap">
-                  {tips.map((t, i) => (
+                <span className="mt-3 flex items-center gap-2 mb-6">
+                  positive: Critical tone - stay calm.
+                </span>
+                <div className="mt-2 flex gap-2 flex-wrap flex-col justify-start items-start">
+                  {/* {tips.map((t, i) => (
                     <button
                       key={i}
                       type="button"
@@ -251,7 +255,10 @@ const ChatContainer = () => {
                     >
                       {t}
                     </button>
-                  ))}
+                  ))} */}
+                  <button>Xasgsgagsa</button>
+                  <button>Xvxzvxz</button>
+                  <button>Xaffasfsasfafsafsafsa</button>
                 </div>
               </>
             )}

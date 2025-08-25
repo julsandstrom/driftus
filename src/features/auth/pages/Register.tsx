@@ -5,6 +5,7 @@ import type { RegisterField } from "../validators/registerValidator";
 import InputField from "../../../shared/components/InputField";
 import { fieldConfig } from "../constants/registerFieldConfig";
 import logoUrl from "../../../assets/DriftusLogo.svg";
+import { Button } from "../../../shared/components/Button";
 
 type User = {
   username: string;
@@ -88,7 +89,7 @@ const Register = () => {
         {" "}
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col mx-auto gap-2 justify-center"
+          className="flex flex-col mx-auto gap-6 justify-center"
         >
           {fieldConfig.map((field) => (
             <InputField
@@ -105,13 +106,9 @@ const Register = () => {
             />
           ))}
           <div>
-            <button
-              type="submit"
-              className="bg-[#BE9C3D] text-black px-4 py-2 mt-11 w-[180px] rounded-xl transition ease-out duration-200 hover:ring-2 hover:ring-white/95
-            hover:-translate-y-0.5"
-            >
-              Register Account
-            </button>
+            <Button type="submit" size="md" variant="primary">
+              Register
+            </Button>
           </div>
         </form>
       </div>

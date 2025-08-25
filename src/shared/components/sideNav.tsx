@@ -32,10 +32,10 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
       {expanded ? (
         <aside
           className={`
-        h-screen shrink-0 border-r border-zinc-600
+        h-full shrink-0 border-r border-zinc-600
         transition-[width] duration-200 pr-4 
-        ${expanded ? "w-64" : "w-16"}
-        sticky top-0 left-0
+        ${expanded ? "w-64 " : "w-16"}
+        sticky top-0 left-0 h-11
       `}
         >
           <nav className="h-full flex flex-col pl-3">
@@ -71,7 +71,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
               />{" "}
               <button
                 onClick={() => setExpanded((c) => !c)}
-                className="p-1.5 rounded-lg hover:bg-green-100"
+                className="p-1.5  rounded-lg hover:bg-red-600"
               >
                 {expanded ? <ChevronFirst /> : <ChevronLast />}
               </button>
@@ -95,7 +95,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
       ) : (
         <button
           onClick={() => setExpanded((c) => !c)}
-          className="p-1.5 rounded-lg hover:bg-green-100"
+          className="p-1.5 rounded-lg border-r-2 border-zinc-600 hover:bg-green-600"
         >
           {expanded ? <ChevronFirst /> : <ChevronLast />}
         </button>

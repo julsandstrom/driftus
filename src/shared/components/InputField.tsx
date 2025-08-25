@@ -26,19 +26,19 @@ const InputField = ({
   autoComplete,
 }: InputFieldProps) => {
   return (
-    <div className="flex flex-row gap-8 justify-between items-end mt-9 h-[40px]">
-      <div className="flex gap-2">
-        {" "}
-        {Icon && <Icon />}
-        {label && (
-          <label htmlFor={name} className="text-xl font-medium">
-            {label}
-          </label>
-        )}{" "}
-      </div>
+    <>
       <div className="flex flex-col justify-between">
         {" "}
         {errorMessages && <p className="text-red-600">{errorMessages}</p>}{" "}
+        <div className="flex">
+          {" "}
+          {Icon && <Icon />}
+          {label && (
+            <label htmlFor={name} className="text-xl font-medium">
+              {label}
+            </label>
+          )}{" "}
+        </div>
         <input
           type={type}
           name={name}
@@ -49,7 +49,7 @@ const InputField = ({
           autoComplete={autoComplete}
         />{" "}
       </div>
-    </div>
+    </>
   );
 };
 
