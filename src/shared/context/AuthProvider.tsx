@@ -11,11 +11,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const CONV_KEYS = ["conversations", "activeConversationId"];
+  const clearConversationsCache = () => {
+    for (const k of CONV_KEYS) localStorage.removeItem(k);
+  };
+
   const refreshUser = async () => {
     const storedToken = localStorage.getItem("token");
 
     if (!storedToken) {
       console.log("Missing token");
+      clearConversationsCache();
       navigate("/login");
       setLoading(false);
       return;
@@ -54,6 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
     } catch (err) {
       console.log(err);
+      clearConversationsCache();
       localStorage.removeItem("token");
       navigate("/login");
     } finally {
@@ -71,12 +78,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (token: string) => {
     localStorage.setItem("token", token);
+    clearConversationsCache();
     await refreshUser();
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     console.log("Deleting token");
+    clearConversationsCache();
     setUser(null);
     navigate("/login");
   };
@@ -84,7 +93,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   if (loading) return null;
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, refreshUser, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        refreshUser,
+        loading,
+        clearConversationsCache,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -13,7 +13,7 @@ export const RegisterFieldRules = {
   ],
   email: [
     { fn: (e) => e.length > 0, error: "Email is empty" },
-    { fn: (e) => e.length <= 20, error: "Max 20 characters" },
+    { fn: (e) => e.length <= 30, error: "Max 30 characters" },
     {
       fn: (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e),
       error: "Invalid email format",

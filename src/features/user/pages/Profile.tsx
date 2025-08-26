@@ -24,7 +24,7 @@ type Form = {
   password: string;
 };
 const Profile = () => {
-  const { user, logout, refreshUser } = useAuth();
+  const { user, logout, refreshUser, clearConversationsCache } = useAuth();
   const navigate = useNavigate();
   const [showError, setShowError] = useState<
     Partial<Record<RegisterField, string[]>>
@@ -122,6 +122,7 @@ const Profile = () => {
       }
     );
     if (res.ok) {
+      clearConversationsCache();
       navigate("/login");
     } else {
       console.log("failed to delete account");
