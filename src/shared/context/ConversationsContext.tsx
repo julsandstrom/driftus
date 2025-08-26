@@ -56,7 +56,7 @@ export function ConversationsProvider({
     const id = crypto.randomUUID();
     const conv = { id, title };
     setConversations((cs) => [conv, ...cs]);
-    setActiveId(id);
+    setActiveId(conv.id);
     return conv;
   }
 
@@ -70,6 +70,7 @@ export function ConversationsProvider({
   }
 
   function ensureConversation(id: string, title = "Shared") {
+    console.log("This should not run");
     setConversations((prev) => {
       if (prev.some((c) => c.id === id)) return prev;
       return [{ id, title }, ...prev];

@@ -6,6 +6,8 @@ import { useConversations } from "../context/ConversationsContext";
 import ConversationItem from "./ConversationItem";
 import UserContainer from "../../features/user/containers/UserContainer";
 import { Button } from "./Button";
+import { useAvatarPreview } from "../context/AvatarPreviewContext";
+import { useAuth } from "../hooks/useAuth";
 
 type SidebarContext = {
   expanded: boolean;
@@ -16,17 +18,15 @@ type SidebarContext = {
 const SidebarContext = createContext<SidebarContext | null>(null);
 
 export default function SideNav({ children }: { children: React.ReactNode }) {
-  const {
-    conversations,
-    activeId,
-    setActiveId,
-    createConversation,
-    deleteConversation,
-
-    joinById,
-  } = useConversations();
+  const { conversations, createConversation, deleteConversation, joinById } =
+    useConversations();
   const [expanded, setExpanded] = useState(true);
   const [activeKey, setActiveKey] = useState<string | null>(null);
+
+  const { user } = useAuth();
+  const { preview } = useAvatarPreview();
+
+  const avatarSrc = preview ?? user?.avatar ?? "";
 
   return (
     <>
@@ -61,11 +61,12 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
             </main>
             <div className="p-4 pb-2 flex justify-between items-center ">
               <img
-                src="https://i.pravatar.cc/200"
+                src={avatarSrc}
                 className={`overflow-hidden transition-all rounded-xl ${
                   expanded ? "w-32" : "w-0"
                 }`}
-                alt=""
+                alt={user?.user ? `${user.user} avatar` : "Avatar"}
+                loading="lazy"
               />{" "}
               <button
                 onClick={() => setExpanded((c) => !c)}
@@ -95,8 +96,6 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
                 <ConversationItem
                   key={c.id}
                   conv={c}
-                  isActive={activeId === c.id}
-                  setActiveId={setActiveId}
                   onDelete={deleteConversation}
                   expanded={expanded}
                 />
@@ -134,7 +133,6 @@ export function SidebarItem({
 }) {
   const ctx = useContext(SidebarContext);
   if (!ctx) throw new Error("SidebarItem must be used within <SideNav />");
-  // const { expanded } = ctx;
 
   const base = `text-xl h-11 relative flex items-center py-2  my-1 font-medium rounded-md cursor-pointer transition-colors group`;
   const active = "bg-[#BE9C3D]  text-zinc-700 text-xl";
@@ -158,17 +156,6 @@ export function SidebarItem({
     </>
   );
   {
-    /* {!expanded && (
-        <div
-          className={`
-            absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100
-            text-indigo-800 text-sm invisible opacity-0 -translate-x-3
-            transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-          `}
-        >
-          {text}
-        </div>
-      )} */
   }
 
   if (to) {

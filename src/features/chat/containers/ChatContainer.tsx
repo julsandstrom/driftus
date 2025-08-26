@@ -8,8 +8,7 @@ import { useConversations } from "../../../shared/context/ConversationsContext";
 import { StatusBar } from "../components/StatusBar";
 
 import type { Message } from "../../../shared/types";
-import { useMemo } from "react";
-import { useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import logoUrl from "../../../assets/DriftusLogo.svg";
 import { Button } from "../../../shared/components/Button";
@@ -26,7 +25,6 @@ const ChatContainer = () => {
     peerName,
     flashKind,
     flashText,
-
     inputError,
 
     setIsFocused,
@@ -42,7 +40,7 @@ const ChatContainer = () => {
   const [showAiError, setShowAiError] = useState(false);
   const [glow, setGlow] = useState(false);
 
-  const { conversations } = useConversations();
+  const { conversations, activeId } = useConversations();
 
   const { logout, user } = useAuth();
 
@@ -84,10 +82,10 @@ const ChatContainer = () => {
   function getLatestMessage(messages: Message[], myId: string) {
     let lastMine: Message | null = null;
     let lastTheirs: Message | null = null;
-    setTips([]);
-    setSentiment("");
-    setEnergy(0);
-    moodColor("", 0);
+    // setTips([]);
+    // setSentiment("");
+    // setEnergy(0);
+    // moodColor("", 0);
     for (let i = messages.length - 1; i >= 0; i--) {
       const m = messages[i];
       const uid = String(m.userId ?? "");
@@ -100,6 +98,13 @@ const ChatContainer = () => {
     }
     return { lastMine, lastTheirs };
   }
+  useEffect(() => {
+    setTips([]);
+    setSentiment("");
+    setEnergy(0);
+    setGlow(false);
+    setShowAiError(false);
+  }, [activeId]);
 
   const { lastMine, lastTheirs } = useMemo(
     () => getLatestMessage(messages, myId),
@@ -172,6 +177,7 @@ const ChatContainer = () => {
           {conversations.length > 0 && (
             <>
               <MessagePair
+                key={activeId}
                 theirs={lastTheirs?.text}
                 mine={lastMine?.text}
                 pinClass={pinClass || "text-green-500 "}
@@ -181,6 +187,7 @@ const ChatContainer = () => {
               {/* <ChatList messages={messages} removeMessage={removeMessage} /> */}
 
               <Composer
+                key={`composer-${activeId}`}
                 value={newMessage}
                 onSend={handleSubmit}
                 onChange={setNewMessage}

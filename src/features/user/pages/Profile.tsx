@@ -14,7 +14,8 @@ import InputField from "../../../shared/components/InputField";
 import { fieldConfig } from "../../auth/constants/registerFieldConfig";
 import logoUrl from "../../../assets/DriftusLogo.svg";
 import { Button } from "../../../shared/components/Button";
-
+import { useAvatarPreview } from "../../../shared/context/AvatarPreviewContext";
+import * as Sentry from "@sentry/react";
 type Form = {
   id: string;
   username: string;
@@ -30,6 +31,8 @@ const Profile = () => {
   >({});
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
 
+  const { setPreview } = useAvatarPreview();
+
   const [form, setForm] = useState<Form>({
     id: user?.id ?? "",
     username: user?.user ?? "",
@@ -40,8 +43,14 @@ const Profile = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
+
+    if (name === "avatar") {
+      const clean = value.trim();
+
+      if (!clean || clean === (user?.avatar ?? "")) setPreview(null);
+      else setPreview(clean);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,10 +92,16 @@ const Profile = () => {
     if (res.ok) {
       refreshUser();
       setShowSuccessMsg(true);
+      setPreview(null);
       console.log("Update was successful");
+      Sentry.captureMessage("profile:update_success", { level: "info" });
     } else {
       setShowSuccessMsg(false);
-      console.log("Update failed.");
+      console.warn("Update failed.");
+      Sentry.captureMessage("profile:update_failed", {
+        level: "error",
+        extra: { status: res.status, userId: form.id },
+      });
     }
   };
 

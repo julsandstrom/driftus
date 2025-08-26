@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import type { Message } from "../../../shared/types";
 import type { FlashKind } from "./ChatContext";
@@ -14,6 +14,7 @@ import {
   deleteMessage,
 } from "../../../shared/api/chatify";
 import { useAuth } from "../../../shared/hooks/useAuth";
+import * as Sentry from "@sentry/react";
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -70,25 +71,53 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     if (!activeId) return;
     try {
       const data = await getMessages(activeId);
       const list = Array.isArray(data) ? data : [];
       updatePeerName(list);
       setMessages(list);
+      console.log(list);
       if (list.length >= 1) {
         showFlash("success", "Loaded messages!", 2000);
       } else {
         showFlash("success", "You have not recieved a message yet...");
       }
     } catch (err) {
-      console.log("Failed to load messages", err);
+      console.warn("Failed to load messages", err);
       showFlash("error", "Failed to load messages", 2000);
+    }
+  }, [activeId]);
+
+  useEffect(() => {
+    if (!isFocused) return;
+    console.log(isFocused);
+
+    const interval = setInterval(() => {
+      fetchMessages();
+      console.log("fetching");
+    }, 5000);
+
+    const timeout = setTimeout(() => {
+      setIsFocused(false);
+    }, 30_000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [isFocused, fetchMessages, setIsFocused]);
+
+  useEffect(() => {
+    if (!activeId) {
       setMessages([]);
       setPeerName("");
+      return;
     }
-  };
+
+    fetchMessages();
+  }, [activeId]);
 
   useEffect(() => {
     const cid = sp.get("conversationID");
@@ -123,6 +152,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const sent = await createMessage(cleanInput, activeId);
       console.log("Message was sent!");
+      Sentry.captureMessage("test: Sent Message", { level: "info" });
       setNewMessage("");
       setMessages((prev) => [...prev, sent]);
       setAiTipRecieved(false);
@@ -165,6 +195,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         sendingStatus,
         aiTipRecieved,
         setAiTipRecieved,
+        setMessages,
       }}
     >
       {children}

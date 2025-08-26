@@ -3,30 +3,22 @@ import { Trash2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useConversations } from "../context/ConversationsContext";
 import { Button } from "./Button";
-import { useEffect } from "react";
-import { useChat } from "../../features/chat/hooks/useChat";
 
 type Props = {
   conv: Conversation;
-  isActive: boolean;
-  setActiveId: (id: string) => void;
+
   onDelete?: (id: string) => void;
   expanded: boolean;
 };
 
-function ConversationItem({
-  conv,
-  isActive,
-  setActiveId,
-  onDelete,
-  expanded,
-}: Props) {
+function ConversationItem({ conv, onDelete, expanded }: Props) {
   const navigate = useNavigate();
 
-  const { conversations } = useConversations();
-  const { fetchMessages, isFocused, setIsFocused } = useChat();
+  const { conversations, activeId, setActiveId } = useConversations();
+
   const select = () => {
     setActiveId(conv.id);
+
     navigate(`/chat?conversationID=${conv.id}`);
   };
   const copyLink = async (id: string) => {
@@ -34,26 +26,8 @@ function ConversationItem({
     alert("Länk kopierad");
   };
 
+  const isActive = activeId === conv.id;
   const sharedConversation = conversations[0].title === "Chat";
-
-  useEffect(() => {
-    if (!isFocused) return;
-    console.log(isFocused);
-
-    const interval = setInterval(() => {
-      fetchMessages();
-      console.log("fetching");
-    }, 5000);
-
-    const timeout = setTimeout(() => {
-      setIsFocused(false);
-    }, 30_000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, [isFocused, fetchMessages, setIsFocused]);
 
   return (
     <>

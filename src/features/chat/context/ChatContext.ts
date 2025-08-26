@@ -20,6 +20,7 @@ type ChatContextType = {
   setIsFocused: (v: boolean) => void;
   aiTipRecieved: boolean;
   setAiTipRecieved: (s: boolean) => void;
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 };
 
 const ChatContext = createContext<ChatContextType | null>(null);
