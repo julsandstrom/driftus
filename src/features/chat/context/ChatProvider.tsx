@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react";
 import React, { useCallback, useEffect, useState } from "react";
 
 import type { Message } from "../../../shared/types";
@@ -14,7 +15,6 @@ import {
   deleteMessage,
 } from "../../../shared/api/chatify";
 import { useAuth } from "../../../shared/hooks/useAuth";
-import * as Sentry from "@sentry/react";
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -86,6 +86,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (err) {
       console.warn("Failed to load messages", err);
+      Sentry.captureMessage("Failed to load messages", { level: "info" });
       showFlash("error", "Failed to load messages", 2000);
     }
   }, [activeId]);
@@ -151,8 +152,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       const sent = await createMessage(cleanInput, activeId);
-      console.log("Message was sent!");
-      Sentry.captureMessage("test: Sent Message", { level: "info" });
+
       setNewMessage("");
       setMessages((prev) => [...prev, sent]);
       setAiTipRecieved(false);
@@ -161,6 +161,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       setSendingStatus(false);
     } catch (err) {
       console.log("failed to send", err);
+      Sentry.captureMessage("failed to send", { level: "info" });
+
       showFlash("error", "Failed to send", 2000);
       setSendingStatus(false);
     }
@@ -174,6 +176,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (err) {
       showFlash("error", "Failed to delete message...");
       console.log("Failed to delete message", err);
+      Sentry.captureMessage("Failed to delete message", { level: "info" });
     }
   };
   return (

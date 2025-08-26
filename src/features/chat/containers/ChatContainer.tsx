@@ -14,6 +14,7 @@ import logoUrl from "../../../assets/DriftusLogo.svg";
 import { Button } from "../../../shared/components/Button";
 import MessagePair from "../components/MessagePair";
 import Composer from "../components/Composer";
+// import ChatList from "../components/ChatList";
 
 const ChatContainer = () => {
   const {
@@ -183,9 +184,7 @@ const ChatContainer = () => {
                 pinClass={pinClass || "text-green-500 "}
                 glow={glow}
               />
-
               {/* <ChatList messages={messages} removeMessage={removeMessage} /> */}
-
               <Composer
                 key={`composer-${activeId}`}
                 value={newMessage}
@@ -210,7 +209,6 @@ const ChatContainer = () => {
                 inputError={inputError}
                 setIsFocused={setIsFocused}
               />
-              {/* <span className="text-red-600 mr-48">{inputError}</span> */}
             </>
           )}{" "}
           <div className="flex-row">

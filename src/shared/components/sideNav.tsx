@@ -26,7 +26,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   const { preview } = useAvatarPreview();
 
-  const avatarSrc = preview ?? user?.avatar ?? "";
+  const avatarSrc = preview ?? user?.avatar ?? "https://i.pravatar.cc/200";
 
   return (
     <>

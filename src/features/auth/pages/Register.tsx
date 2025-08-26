@@ -26,6 +26,8 @@ const Register = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  const [registerError, setRegisterError] = useState(false);
+  const [registerErrorMsg, setRegisterErrorMsg] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,10 +69,15 @@ const Register = () => {
       const data = await res.json();
 
       if (!res.ok) {
+        setRegisterError(true);
+        setRegisterErrorMsg(data.error);
+        console.warn(data.error);
         throw new Error(data.message || "Registration failed");
       }
       if (res.ok) {
         navigate("/login");
+        setRegisterError(false);
+        setRegisterErrorMsg("");
       }
     } catch {
       console.log("Something went wrong");
@@ -105,10 +112,15 @@ const Register = () => {
               autoComplete={field.autoComplete}
             />
           ))}
-          <div>
+          <div className="flex flex-col justify-center">
             <Button type="submit" size="md" variant="primary">
               Register
             </Button>
+            {registerError && (
+              <p id="register error" role="alert" className="text-red-600">
+                {registerErrorMsg}
+              </p>
+            )}
           </div>
         </form>
       </div>

@@ -75,11 +75,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = () => {
-    const confirm = window.confirm("You sure you want to logout?");
-    if (!confirm) return;
     localStorage.removeItem("token");
     console.log("Deleting token");
     setUser(null);
+    navigate("/login");
   };
 
   if (loading) return null;

@@ -122,7 +122,6 @@ const Profile = () => {
       }
     );
     if (res.ok) {
-      logout();
       navigate("/login");
     } else {
       console.log("failed to delete account");
