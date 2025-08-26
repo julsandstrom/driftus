@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import type { Message } from "../../../shared/types";
 import type { FlashKind } from "./ChatContext";
@@ -21,14 +21,15 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [inputError, setInputError] = useState("");
   const { activeId, setConversations } = useConversations();
   const [peerName, setPeerName] = useState<string>("");
-
+  const [isFocused, setIsFocused] = useState(false);
   const [flashText, setFlashText] = useState<string | null>(null);
   const [flashKind, setFlashKind] = useState<FlashKind>("info");
-
+  const [aiTipRecieved, setAiTipRecieved] = useState(false);
+  const [sendingStatus, setSendingStatus] = useState(false);
   const [sp, setSp] = useSearchParams();
   const { user } = useAuth();
 
-  function showFlash(kind: FlashKind, text: string, ms = 1500): void {
+  function showFlash(kind: FlashKind, text: string, ms = 3500): void {
     setFlashKind(kind);
     setFlashText(text);
     if (ms > 0) setTimeout(() => setFlashText(null), ms);
@@ -55,9 +56,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
                   ...c,
                   shared: true,
                   title:
-                    c.title === "Chat" || c.title === "Shared Conversation"
-                      ? name
-                      : c.title,
+                    c.title === "Chat" || c.title === "Shared" ? name : c.title,
                 }
               : c
           )
@@ -80,6 +79,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       setMessages(list);
       if (list.length >= 1) {
         showFlash("success", "Loaded messages!", 2000);
+      } else {
+        showFlash("success", "You have not recieved a message yet...");
       }
     } catch (err) {
       console.log("Failed to load messages", err);
@@ -99,16 +100,6 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [activeId]);
 
-  useEffect(() => {
-    if (!activeId) {
-      setMessages([]);
-      return;
-    }
-    fetchMessages();
-    setInputError("");
-    console.log("fetched messages");
-  }, [activeId]);
-
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -125,18 +116,23 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       setInputError(errorMessage[0]);
       return;
     }
+    setSendingStatus(true);
 
     setInputError("");
 
     try {
       const sent = await createMessage(cleanInput, activeId);
+      console.log("Message was sent!");
       setNewMessage("");
       setMessages((prev) => [...prev, sent]);
+      setAiTipRecieved(false);
       await fetchMessages();
       showFlash("success", "Sent successfully", 1200);
+      setSendingStatus(false);
     } catch (err) {
       console.log("failed to send", err);
       showFlash("error", "Failed to send", 2000);
+      setSendingStatus(false);
     }
   };
 
@@ -164,6 +160,11 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         flashKind,
         flashText,
         showFlash,
+        isFocused,
+        setIsFocused,
+        sendingStatus,
+        aiTipRecieved,
+        setAiTipRecieved,
       }}
     >
       {children}

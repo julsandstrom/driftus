@@ -1,5 +1,3 @@
-import InputField from "../../../shared/components/InputField";
-
 import { useChat } from "../hooks/useChat";
 
 import SideNav from "../../../shared/components/sideNav";
@@ -10,10 +8,13 @@ import { useConversations } from "../../../shared/context/ConversationsContext";
 import { StatusBar } from "../components/StatusBar";
 
 import type { Message } from "../../../shared/types";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useState } from "react";
-import ChatBubble from "../components/ChatBubble";
+
 import logoUrl from "../../../assets/DriftusLogo.svg";
+import { Button } from "../../../shared/components/Button";
+import MessagePair from "../components/MessagePair";
+import Composer from "../components/Composer";
 
 const ChatContainer = () => {
   const {
@@ -25,8 +26,10 @@ const ChatContainer = () => {
     peerName,
     flashKind,
     flashText,
-    fetchMessages,
+
     inputError,
+
+    setIsFocused,
   } = useChat();
 
   const [tips, setTips] = useState<string[]>([]);
@@ -38,8 +41,6 @@ const ChatContainer = () => {
 
   const [showAiError, setShowAiError] = useState(false);
   const [glow, setGlow] = useState(false);
-
-  const [isFocused, setIsFocused] = useState(false);
 
   const { conversations } = useConversations();
 
@@ -77,25 +78,8 @@ const ChatContainer = () => {
     setSentiment("");
     setEnergy(0);
     setGlow(false);
+    setShowAiError(false);
   };
-
-  useEffect(() => {
-    console.log(isFocused);
-    if (!isFocused) return;
-
-    const interval = setInterval(() => {
-      fetchMessages();
-    }, 5000);
-
-    const timeout = setTimeout(() => {
-      setIsFocused(false);
-    }, 60_000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, [isFocused, fetchMessages]);
 
   function getLatestMessage(messages: Message[], myId: string) {
     let lastMine: Message | null = null;
@@ -154,14 +138,11 @@ const ChatContainer = () => {
     return "";
   }
 
-  const handleSelection = () => {};
-
   return (
     <>
       <div className="flex h-screen fixed left-0 top-0 ml-[width]">
         <SideNav>
           <SidebarItem
-            onClick={handleSelection}
             icon={<BarChart3 size={20} />}
             text="Profile"
             to="/profile"
@@ -190,46 +171,39 @@ const ChatContainer = () => {
           )}
           {conversations.length > 0 && (
             <>
-              <ul className="flex flex-col gap-11 justify-center items-center">
-                <li className="mr-96 ">
-                  <ChatBubble
-                    text={lastTheirs?.text}
-                    side="left"
-                    showPin={true}
-                    pinClassName={pinClass || "text-green-500 "}
-                    glow={glow}
-                  />
-                </li>
+              <MessagePair
+                theirs={lastTheirs?.text}
+                mine={lastMine?.text}
+                pinClass={pinClass || "text-green-500 "}
+                glow={glow}
+              />
 
-                <li className="">
-                  <ChatBubble text={lastMine?.text} side="right" />
-                </li>
-              </ul>
               {/* <ChatList messages={messages} removeMessage={removeMessage} /> */}
 
-              <form
-                onSubmit={handleSubmit}
-                className="flex justify-center items-end gap-3 mt-0"
-              >
-                <InputField
-                  name="chat"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Try writing something"
-                  classname="w-[310px] h-[50px]"
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
-                />
-                <button
-                  type="submit"
-                  className="bg-[#BE9C3D] text-black px-4 py-2 mt-5 h-[50px] rounded-xl transition ease-out duration-200 hover:ring-2 hover:ring-white/95
-            hover:-translate-y-0.5"
-                >
-                  Send
-                </button>
-              </form>
-              <span className="text-red-600">{inputError}</span>
-              <button onClick={fetchMessages}>Load Message</button>
+              <Composer
+                value={newMessage}
+                onSend={handleSubmit}
+                onChange={setNewMessage}
+                onSuggest={async () => {
+                  if (!lastTheirs) {
+                    setShowAiError(true);
+                    return;
+                  }
+                  setAiLoading(true);
+                  try {
+                    const out = await suggestReply(lastTheirs.text, 12);
+                    setTips(out.suggestions || []);
+                    setEnergy(Number(out.energy ?? 0));
+                    setSentiment((out.sentiment as any) || "");
+                  } finally {
+                    setAiLoading(false);
+                  }
+                }}
+                aiLoading={aiLoading}
+                inputError={inputError}
+                setIsFocused={setIsFocused}
+              />
+              {/* <span className="text-red-600 mr-48">{inputError}</span> */}
             </>
           )}{" "}
           <div className="flex-row">
@@ -237,58 +211,40 @@ const ChatContainer = () => {
 
             {lastTheirs && (
               <>
-                {" "}
-                <button
-                  type="button"
-                  disabled={!lastTheirs || aiLoading}
-                  onClick={async () => {
-                    if (!lastTheirs) return;
-                    setAiLoading(true);
-                    try {
-                      const out = await suggestReply(lastTheirs.text, 12);
-                      setTips(out.suggestions || []);
-                      setEnergy(Number(out.energy ?? 0));
-                      setSentiment((out.sentiment as any) || "");
-                    } finally {
-                      setAiLoading(false);
-                    }
-                  }}
-                >
-                  {aiLoading ? "Analyzing message..." : "AI Suggestions"}
-                </button>
                 {sentiment !== "" && (
-                  <>
-                    <div className="mt-3 flex items-center gap-2">
-                      <div
-                        className={`w-3 h-3 rounded-full ${moodColor(
-                          sentiment,
-                          energy
-                        )}`}
-                      />
+                  <div className="mt-3 flex items-center gap-2">
+                    <div
+                      className={`w-3 h-3 rounded-full ${moodColor(
+                        sentiment,
+                        energy
+                      )}`}
+                    />
 
-                      <span className="text-sm opacity-80">
-                        {moodLabel(sentiment, energy)}
-                      </span>
-                    </div>
-                  </>
+                    <span className="text-sm opacity-80">
+                      {moodLabel(sentiment, energy)}
+                    </span>
+                  </div>
                 )}
                 <div className="mt-2 flex gap-2 flex-wrap flex-col justify-start items-start">
                   {tips.map((t, i) => (
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="md"
                       key={i}
-                      type="button"
                       className="underline"
                       onClick={() => setNewMessage(t)}
                     >
                       {t}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </>
             )}
           </div>
           {showAiError && (
-            <span>AI Suggestions is currently not available.</span>
+            <p id="ai error" role="alert">
+              AI Suggestions is currently not available.
+            </p>
           )}
         </main>
       </div>

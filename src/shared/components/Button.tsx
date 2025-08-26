@@ -34,6 +34,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
+    const isDisabled = !!(disabled || loading);
+
+    const disabledClasses =
+      "disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none";
+
     const variantStyling =
       variant === "primary"
         ? " flex justify-center items-center bg-[#BE9C3D]  text-[#1A1A1A] px-4 py-2   rounded-xl transition ease-out duration-200 hover:bg-[#9E7E2F]  hover:-translate-y-0.5"
@@ -52,11 +57,36 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type}
         aria-label={ariaLabel}
-        onClick={onClick}
-        className={`${size} ${variantStyling} ${className}`}
+        onClick={isDisabled ? undefined : onClick}
+        className={`${size} ${variantStyling}  ${disabledClasses} ${className}`}
         disabled={disabled || loading}
+        aria-disabled={isDisabled || undefined}
+        aria-busy={loading || undefined}
         title={title}
       >
+        {" "}
+        {loading && (
+          <svg
+            className="mr-2 h-4 w-4 animate-spin"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+              fill="none"
+            />
+            <path
+              className="opacity-75"
+              d="M12 2a10 10 0 0 1 10 10h-4a6 6 0 0 0-6-6V2z"
+              fill="currentColor"
+            />
+          </svg>
+        )}
         {children}
       </button>
     );

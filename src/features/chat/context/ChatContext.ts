@@ -15,6 +15,11 @@ type ChatContextType = {
   flashKind: FlashKind;
   flashText: string | null;
   showFlash: (kind: FlashKind, text: string) => void;
+  isFocused: boolean;
+  sendingStatus: boolean;
+  setIsFocused: (v: boolean) => void;
+  aiTipRecieved: boolean;
+  setAiTipRecieved: (s: boolean) => void;
 };
 
 const ChatContext = createContext<ChatContextType | null>(null);

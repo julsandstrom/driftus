@@ -3,6 +3,9 @@ import { Trash2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useConversations } from "../context/ConversationsContext";
 import { Button } from "./Button";
+import { useEffect, useState } from "react";
+import { useChat } from "../../features/chat/hooks/useChat";
+
 type Props = {
   conv: Conversation;
   isActive: boolean;
@@ -21,7 +24,7 @@ function ConversationItem({
   const navigate = useNavigate();
 
   const { conversations } = useConversations();
-
+  const { fetchMessages, isFocused, setIsFocused } = useChat();
   const select = () => {
     setActiveId(conv.id);
     navigate(`/chat?conversationID=${conv.id}`);
@@ -33,21 +36,40 @@ function ConversationItem({
 
   const sharedConversation = conversations[0].title === "Chat";
 
+  useEffect(() => {
+    if (!isFocused) return;
+    console.log(isFocused);
+
+    const interval = setInterval(() => {
+      fetchMessages();
+      console.log("fetching");
+    }, 5000);
+
+    const timeout = setTimeout(() => {
+      setIsFocused(false);
+    }, 30_000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [isFocused, fetchMessages, setIsFocused]);
+
   return (
     <>
       {expanded ? (
         <li
-          className={`w-full rounded-xl h-11  text-[#1A1A1A] pr-4 mb-2 list-none ${
-            isActive ? "bg-[#BE9C3D]  text-[#1A1A1A] " : "bg-white"
+          className={`w-full rounded-xl h-14  text-[#1A1A1A] px-4 mb-2 list-none flex justify-between ${
+            isActive ? "bg-white  text-[#1A1A1A] " : ""
           }`}
         >
           {sharedConversation ? (
-            <div className="flex h-11">
+            <>
               <Button
-                variant="subtle"
+                variant={`${!isActive ? "ghost" : "subtle"}`}
                 size="md"
                 onClick={select}
-                className={`w-full text-left rounded-xl h-11 flex justify-center mr-2
+                className={`w-full text-left rounded-xl h-11 flex justify-center mr-2 place-self-center
                 }`}
                 title={conv.id}
               >
@@ -56,7 +78,7 @@ function ConversationItem({
               </Button>
 
               <Button
-                variant="subtle"
+                variant={`${!isActive ? "ghost" : "subtle"}`}
                 size="md"
                 onClick={() => copyLink(conv.id)}
                 className="w-full text-left rounded-xl "
@@ -75,7 +97,9 @@ function ConversationItem({
                     onDelete(conv.id);
                   }}
                   title="Delete"
-                  className="bg-none"
+                  className={`bg-none ${
+                    !isActive ? "ghost text-white" : "subtle"
+                  }`}
                 >
                   <Trash2Icon
                     aria-hidden="true"
@@ -84,15 +108,15 @@ function ConversationItem({
                   />
                 </Button>
               )}
-            </div>
+            </>
           ) : (
-            <div className="flex rounded-xl flex-row gap-2">
+            <>
               <Button
-                variant="primary"
+                variant="subtle"
                 size="md"
                 onClick={select}
-                className={`w-full text-left rounded-xl h-11 flex justify-center  ${
-                  isActive ? "bg-green-800 " : ""
+                className={` text-left rounded-xl h-11 flex justify-center place-self-center  ${
+                  isActive ? " " : ""
                 }`}
                 title={conv.id}
               >
@@ -101,10 +125,10 @@ function ConversationItem({
               </Button>
 
               <Button
-                variant="ghost"
+                variant="subtle"
                 size="md"
                 onClick={() => copyLink(conv.id)}
-                className="w-full text-left rounded-xl hover:bg-yellow-600"
+                className=" rounded-xl text-center w-[60px]"
               >
                 Copy Link
               </Button>
@@ -120,7 +144,7 @@ function ConversationItem({
                     onDelete(conv.id);
                   }}
                   title="Delete"
-                  className="bg-none"
+                  className="bg-none "
                 >
                   <Trash2Icon
                     aria-hidden="true"
@@ -129,7 +153,7 @@ function ConversationItem({
                   />
                 </Button>
               )}
-            </div>
+            </>
           )}
         </li>
       ) : (

@@ -24,7 +24,7 @@ export default function ChatBubble({
     >
       <div className="relative z-20 px-11 py-10 md:px-12 md:py-9  w-[300px] md:w-[320px] aspect-[309/148] flex justify-center items-center ">
         <p
-          className={`text-2xl font-semibold md:text-3xl leading-relaxed text-zinc-900 whitespace-pre-wrap break-words text-center  ${
+          className={`text-2xl font-thin md:text-3xl leading-relaxed text-zinc-900 whitespace-pre-wrap break-words text-center  ${
             isRight && "text-zinc-400"
           }`}
         >

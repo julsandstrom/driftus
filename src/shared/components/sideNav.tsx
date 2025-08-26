@@ -34,7 +34,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
         <aside
           className={`
         h-full shrink-0 border-r border-zinc-600
-        transition-[width] duration-200 pr-4 
+        transition-[width] duration-200 pr-4 bg-[#1a1a1a]
         ${expanded ? "w-64 " : "w-16"}
         sticky top-0 left-0 h-11
       `}
@@ -62,7 +62,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
             <div className="p-4 pb-2 flex justify-between items-center ">
               <img
                 src="https://i.pravatar.cc/200"
-                className={`overflow-hidden transition-all ${
+                className={`overflow-hidden transition-all rounded-xl ${
                   expanded ? "w-32" : "w-0"
                 }`}
                 alt=""
@@ -136,7 +136,7 @@ export function SidebarItem({
   if (!ctx) throw new Error("SidebarItem must be used within <SideNav />");
   // const { expanded } = ctx;
 
-  const base = `text-xl h-11 relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group`;
+  const base = `text-xl h-11 relative flex items-center py-2  my-1 font-medium rounded-md cursor-pointer transition-colors group`;
   const active = "bg-[#BE9C3D]  text-zinc-700 text-xl";
   const inactive =
     "transition ease-out duration-200 hover:bg-white hover:text-black text-xl";

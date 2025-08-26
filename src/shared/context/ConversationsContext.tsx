@@ -49,7 +49,7 @@ export function ConversationsProvider({
     if (!(id.length === 36 && id.split("-").length === 5))
       return alert("Ogiltigt ID");
 
-    ensureConversation(id, "Shared Conversation");
+    ensureConversation(id, "Shared");
   };
 
   function createConversation(title = "Chat") {
@@ -69,7 +69,7 @@ export function ConversationsProvider({
     });
   }
 
-  function ensureConversation(id: string, title = "Shared Conversation") {
+  function ensureConversation(id: string, title = "Shared") {
     setConversations((prev) => {
       if (prev.some((c) => c.id === id)) return prev;
       return [{ id, title }, ...prev];
