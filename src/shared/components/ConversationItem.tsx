@@ -3,7 +3,7 @@ import { Trash2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useConversations } from "../context/ConversationsContext";
 import { Button } from "./Button";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useChat } from "../../features/chat/hooks/useChat";
 
 type Props = {
