@@ -6,8 +6,8 @@ export const ValidatorRules: ValidatorRule[] = [
     error: "Empty message not allowed",
   },
   {
-    fn: (input) => input.length < 30,
-    error: "Max 30 characters per message",
+    fn: (input) => input.length < 40,
+    error: "Max 40 characters per message",
   },
   {
     fn: (input) => !/<[^>]+>/.test(input),

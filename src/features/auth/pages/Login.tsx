@@ -19,7 +19,7 @@ const Login = () => {
     password: "",
   });
 
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [loginError, setLoginError] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,15 +30,11 @@ const Login = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setErrorMessage(false);
+    setLoginError(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (errorMessage) return;
-    if (form.username.length <= 0 || form.password.length <= 0) {
-      setErrorMessage(true);
-    }
 
     try {
       const csrfRes = await fetch("https://chatify-api.up.railway.app/csrf", {
@@ -63,10 +59,13 @@ const Login = () => {
 
       const data = await res.json().catch(() => null);
 
-      if (!res.ok) throw new Error(data?.message ?? `HTTP ${res.status}`);
+      if (!res.ok) {
+        setLoginError(true);
+        throw new Error(data?.message ?? `HTTP ${res.status}`);
+      }
 
       const token = data.token;
-
+      setLoginError(false);
       await login(token);
 
       navigate(from, { replace: true });
@@ -110,10 +109,13 @@ const Login = () => {
         <Button type="submit" size="md" variant="primary">
           Login
         </Button>
+        {loginError && (
+          <p id="login error" role="alert" className="text-red-600">
+            Username or password is incorrect
+          </p>
+        )}
       </form>
-      {errorMessage && (
-        <span className="text-red-600">Fields can't be left empty</span>
-      )}
+
       <br />
       <div className="flex justify-center items-center mt-8">
         <h2 className="m-0 p-0 text-xl">No account?</h2>
