@@ -33,8 +33,8 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
     <>
       {expanded ? (
         <li
-          className={`w-full rounded-xl h-14  text-[#1A1A1A] px-4 mb-2 list-none flex justify-between ${
-            isActive ? "bg-white  text-[#1A1A1A] " : ""
+          className={`w-full rounded-xl h-14  text-[#1A1A1A] pr-4 mb-2 list-none flex justify-between ${
+            isActive ? "bg-[#BE9C3D]  text-[#1A1A1A] " : ""
           }`}
         >
           {sharedConversation ? (

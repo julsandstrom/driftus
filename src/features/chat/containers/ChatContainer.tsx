@@ -1,11 +1,10 @@
 import { useChat } from "../hooks/useChat";
 
 import SideNav from "../../../shared/components/sideNav";
-import { BarChart3, UserCircle } from "lucide-react";
+import { LogOut, UserCircle } from "lucide-react";
 import { SidebarItem } from "../../../shared/components/sideNav";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useConversations } from "../../../shared/context/ConversationsContext";
-import { StatusBar } from "../components/StatusBar";
 
 import type { Message } from "../../../shared/types";
 import { useMemo, useState, useEffect } from "react";
@@ -14,7 +13,7 @@ import logoUrl from "../../../assets/DriftusLogo.svg";
 import { Button } from "../../../shared/components/Button";
 import MessagePair from "../components/MessagePair";
 import Composer from "../components/Composer";
-// import ChatList from "../components/ChatList";
+import MainIcon from "../../../shared/components/MainIcon";
 
 const ChatContainer = () => {
   const {
@@ -22,10 +21,7 @@ const ChatContainer = () => {
     newMessage,
     setNewMessage,
     sendMessage,
-    // removeMessage,
     peerName,
-    flashKind,
-    flashText,
     inputError,
 
     setIsFocused,
@@ -83,10 +79,7 @@ const ChatContainer = () => {
   function getLatestMessage(messages: Message[], myId: string) {
     let lastMine: Message | null = null;
     let lastTheirs: Message | null = null;
-    // setTips([]);
-    // setSentiment("");
-    // setEnergy(0);
-    // moodColor("", 0);
+
     for (let i = messages.length - 1; i >= 0; i--) {
       const m = messages[i];
       const uid = String(m.userId ?? "");
@@ -145,46 +138,51 @@ const ChatContainer = () => {
   }
 
   return (
-    <>
-      <div className="flex h-screen fixed left-0 top-0 ml-[width]">
-        <SideNav>
-          <SidebarItem
-            icon={<BarChart3 size={20} />}
-            text="Profile"
-            to="/profile"
-            end
-          />{" "}
-          <SidebarItem
-            icon={<UserCircle size={20} />}
-            text="Log Out"
-            onClick={logout}
-          />
-        </SideNav>
-      </div>
-      {conversations.length <= 0 && (
-        <>
-          <img
-            src={logoUrl}
-            alt="DriftUs — Feel the message."
-            className="block mx-auto w-[min(90vw,720px)]"
-          />
-        </>
-      )}
+    <div className="flex w-full">
+      <SideNav>
+        <SidebarItem
+          icon={<UserCircle size={20} />}
+          text="Profile"
+          to="/profile"
+          end
+        />{" "}
+        <SidebarItem
+          icon={<LogOut size={20} />}
+          text="Log Out"
+          onClick={logout}
+        />
+      </SideNav>
       <div className=" grid min-h-dvh place-items-center justify-center w-full">
+        {" "}
+        {conversations.length <= 0 && (
+          <>
+            <img
+              src={logoUrl}
+              alt="DriftUs - Feel the message."
+              className=" w-[min(90vw,720px)] h-fit  self-start"
+            />
+          </>
+        )}
         <main className="flex-1 p-4 w-full">
-          {peerName && (
-            <div className="mb-4 flex">Conversation with: {peerName}</div>
-          )}
           {conversations.length > 0 && (
             <>
-              <MessagePair
-                key={activeId}
-                theirs={lastTheirs?.text}
-                mine={lastMine?.text}
-                pinClass={pinClass || "text-green-500 "}
-                glow={glow}
-              />
-              {/* <ChatList messages={messages} removeMessage={removeMessage} /> */}
+              {" "}
+              <div className="relative inline-block">
+                <span className="text-2xl text-start absolute -top-2 left-1 text-[#BE9C3D]">
+                  {" "}
+                  {peerName ? peerName : "waiting for other user..."}
+                </span>
+                <MessagePair
+                  key={activeId}
+                  theirs={lastTheirs?.text}
+                  mine={lastMine?.text}
+                  pinClass={pinClass || "text-green-500 "}
+                  glow={glow}
+                />{" "}
+                <span className="text-2xl absolute bottom-11 -right-1 left-36 text-[#BE9C3D]">
+                  {user?.user}
+                </span>
+              </div>
               <Composer
                 key={`composer-${activeId}`}
                 value={newMessage}
@@ -197,10 +195,10 @@ const ChatContainer = () => {
                   }
                   setAiLoading(true);
                   try {
-                    const out = await suggestReply(lastTheirs.text, 12);
-                    setTips(out.suggestions || []);
-                    setEnergy(Number(out.energy ?? 0));
-                    setSentiment((out.sentiment as any) || "");
+                    const res = await suggestReply(lastTheirs.text, 12);
+                    setTips(res.suggestions || []);
+                    setEnergy(Number(res.energy ?? 0));
+                    setSentiment((res.sentiment as any) || "");
                   } finally {
                     setAiLoading(false);
                   }
@@ -212,31 +210,34 @@ const ChatContainer = () => {
             </>
           )}{" "}
           <div className="flex-row">
-            <StatusBar text={flashText} kind={flashKind} />
-
             {lastTheirs && (
               <>
                 {sentiment !== "" && (
-                  <div className="mt-3 flex items-center gap-2">
+                  <div className=" flex justify-center items-start  mb-5">
                     <div
-                      className={`w-3 h-3 rounded-full ${moodColor(
+                      className={`w-3 h-3 rounded-full  ${moodColor(
                         sentiment,
                         energy
                       )}`}
                     />
-
-                    <span className="text-sm opacity-80">
+                    <MainIcon
+                      className={`h-9 w-9 pb-0.5 ${moodColor(
+                        sentiment,
+                        energy
+                      )}`}
+                    />
+                    <span className="text-sm opacity-80 font-thin text-center">
                       {moodLabel(sentiment, energy)}
                     </span>
                   </div>
                 )}
-                <div className="mt-2 flex gap-2 flex-wrap flex-col justify-start items-start">
+                <div className="mt-2 flex gap-5 flex-wrap flex-col justify-start items-start">
                   {tips.map((t, i) => (
                     <Button
-                      variant="ghost"
+                      variant="subtle"
                       size="md"
                       key={i}
-                      className="underline"
+                      className=" bg-white p-3"
                       onClick={() => setNewMessage(t)}
                     >
                       {t}
@@ -246,14 +247,22 @@ const ChatContainer = () => {
               </>
             )}
           </div>
-          {showAiError && (
-            <p id="ai error" role="alert">
-              AI Suggestions is currently not available.
-            </p>
-          )}
+          <div className="flex justify-center items-end pr-24 pt-5 h-11">
+            {showAiError && (
+              <>
+                <span>
+                  {" "}
+                  <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
+                </span>
+                <p id="ai error" role="alert">
+                  AI Suggestions is currently not available.
+                </p>
+              </>
+            )}
+          </div>
         </main>
       </div>
-    </>
+    </div>
   );
 };
 

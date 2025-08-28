@@ -1,6 +1,8 @@
 import { Button } from "../../../shared/components/Button";
 import InputField from "../../../shared/components/InputField";
 import { useChat } from "../hooks/useChat";
+import { StatusBar } from "./StatusBar";
+import MainIcon from "../../../shared/components/MainIcon";
 
 type Props = {
   value: string;
@@ -21,12 +23,21 @@ export default function Composer({
   inputError,
   setIsFocused,
 }: Props) {
-  const { sendingStatus, aiTipRecieved, setAiTipRecieved } = useChat();
+  const {
+    sendingStatus,
+    aiTipRecieved,
+    setAiTipRecieved,
+    flashText,
+    flashKind,
+  } = useChat();
   return (
     <form
       onSubmit={onSend}
       className="flex flex-wrap justify-center items-end gap-3 mt-0"
     >
+      <div className="basis-full h-11">
+        <StatusBar text={flashText} kind={flashKind} />
+      </div>
       <InputField
         name="chat"
         value={value}
@@ -60,9 +71,19 @@ export default function Composer({
         {" "}
         {aiLoading ? "Analyzing message..." : "AI Suggestions"}
       </Button>
-      <p id="chat error" role="alert" className="basis-full text-red-600 mr-48">
-        {inputError}
-      </p>
+
+      {inputError && (
+        <div className="basis-full flex justify-center items-end">
+          {" "}
+          <span>
+            {" "}
+            <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
+          </span>
+          <p id="chat error" role="alert" className="  mr-48">
+            {inputError}
+          </p>
+        </div>
+      )}
     </form>
   );
 }

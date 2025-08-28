@@ -1,5 +1,5 @@
 import type { FlashKind } from "../context/ChatContext";
-
+import MainIcon from "../../../shared/components/MainIcon";
 export function StatusBar({
   text,
   kind,
@@ -10,15 +10,19 @@ export function StatusBar({
   if (!text) return null;
   const cls =
     kind === "success"
-      ? "bg-green-100 text-green-800 border-green-300"
+      ? "text-green-600 "
       : kind === "error"
-      ? "bg-rose-100 text-rose-800 border-rose-300"
-      : "bg-slate-100 text-slate-800 border-slate-300";
+      ? " text-rose-800 "
+      : "text-slate-800 ";
   return (
     <div
-      className={`fixed bottom-50 z-50 p-24 py-2 rounded-xl border shadow ${cls}`}
+      className={` flex justify-center items-end rounded-xl shadow ${cls}p-2 text-center pr-56 `}
     >
-      {text}
+      <span>
+        {" "}
+        <MainIcon className={`h-9 w-9 pb-1 ${cls}`} />
+      </span>
+      <p> {text}</p>
     </div>
   );
 }

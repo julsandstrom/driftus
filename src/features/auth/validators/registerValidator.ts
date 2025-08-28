@@ -9,7 +9,7 @@ export const RegisterFieldRules = {
       fn: (n) => n.length > 0,
       error: "Username is empty",
     },
-    { fn: (n) => n.length <= 15, error: "Max 15 characters" },
+    { fn: (n) => n.length <= 11, error: "Max 11 characters" },
   ],
   email: [
     { fn: (e) => e.length > 0, error: "Email is empty" },
@@ -23,6 +23,10 @@ export const RegisterFieldRules = {
     {
       fn: (p) => p.length >= 6,
       error: "Minimum 6 characters",
+    },
+    {
+      fn: (p) => p.length <= 15,
+      error: "Max 15 characters",
     },
   ],
   avatar: [],
