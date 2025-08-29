@@ -92,6 +92,7 @@ const Login = () => {
           icon={UserIcon}
           label="Username"
           placeholder={"username"}
+          classname="w-[200px] h-[30px]"
           value={form.username}
           onChange={handleChange}
         />
@@ -103,6 +104,7 @@ const Login = () => {
           name="password"
           placeholder={"password"}
           value={form.password}
+          classname="w-[200px] h-[30px]"
           onChange={handleChange}
         />
 

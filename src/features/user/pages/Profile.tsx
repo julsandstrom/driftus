@@ -169,6 +169,7 @@ const Profile = () => {
               errorMessages={showError[field.name]?.[0]}
               icon={field.icon}
               autoComplete={field.autoComplete}
+              classname="w-[200px] h-[30px]"
             />
           ))}
         </form>

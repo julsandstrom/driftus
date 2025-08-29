@@ -218,7 +218,7 @@ const ChatContainer = () => {
                   {user?.user}
                 </span>
               </div>
-              <div className="relative min-h-[100svh] pb-[84px] md:pb-0">
+              <div className="relative min-h-[100svh] pb-[calc(72px+env(safe-area-inset-bottom,0px)+12px)]  md:pb-0">
                 <div className="flex-row">
                   {lastTheirs && (
                     <>
