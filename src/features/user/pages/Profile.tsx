@@ -12,7 +12,7 @@ import {
 import type { RegisterField } from "../../auth/validators/registerValidator";
 import InputField from "../../../shared/components/InputField";
 import { fieldConfig } from "../../auth/constants/registerFieldConfig";
-import logoUrl from "../../../assets/DriftusLogo.svg";
+
 import { Button } from "../../../shared/components/Button";
 import { useAvatarPreview } from "../../../shared/context/AvatarPreviewContext";
 import * as Sentry from "@sentry/react";
