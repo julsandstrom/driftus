@@ -8,6 +8,9 @@ const SENTRY_INGEST_HOST =
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: true,
+    port: 1573,
+    strictPort: true,
     proxy: {
       "/sentry-tunnel": {
         target: `https://${SENTRY_INGEST_HOST}`,

@@ -218,30 +218,34 @@ const ChatContainer = () => {
                   {user?.user}
                 </span>
               </div>
-              <Composer
-                key={`composer-${activeId}`}
-                value={newMessage}
-                onSend={handleSubmit}
-                onChange={setNewMessage}
-                onSuggest={async () => {
-                  if (!lastTheirs) {
-                    setShowAiError(true);
-                    return;
-                  }
-                  setAiLoading(true);
-                  try {
-                    const res = await suggestReply(lastTheirs.text, 12);
-                    setTips(res.suggestions || []);
-                    setEnergy(Number(res.energy ?? 0));
-                    setSentiment((res.sentiment as any) || "");
-                  } finally {
-                    setAiLoading(false);
-                  }
-                }}
-                aiLoading={aiLoading}
-                inputError={inputError}
-                setIsFocused={setIsFocused}
-              />
+              <div className="relative min-h-[100svh] pb-[84px] md:pb-0">
+                <Composer
+                  key={`composer-${activeId}`}
+                  value={newMessage}
+                  onSend={handleSubmit}
+                  onChange={setNewMessage}
+                  onSuggest={async () => {
+                    if (!lastTheirs) {
+                      setShowAiError(true);
+                      return;
+                    }
+                    setAiLoading(true);
+                    try {
+                      const res = await suggestReply(lastTheirs.text, 12);
+                      setTips(res.suggestions || []);
+                      setEnergy(Number(res.energy ?? 0));
+                      setSentiment((res.sentiment as any) || "");
+                    } finally {
+                      setAiLoading(false);
+                    }
+                  }}
+                  aiLoading={aiLoading}
+                  inputError={inputError}
+                  setIsFocused={setIsFocused}
+                  showAiError={showAiError}
+                  setShowAiError={setShowAiError}
+                />
+              </div>
             </>
           )}{" "}
           <div className="flex-row">
@@ -279,19 +283,6 @@ const ChatContainer = () => {
                     </Button>
                   ))}
                 </div>
-              </>
-            )}
-          </div>
-          <div className="flex justify-center items-end pr-24 pt-5 h-11">
-            {showAiError && (
-              <>
-                <span>
-                  {" "}
-                  <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
-                </span>
-                <p id="ai error" role="alert" className="text-xs md:text-lg">
-                  AI found no message to analyze...
-                </p>
               </>
             )}
           </div>

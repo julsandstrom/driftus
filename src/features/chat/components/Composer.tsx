@@ -3,6 +3,7 @@ import InputField from "../../../shared/components/InputField";
 import { useChat } from "../hooks/useChat";
 import { StatusBar } from "./StatusBar";
 import MainIcon from "../../../shared/components/MainIcon";
+import { useEffect } from "react";
 
 type Props = {
   value: string;
@@ -12,6 +13,8 @@ type Props = {
   aiLoading?: boolean;
   inputError?: string;
   setIsFocused: (v: boolean) => void;
+  showAiError?: boolean;
+  setShowAiError: (s: boolean) => void;
 };
 
 export default function Composer({
@@ -22,6 +25,8 @@ export default function Composer({
   aiLoading,
   inputError,
   setIsFocused,
+  showAiError,
+  setShowAiError,
 }: Props) {
   const {
     sendingStatus,
@@ -30,20 +35,53 @@ export default function Composer({
     flashText,
     flashKind,
   } = useChat();
+
+  useEffect(() => {
+    if (!showAiError) return;
+
+    if (showAiError) {
+      setTimeout(() => {
+        setShowAiError(false);
+      }, 3000);
+    }
+  }, [showAiError]);
+
   return (
     <form
       onSubmit={onSend}
-      className="flex flex-wrap justify-center items-end gap-3 mt-0"
+      className="fixed inset-x-0 bottom-0 z-50 sm:static md:z-auto px-2 py-2 flex flex-wrap justify-start md:justify-center items-end gap-3 mt-0 [padding-bottom:calc(env(safe-area-inset-bottom,0px)+0.25rem)]"
     >
-      <div className="basis-full h-11">
-        <StatusBar text={flashText} kind={flashKind} />
-      </div>
+      <StatusBar text={flashText} kind={flashKind} />
+
+      {showAiError && (
+        <div className="flex justify-center items-end pr-24 pt-5 h-11">
+          <span>
+            {" "}
+            <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
+          </span>
+          <p id="ai error" role="alert" className="text-xs md:text-lg">
+            AI found no message to analyze...
+          </p>
+        </div>
+      )}
+      {inputError && (
+        <div className=" flex justify-center items-end">
+          {" "}
+          <span>
+            {" "}
+            <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
+          </span>
+          <p id="chat error" role="alert" className=" text-xs md:text-lg ">
+            {inputError}
+          </p>
+        </div>
+      )}
       <InputField
         name="chat"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Try writing something"
-        classname="md:w-[200px] lg:w-[310px] md:h-[42px]  lg:h-[50px] "
+        classname="w-[230px] md:w-[200px] lg:w-[310px] md:h-[42px]  lg:h-[50px] "
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       />
@@ -74,19 +112,6 @@ export default function Composer({
           <MainIcon className="h-5 w-5 text-[#BE9C3D]" title="AI suggestions" />
         )}
       </Button>
-
-      {inputError && (
-        <div className="basis-full flex justify-center items-end">
-          {" "}
-          <span>
-            {" "}
-            <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
-          </span>
-          <p id="chat error" role="alert" className=" text-xs md:text-lg ">
-            {inputError}
-          </p>
-        </div>
-      )}
     </form>
   );
 }
