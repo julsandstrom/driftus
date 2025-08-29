@@ -49,69 +49,78 @@ export default function Composer({
   return (
     <form
       onSubmit={onSend}
-      className="fixed inset-x-0 bottom-0 z-50 sm:static md:z-auto px-2 py-2 flex flex-wrap justify-start md:justify-center items-end gap-3 mt-0 [padding-bottom:calc(env(safe-area-inset-bottom,0px)+0.25rem)]"
+      className="fixed inset-x-0 bottom-0 z-50 md:static md:z-auto
+             border-t border-zinc-800 md:border-none bg-[#1A1A1A]/95 backdrop-blur
+             [padding-bottom:calc(env(safe-area-inset-bottom,0px)+0.25rem)]"
     >
-      <StatusBar text={flashText} kind={flashKind} />
+      <div className="mx-auto w-full max-w-screen-md px-2 py-2">
+        <StatusBar text={flashText} kind={flashKind} />
 
-      {showAiError && (
-        <div className="flex justify-center items-end pr-24 pt-5 h-11">
-          <span>
-            {" "}
-            <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
-          </span>
-          <p id="ai error" role="alert" className="text-xs md:text-lg">
-            AI found no message to analyze...
-          </p>
-        </div>
-      )}
-      {inputError && (
-        <div className=" flex justify-center items-end">
-          {" "}
-          <span>
-            {" "}
-            <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
-          </span>
-          <p id="chat error" role="alert" className=" text-xs md:text-lg ">
-            {inputError}
-          </p>
-        </div>
-      )}
-      <InputField
-        name="chat"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="Try writing something"
-        classname="w-[230px] md:w-[200px] lg:w-[310px] md:h-[42px]  lg:h-[50px] "
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-      />
-
-      <Button
-        type="submit"
-        variant="primary"
-        size="md"
-        className="md:h-[42px]   lg:h-[50px]"
-        disabled={sendingStatus}
-      >
-        {sendingStatus ? "Sending" : "Send"}
-      </Button>
-      <Button
-        variant="ghost"
-        size="md"
-        onClick={() => {
-          if (aiLoading || aiTipRecieved) return;
-          onSuggest?.();
-          setAiTipRecieved(true);
-        }}
-        className="md:h-[42px]   lg:h-[50px] border border-[#BE9C3D] px-3 py-2"
-        disabled={aiLoading || aiTipRecieved}
-      >
-        {aiLoading ? (
-          "..."
-        ) : (
-          <MainIcon className="h-5 w-5 text-[#BE9C3D]" title="AI suggestions" />
+        {showAiError && (
+          <div className="flex justify-start items-end pr-24 pt-5 h-11">
+            <span>
+              {" "}
+              <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
+            </span>
+            <p id="ai error" role="alert" className="text-xs md:text-lg">
+              AI found no message to analyze...
+            </p>
+          </div>
         )}
-      </Button>
+        {inputError && (
+          <div className=" flex justify-start items-end">
+            {" "}
+            <span>
+              {" "}
+              <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
+            </span>
+            <p id="chat error" role="alert" className=" text-xs md:text-lg ">
+              {inputError}
+            </p>
+          </div>
+        )}
+        <div className="flex items-center gap-2 justify-start sm:justify-center">
+          <InputField
+            name="chat"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="Try writing something"
+            classname="w-[200px]  h-9 text-base sm:w-[400px]  md:w-[300px] lg:w-[310px] md:h-[42px]  lg:h-[50px] "
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+          />
+
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            className="md:h-[42px]   lg:h-[50px]"
+            disabled={sendingStatus}
+          >
+            {sendingStatus ? "Sending" : "Send"}
+          </Button>
+          <Button
+            variant="ghost"
+            size="md"
+            onClick={() => {
+              if (aiLoading || aiTipRecieved) return;
+              onSuggest?.();
+              setAiTipRecieved(true);
+            }}
+            className="md:h-[42px]   lg:h-[50px] border border-[#BE9C3D] px-3 py-2"
+            disabled={aiLoading || aiTipRecieved}
+          >
+            {aiLoading ? (
+              "..."
+            ) : (
+              <MainIcon
+                className="h-5 w-5 text-[#BE9C3D]"
+                title="AI suggestions"
+              />
+            )}
+          </Button>
+        </div>
+      </div>
     </form>
   );
 }

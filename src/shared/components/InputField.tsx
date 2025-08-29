@@ -38,7 +38,7 @@ const InputField = ({
           {" "}
           {Icon && <Icon />}
           {label && (
-            <label htmlFor={name} className="text-xl font-medium">
+            <label htmlFor={name} className="text-xs md:text-xl font-medium">
               {label}
             </label>
           )}{" "}
@@ -49,7 +49,7 @@ const InputField = ({
           value={value}
           onChange={onChange}
           placeholder={!errorMessages ? placeholder : `${errorMessages}`}
-          className={`${classname} bg-white text-black font-thin h-9 rounded-lg px-2 w-[190px] text-xl leading-none shadow-sm ring-1 ring-zing-300 placeholder:text-black-400 transition focus:outline-none focus:ring-2 focus: ring-green-500/95`}
+          className={`${classname} bg-white text-black font-thin  rounded-lg px-2 text-xl leading-none shadow-sm ring-1 ring-zing-300 placeholder:text-black-400 transition focus:outline-none focus:ring-2 focus: ring-green-500/95`}
           autoComplete={autoComplete}
           onFocus={onFocus}
           onBlur={onBlur}

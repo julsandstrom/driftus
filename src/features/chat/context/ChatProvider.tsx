@@ -29,6 +29,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [sendingStatus, setSendingStatus] = useState(false);
   const [sp, setSp] = useSearchParams();
   const { user } = useAuth();
+  const [count, setCount] = useState(0);
 
   function showFlash(kind: FlashKind, text: string, ms = 3500): void {
     setFlashKind(kind);
@@ -93,12 +94,15 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!isFocused) return;
-    console.log(isFocused);
+    fetchMessages();
+    console.log(count);
+
+    setCount((count) => count++);
 
     const interval = setInterval(() => {
       fetchMessages();
-      console.log("fetching");
-    }, 5000);
+      setCount((count) => count++);
+    }, 10000);
 
     const timeout = setTimeout(() => {
       setIsFocused(false);
@@ -179,6 +183,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       Sentry.captureMessage("Failed to delete message", { level: "info" });
     }
   };
+
   return (
     <ChatContext.Provider
       value={{

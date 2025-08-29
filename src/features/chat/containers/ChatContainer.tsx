@@ -166,7 +166,7 @@ const ChatContainer = () => {
         {" "}
         {conversations.length <= 0 && (
           <>
-            <main className="flex flex-col gap-28 pl-3 mt-3 justify-end self-center">
+            <main className="flex flex-col gap-28 pr-5 md:pl-3 mt-3 justify-end self-center">
               <div className="flex flex-col items-start">
                 <span className="text-sm sm:text-2xl md:text-3xl">
                   Start by creating a conversation
@@ -219,6 +219,44 @@ const ChatContainer = () => {
                 </span>
               </div>
               <div className="relative min-h-[100svh] pb-[84px] md:pb-0">
+                <div className="flex-row">
+                  {lastTheirs && (
+                    <>
+                      {sentiment !== "" && (
+                        <div className=" flex justify-start items-start  my-5">
+                          <div
+                            className={`w-3 h-3 rounded-full  ${moodColor(
+                              sentiment,
+                              energy
+                            )}`}
+                          />
+                          <MainIcon
+                            className={`h-9 w-9 pb-0.5 ${moodColor(
+                              sentiment,
+                              energy
+                            )}`}
+                          />
+                          <span className="text-sm opacity-80 font-thin text-center self-end">
+                            {moodLabel(sentiment, energy)}Critical
+                          </span>
+                        </div>
+                      )}
+                      <div className="mt-2 flex gap-5 flex-wrap flex-col justify-start items-start">
+                        {tips.map((t, i) => (
+                          <Button
+                            variant="subtle"
+                            size="md"
+                            key={i}
+                            className=" bg-white p-3 text-xs md:text-lg"
+                            onClick={() => setNewMessage(t)}
+                          >
+                            {t}
+                          </Button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
                 <Composer
                   key={`composer-${activeId}`}
                   value={newMessage}
@@ -248,44 +286,6 @@ const ChatContainer = () => {
               </div>
             </>
           )}{" "}
-          <div className="flex-row">
-            {lastTheirs && (
-              <>
-                {sentiment !== "" && (
-                  <div className=" flex justify-start items-start  my-5">
-                    <div
-                      className={`w-3 h-3 rounded-full  ${moodColor(
-                        sentiment,
-                        energy
-                      )}`}
-                    />
-                    <MainIcon
-                      className={`h-9 w-9 pb-0.5 ${moodColor(
-                        sentiment,
-                        energy
-                      )}`}
-                    />
-                    <span className="text-sm opacity-80 font-thin text-center self-end">
-                      {moodLabel(sentiment, energy)}Critical
-                    </span>
-                  </div>
-                )}
-                <div className="mt-2 flex gap-5 flex-wrap flex-col justify-start items-start">
-                  {tips.map((t, i) => (
-                    <Button
-                      variant="subtle"
-                      size="md"
-                      key={i}
-                      className=" bg-white p-3 text-xs md:text-lg"
-                      onClick={() => setNewMessage(t)}
-                    >
-                      {t}
-                    </Button>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
         </main>
       </div>
     </div>
