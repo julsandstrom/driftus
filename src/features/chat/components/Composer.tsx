@@ -1,9 +1,8 @@
 import { Button } from "../../../shared/components/Button";
 import InputField from "../../../shared/components/InputField";
 import { useChat } from "../hooks/useChat";
-import { StatusBar } from "./StatusBar";
+
 import MainIcon from "../../../shared/components/MainIcon";
-import { useEffect } from "react";
 
 type Props = {
   value: string;
@@ -23,69 +22,26 @@ export default function Composer({
   onSend,
   onSuggest,
   aiLoading,
-  inputError,
+
   setIsFocused,
-  showAiError,
-  setShowAiError,
 }: Props) {
-  const {
-    sendingStatus,
-    aiTipRecieved,
-    setAiTipRecieved,
-    flashText,
-    flashKind,
-  } = useChat();
-
-  useEffect(() => {
-    if (!showAiError) return;
-
-    if (showAiError) {
-      setTimeout(() => {
-        setShowAiError(false);
-      }, 3000);
-    }
-  }, [showAiError]);
+  const { sendingStatus, aiTipRecieved, setAiTipRecieved } = useChat();
 
   return (
     <form
       onSubmit={onSend}
-      className="fixed inset-x-0 bottom-0 z-50 md:static md:z-auto
+      className="fixed  inset-x-0 bottom-0 z-50 h-[72px] md:h-auto md:static md:z-auto
              border-t border-zinc-800 md:border-none bg-[#1A1A1A]/95 backdrop-blur
-             [padding-bottom:calc(env(safe-area-inset-bottom,0px)+0.25rem)]"
+             [padding-bottom:calc(env(safe-area-inset-bottom,0px)+0.25rem)] "
     >
       <div className="mx-auto w-full max-w-screen-md px-2 py-2">
-        <StatusBar text={flashText} kind={flashKind} />
-
-        {showAiError && (
-          <div className="flex justify-start items-end pr-24 pt-5 h-11">
-            <span>
-              {" "}
-              <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
-            </span>
-            <p id="ai error" role="alert" className="text-xs md:text-lg">
-              AI found no message to analyze...
-            </p>
-          </div>
-        )}
-        {inputError && (
-          <div className=" flex justify-start items-end">
-            {" "}
-            <span>
-              {" "}
-              <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
-            </span>
-            <p id="chat error" role="alert" className=" text-xs md:text-lg ">
-              {inputError}
-            </p>
-          </div>
-        )}
         <div className="flex items-center gap-2 justify-start sm:justify-center">
           <InputField
             name="chat"
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder="Try writing something"
-            classname="w-[200px]  h-9 text-base sm:w-[400px]  md:w-[300px] lg:w-[310px] md:h-[42px]  lg:h-[50px] "
+            classname="w-[200px]  h-9 text-base sm:w-[400px]  md:w-[300px] lg:w-[460px] md:h-[42px]  lg:h-[50px] "
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />

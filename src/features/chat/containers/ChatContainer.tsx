@@ -8,8 +8,7 @@ import { useConversations } from "../../../shared/context/ConversationsContext";
 
 import type { Message } from "../../../shared/types";
 import { useMemo, useState, useEffect } from "react";
-
-// import logoUrl from "../../../assets/DriftusLogo.svg";
+import { StatusBar } from "../components/StatusBar";
 import { Button } from "../../../shared/components/Button";
 import MessagePair from "../components/MessagePair";
 import Composer from "../components/Composer";
@@ -25,6 +24,8 @@ const ChatContainer = () => {
     inputError,
 
     setIsFocused,
+    flashKind,
+    flashText,
   } = useChat();
 
   const [tips, setTips] = useState<string[]>([]);
@@ -138,6 +139,16 @@ const ChatContainer = () => {
     return "";
   }
 
+  useEffect(() => {
+    if (!showAiError) return;
+
+    if (showAiError) {
+      setTimeout(() => {
+        setShowAiError(false);
+      }, 3000);
+    }
+  }, [showAiError]);
+
   return (
     <div className="flex w-full">
       <SideNav>
@@ -198,7 +209,7 @@ const ChatContainer = () => {
             </main>
           </>
         )}
-        <main className="flex-1 p-4 w-full">
+        <main className="flex-1  p-4 w-full">
           {conversations.length > 0 && (
             <>
               {" "}
@@ -257,32 +268,71 @@ const ChatContainer = () => {
                     </>
                   )}
                 </div>
-                <Composer
-                  key={`composer-${activeId}`}
-                  value={newMessage}
-                  onSend={handleSubmit}
-                  onChange={setNewMessage}
-                  onSuggest={async () => {
-                    if (!lastTheirs) {
-                      setShowAiError(true);
-                      return;
-                    }
-                    setAiLoading(true);
-                    try {
-                      const res = await suggestReply(lastTheirs.text, 12);
-                      setTips(res.suggestions || []);
-                      setEnergy(Number(res.energy ?? 0));
-                      setSentiment((res.sentiment as any) || "");
-                    } finally {
-                      setAiLoading(false);
-                    }
-                  }}
-                  aiLoading={aiLoading}
-                  inputError={inputError}
-                  setIsFocused={setIsFocused}
-                  showAiError={showAiError}
-                  setShowAiError={setShowAiError}
-                />
+                <div className="fixed bottom-20 left-0 flex flex-col justify-start items-start sm:left-20 md:static md:mt-52">
+                  {" "}
+                  <StatusBar text={flashText} kind={flashKind} />
+                  {showAiError && (
+                    <div className="flex justify-start items-end pt-5 h-11">
+                      <span>
+                        {" "}
+                        <MainIcon
+                          className={`h-9 w-9 pb-1 text-red-600`}
+                        />{" "}
+                      </span>
+                      <p
+                        id="ai error"
+                        role="alert"
+                        className="text-xs md:text-lg"
+                      >
+                        AI found no message to analyze...
+                      </p>
+                    </div>
+                  )}
+                  {inputError && (
+                    <div className=" flex justify-start items-end">
+                      {" "}
+                      <span>
+                        {" "}
+                        <MainIcon
+                          className={`h-9 w-9 pb-1 text-red-600`}
+                        />{" "}
+                      </span>
+                      <p
+                        id="chat error"
+                        role="alert"
+                        className=" text-xs md:text-lg "
+                      >
+                        {inputError}
+                      </p>
+                    </div>
+                  )}
+                  <Composer
+                    key={`composer-${activeId}`}
+                    value={newMessage}
+                    onSend={handleSubmit}
+                    onChange={setNewMessage}
+                    onSuggest={async () => {
+                      if (!lastTheirs) {
+                        setShowAiError(true);
+                        return;
+                      }
+                      setAiLoading(true);
+                      try {
+                        const res = await suggestReply(lastTheirs.text, 12);
+                        setTips(res.suggestions || []);
+                        setEnergy(Number(res.energy ?? 0));
+                        setSentiment((res.sentiment as any) || "");
+                      } finally {
+                        setAiLoading(false);
+                      }
+                    }}
+                    aiLoading={aiLoading}
+                    inputError={inputError}
+                    setIsFocused={setIsFocused}
+                    showAiError={showAiError}
+                    setShowAiError={setShowAiError}
+                  />
+                </div>{" "}
               </div>
             </>
           )}{" "}

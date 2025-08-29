@@ -92,7 +92,7 @@ const Login = () => {
           icon={UserIcon}
           label="Username"
           placeholder={"username"}
-          classname="w-[200px] h-[30px]"
+          classname="w-[200px] h-[30px] sm:w-[250px] sm:h-[50px] lg:w-[300px] lg:h-[50px]"
           value={form.username}
           onChange={handleChange}
         />
@@ -104,11 +104,16 @@ const Login = () => {
           name="password"
           placeholder={"password"}
           value={form.password}
-          classname="w-[200px] h-[30px]"
+          classname="w-[200px] h-[30px] sm:w-[250px] sm:h-[50px] lg:w-[300px] lg:h-[50px]"
           onChange={handleChange}
         />
 
-        <Button type="submit" size="md" variant="primary">
+        <Button
+          type="submit"
+          size="md"
+          variant="primary"
+          className="w-[200px] h-[30px] sm:w-[250px] sm:h-[50px] lg:w-[300px] lg:h-[50px]"
+        >
           Login
         </Button>
         {loginError && (

@@ -169,15 +169,25 @@ const Profile = () => {
               errorMessages={showError[field.name]?.[0]}
               icon={field.icon}
               autoComplete={field.autoComplete}
-              classname="w-[200px] h-[30px]"
+              classname="w-[200px] h-[30px] sm:w-[250px] sm:h-[50px] lg:w-[300px] lg:h-[50px]"
             />
           ))}
         </form>
         <div className="flex text-xs sm:text-lg gap-11 flex-col md:text-lg">
-          <Button onClick={handleSubmit} variant="primary" size="md">
+          <Button
+            onClick={handleSubmit}
+            variant="primary"
+            size="md"
+            className="w-[200px] h-[30px] sm:w-[250px] sm:h-[50px] lg:w-[300px] lg:h-[50px]"
+          >
             Save Changes
           </Button>
-          <Button onClick={handleDelete} variant="destructive" size="md">
+          <Button
+            onClick={handleDelete}
+            variant="destructive"
+            size="md"
+            className="w-[200px] h-[30px] sm:w-[250px] sm:h-[50px] lg:w-[300px] lg:h-[50px]"
+          >
             Delete Account
           </Button>
         </div>

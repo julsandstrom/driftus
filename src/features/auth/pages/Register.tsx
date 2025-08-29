@@ -110,11 +110,16 @@ const Register = () => {
               errorMessages={showError[field.name]?.[0]}
               icon={field.icon}
               autoComplete={field.autoComplete}
-              classname="w-[200px] h-[30px]"
+              classname="w-[200px] h-[30px] sm:w-[250px] sm:h-[50px] lg:w-[300px] lg:h-[50px]"
             />
           ))}
           <div className="flex flex-col justify-center">
-            <Button type="submit" size="md" variant="primary">
+            <Button
+              type="submit"
+              size="md"
+              variant="primary"
+              className="w-[200px] h-[30px] sm:w-[250px] sm:h-[50px] lg:w-[300px] lg:h-[50px]"
+            >
               Register
             </Button>
             {registerError && (
@@ -129,7 +134,7 @@ const Register = () => {
       <div className="flex justify-center items-center gap-2">
         <h2 className="m-0 p-0 text-xl">Already have an account? </h2>
         <button
-          className="m-0 hover:underline text-xl"
+          className="m-0 hover:underline text-xl "
           onClick={() => navigate("/login")}
         >
           Login
