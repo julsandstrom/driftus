@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export type Conversation = { id: string; title: string; shared?: boolean };
 
@@ -30,6 +31,8 @@ export function ConversationsProvider({
   const [activeId, setActiveId] = useState<string>(() => {
     return localStorage.getItem(KEY_ACTIVE) || "";
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem(KEY_LIST, JSON.stringify(conversations));
@@ -67,6 +70,8 @@ export function ConversationsProvider({
       setActiveId((curr) => (curr === id ? updatedConv[0]?.id ?? "" : curr));
       return updatedConv;
     });
+
+    navigate("/chat");
   }
 
   function ensureConversation(id: string, title = "Shared") {

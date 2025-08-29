@@ -18,9 +18,9 @@ export default function ChatBubble({
 
   return (
     <div
-      className={`relative mb-11 flex justify-center ${
-        isRight ? "ml-auto text-zinc-900 mr-11" : "mr-auto"
-      }  w-[200px] sm:w-[250px] md:w-[320px] 2xl:w-[400px] aspect-[309/200] `}
+      className={`relative mb-11 flex justify-center  ${
+        isRight ? "ml-auto text-zinc-900 " : "mr-auto"
+      }  w-[250px] sm:w-[250px] md:w-[320px] 2xl:w-[400px] aspect-[309/200] `}
     >
       <div className="relative z-20 px-11 py-10 md:px-12 md:py-9  w-[300px] md:w-[320px] aspect-[309/148] flex justify-center items-center ">
         <p

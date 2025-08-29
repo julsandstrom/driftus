@@ -33,7 +33,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
     <>
       {expanded ? (
         <li
-          className={`w-full rounded-xl h-24 pr-2  text-[#1A1A1A]  list-none flex flex-col items-start ${
+          className={`w-full rounded-xl h-12 pr-2  text-[#1A1A1A]  list-none flex  items-start ${
             isActive ? "bg-[#BE9C3D]  text-[#1A1A1A] " : ""
           }`}
         >
@@ -43,7 +43,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                 variant={`${!isActive ? "ghost" : "subtle"}`}
                 size="md"
                 onClick={select}
-                className={`w-full text-left text-xs sm:text-base rounded-xl h-11 flex justify-center mr-2 place-self-center
+                className={`w-full text-left text-xs sm:text-base rounded-xl h-11 flex justify-start mr-2 
                 }`}
                 title={conv.id}
               >
@@ -85,7 +85,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                     <Trash2Icon
                       aria-hidden="true"
                       focusable="false"
-                      className="w-7 h-7 md:w-10 lg:h-10"
+                      className="w-7 h-7 md:w-9 lg:h-9"
                     />
                   </Button>
                 )}
@@ -157,7 +157,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
           {" "}
           {conv.title}
         </Button>
-      )}
+      )}{" "}
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { useChat } from "../hooks/useChat";
 
 import SideNav from "../../../shared/components/sideNav";
-import { LogOut, UserCircle } from "lucide-react";
+import { UserCircle } from "lucide-react";
 import { SidebarItem } from "../../../shared/components/sideNav";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useConversations } from "../../../shared/context/ConversationsContext";
@@ -13,6 +13,7 @@ import { Button } from "../../../shared/components/Button";
 import MessagePair from "../components/MessagePair";
 import Composer from "../components/Composer";
 import MainIcon from "../../../shared/components/MainIcon";
+import { useNavigate } from "react-router-dom";
 
 const ChatContainer = () => {
   const {
@@ -40,7 +41,8 @@ const ChatContainer = () => {
   const { conversations, activeId, createConversation, joinById } =
     useConversations();
 
-  const { logout, user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const myId = String(user?.id ?? "");
 
@@ -148,30 +150,37 @@ const ChatContainer = () => {
     }
   }, [showAiError]);
 
+  const copyLink = async (id: string) => {
+    await navigator.clipboard.writeText(id);
+    alert("Länk kopierad");
+  };
+
   return (
     <div className="flex w-full ">
-      <SideNav>
-        <SidebarItem
-          icon={<UserCircle size={20} />}
-          text="Home"
-          to="/chat"
-          end
-        />
-        <SidebarItem
-          icon={<UserCircle size={20} />}
-          text="Profile"
-          to="/profile"
-          end
-        />
-        <div className="mt-11">
-          {" "}
+      {conversations.length <= 0 && (
+        <SideNav>
           <SidebarItem
-            icon={<LogOut size={20} />}
-            text="Log Out"
-            onClick={logout}
+            icon={<UserCircle size={20} />}
+            text="Home"
+            to="/chat"
+            end
           />
-        </div>
-      </SideNav>
+          <SidebarItem
+            icon={<UserCircle size={20} />}
+            text="Profile"
+            to="/profile"
+            end
+          />
+          <div className="mt-11">
+            <SidebarItem
+              icon={<UserCircle size={20} />}
+              text="Log Out"
+              onClick={logout}
+            />
+          </div>
+        </SideNav>
+      )}
+
       <div className=" grid min-h-dvh  place-items-start justify-center   w-full mt-11 2xl:mt-32">
         {" "}
         {conversations.length <= 0 && (
@@ -211,9 +220,27 @@ const ChatContainer = () => {
         <main className="flex-1  p-4  w-full">
           {conversations.length > 0 && (
             <>
-              {" "}
-              <div className="relative inline-block">
-                <span className="text-sm sm:text-lg md:text-2xl text-start absolute -top-3 left-0 md:-top-2 md:left-1 text-[#BE9C3D]">
+              <div className="fixed top-0 left-0 px-5 my-5 flex gap-5">
+                {" "}
+                <Button
+                  variant="subtle"
+                  size="lg"
+                  onClick={() => navigate("/profile")}
+                  className="text-white border border-[#BE9C3D] px-2"
+                >
+                  Go Back
+                </Button>
+                <Button
+                  variant="subtle"
+                  size="lg"
+                  onClick={() => copyLink(activeId)}
+                  className="text-white border border-[#BE9C3D] px-2"
+                >
+                  Copy Link
+                </Button>
+              </div>
+              <div className="relative inline-block mt-20">
+                <span className="text-sm sm:text-lg md:text-2xl text-start absolute -top-5 left-0 md:-top-2 md:left-1 text-[#BE9C3D]">
                   {" "}
                   {peerName ? peerName : "waiting for other user..."}
                 </span>
@@ -224,7 +251,7 @@ const ChatContainer = () => {
                   pinClass={pinClass || "text-green-500 "}
                   glow={glow}
                 />{" "}
-                <span className="text-sm sm:text-lg md:text-2xl absolute bottom-9 md:bottom-11 right-11 md:-right-1 md:left-36 text-[#BE9C3D]">
+                <span className="text-sm sm:text-lg md:text-2xl absolute bottom-11 md:bottom-11 right-11 md:-right-1 md:left-36 text-[#BE9C3D]">
                   {user?.user}
                 </span>
               </div>

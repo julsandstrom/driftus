@@ -16,6 +16,8 @@ import { fieldConfig } from "../../auth/constants/registerFieldConfig";
 import { Button } from "../../../shared/components/Button";
 import { useAvatarPreview } from "../../../shared/context/AvatarPreviewContext";
 import * as Sentry from "@sentry/react";
+import { useConversations } from "../../../shared/context/ConversationsContext";
+
 type Form = {
   id: string;
   username: string;
@@ -32,7 +34,7 @@ const Profile = () => {
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
 
   const { setPreview } = useAvatarPreview();
-
+  const { conversations } = useConversations();
   const [form, setForm] = useState<Form>({
     id: user?.id ?? "",
     username: user?.user ?? "",
@@ -134,12 +136,14 @@ const Profile = () => {
       <div className="flex h-screen fixed left-0 top-0 ml-[width]">
         {" "}
         <SideNav>
-          <SidebarItem
-            icon={<UserCircle size={20} />}
-            text="Home"
-            to="/chat"
-            end
-          />
+          {conversations.length <= 0 && (
+            <SidebarItem
+              icon={<UserCircle size={20} />}
+              text="Home"
+              to="/chat"
+              end
+            />
+          )}
           <SidebarItem
             icon={<BarChart3 size={20} />}
             text="Profile"
