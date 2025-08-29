@@ -22,7 +22,6 @@ const ChatContainer = () => {
     sendMessage,
     peerName,
     inputError,
-
     setIsFocused,
     flashKind,
     flashText,
@@ -289,7 +288,7 @@ const ChatContainer = () => {
                     </div>
                   )}
                   {inputError && (
-                    <div className=" flex justify-start items-end">
+                    <div className=" flex justify-start items-end mb-11">
                       {" "}
                       <span>
                         {" "}

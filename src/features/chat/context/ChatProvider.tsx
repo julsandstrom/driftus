@@ -92,7 +92,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   }, [activeId]);
 
   useEffect(() => {
-    if (conversations.length <= 0) return;
+    if (conversations.length <= 0 || !activeId) return;
 
     const interval = setInterval(() => {
       fetchMessages();
@@ -104,8 +104,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       clearInterval(interval);
       clearTimeout(timeout);
+      console.log("clearing interval");
     };
-  }, [conversations, fetchMessages]);
+  }, [conversations, activeId, fetchMessages]);
 
   useEffect(() => {
     if (!activeId) {

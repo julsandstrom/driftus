@@ -33,9 +33,7 @@ const InputField = ({
     <>
       <div className="flex flex-col justify-between">
         {" "}
-        {errorMessages && <p className="text-red-600">{errorMessages}</p>}{" "}
         <div className="flex">
-          {" "}
           {Icon && <Icon />}
           {label && (
             <label htmlFor={name} className="text-xs md:text-xl font-medium">

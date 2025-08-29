@@ -16,7 +16,7 @@ export function StatusBar({
       : "text-slate-800 ";
   return (
     <div
-      className={`text-xs md:text-xl flex justify-start md:justify-center items-end ${cls}p-2 text-center `}
+      className={`text-xs md:text-xl flex justify-start pb-11 md:pb-0 md:justify-center items-end ${cls}p-2 text-center `}
     >
       <span>
         {" "}
