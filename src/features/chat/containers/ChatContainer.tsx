@@ -150,7 +150,7 @@ const ChatContainer = () => {
   }, [showAiError]);
 
   return (
-    <div className="flex w-full">
+    <div className="flex w-full ">
       <SideNav>
         <SidebarItem
           icon={<UserCircle size={20} />}
@@ -173,7 +173,7 @@ const ChatContainer = () => {
           />
         </div>
       </SideNav>
-      <div className=" grid min-h-dvh  place-items-start justify-center  w-full mt-11 2xl:mt-32">
+      <div className=" grid min-h-dvh  place-items-start justify-center   w-full mt-11 2xl:mt-32">
         {" "}
         {conversations.length <= 0 && (
           <>
@@ -209,7 +209,7 @@ const ChatContainer = () => {
             </main>
           </>
         )}
-        <main className="flex-1  p-4 w-full">
+        <main className="flex-1  p-4  w-full">
           {conversations.length > 0 && (
             <>
               {" "}
@@ -230,7 +230,7 @@ const ChatContainer = () => {
                 </span>
               </div>
               <div className="relative min-h-[100svh] pb-[calc(72px+env(safe-area-inset-bottom,0px)+12px)]  md:pb-0">
-                <div className="flex-row">
+                <div className="flex-row max-w-[180px] md:max-w-none">
                   {lastTheirs && (
                     <>
                       {sentiment !== "" && (

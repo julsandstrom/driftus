@@ -33,7 +33,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
     <>
       {expanded ? (
         <li
-          className={`w-full rounded-xl h-24  text-[#1A1A1A]  list-none flex flex-col items-start ${
+          className={`w-full rounded-xl h-24 pr-2  text-[#1A1A1A]  list-none flex flex-col items-start ${
             isActive ? "bg-[#BE9C3D]  text-[#1A1A1A] " : ""
           }`}
         >
@@ -62,7 +62,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                   <Copy
                     aria-hidden="true"
                     focusable="false"
-                    className="lg:w-9 lg:h-9"
+                    className="lg:w-10 lg:h-10"
                   />
                 </Button>
 
@@ -85,7 +85,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                     <Trash2Icon
                       aria-hidden="true"
                       focusable="false"
-                      className=" lg:w-8 lg:h-8"
+                      className="w-7 h-7 md:w-10 lg:h-10"
                     />
                   </Button>
                 )}
@@ -116,7 +116,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                   <Copy
                     aria-hidden="true"
                     focusable="false"
-                    className="lg:w-9 lg:h-9"
+                    className="lg:w-10 lg:h-10"
                   />
                 </Button>
                 {onDelete && (
@@ -136,7 +136,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                     <Trash2Icon
                       aria-hidden="true"
                       focusable="false"
-                      className="w-8 h-8"
+                      className="w-7 h-7 md:w-10 lg:h-10"
                     />
                   </Button>
                 )}

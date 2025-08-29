@@ -30,7 +30,7 @@ export default function Composer({
   return (
     <form
       onSubmit={onSend}
-      className="fixed  inset-x-0 bottom-10 z-50 h-[72px] md:h-auto md:static md:z-auto
+      className="fixed  inset-x-0 bottom-12 z-50 h-[72px] md:h-auto md:static md:z-auto
              border-t border-zinc-800 md:border-none bg-[#1A1A1A]/95 backdrop-blur
              [padding-bottom:calc(env(safe-area-inset-bottom,0px)+0.25rem)] "
     >
@@ -41,7 +41,7 @@ export default function Composer({
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder="Try writing something"
-            classname="w-[200px]  h-9 text-base sm:w-[400px]  md:w-[300px] lg:w-[460px] md:h-[42px]  lg:h-[50px] "
+            classname="w-[230px] h-9 text-xs sm:w-[400px]  md:w-[300px] lg:w-[460px] md:h-[42px]  lg:h-[50px] "
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />
