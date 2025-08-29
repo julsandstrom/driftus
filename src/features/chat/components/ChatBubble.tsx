@@ -20,7 +20,7 @@ export default function ChatBubble({
     <div
       className={`relative mb-11 flex justify-center ${
         isRight ? "ml-auto text-zinc-900 mr-11" : "mr-auto"
-      }  w-[300px] md:w-[320px] aspect-[309/200] `}
+      }  w-[200px] sm:w-[250px] md:w-[320px] 2xl:w-[400px] aspect-[309/200] `}
     >
       <div className="relative z-20 px-11 py-10 md:px-12 md:py-9  w-[300px] md:w-[320px] aspect-[309/148] flex justify-center items-center ">
         <p
@@ -46,7 +46,7 @@ export default function ChatBubble({
               fill="#D7D7D7"
             />
           </svg>{" "}
-          <div className="absolute left-5 -bottom-1 ">
+          <div className="absolute left-2 -bottom-4 md:left-5 md:-bottom-1 ">
             <Pin className={pinClassName} glow={glow} />
           </div>
         </>

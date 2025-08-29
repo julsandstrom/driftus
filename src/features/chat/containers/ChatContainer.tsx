@@ -9,7 +9,7 @@ import { useConversations } from "../../../shared/context/ConversationsContext";
 import type { Message } from "../../../shared/types";
 import { useMemo, useState, useEffect } from "react";
 
-import logoUrl from "../../../assets/DriftusLogo.svg";
+// import logoUrl from "../../../assets/DriftusLogo.svg";
 import { Button } from "../../../shared/components/Button";
 import MessagePair from "../components/MessagePair";
 import Composer from "../components/Composer";
@@ -37,7 +37,8 @@ const ChatContainer = () => {
   const [showAiError, setShowAiError] = useState(false);
   const [glow, setGlow] = useState(false);
 
-  const { conversations, activeId } = useConversations();
+  const { conversations, activeId, createConversation, joinById } =
+    useConversations();
 
   const { logout, user } = useAuth();
 
@@ -142,25 +143,59 @@ const ChatContainer = () => {
       <SideNav>
         <SidebarItem
           icon={<UserCircle size={20} />}
+          text="Home"
+          to="/chat"
+          end
+        />
+        <SidebarItem
+          icon={<UserCircle size={20} />}
           text="Profile"
           to="/profile"
           end
-        />{" "}
-        <SidebarItem
-          icon={<LogOut size={20} />}
-          text="Log Out"
-          onClick={logout}
         />
+        <div className="mt-11">
+          {" "}
+          <SidebarItem
+            icon={<LogOut size={20} />}
+            text="Log Out"
+            onClick={logout}
+          />
+        </div>
       </SideNav>
-      <div className=" grid min-h-dvh place-items-center justify-center w-full">
+      <div className=" grid min-h-dvh place-items-start justify-center  w-full mt-11 2xl:mt-32">
         {" "}
         {conversations.length <= 0 && (
           <>
-            <img
-              src={logoUrl}
-              alt="DriftUs - Feel the message."
-              className=" w-[min(90vw,720px)] h-fit  self-start"
-            />
+            <main className="flex flex-col gap-28 pl-3 mt-3 justify-end self-center">
+              <div className="flex flex-col items-start">
+                <span className="text-sm sm:text-2xl md:text-3xl">
+                  Start by creating a conversation
+                </span>
+                <Button
+                  variant="default"
+                  size="lg"
+                  onClick={() => createConversation()}
+                  className="bg-none border border-[#BE9C3D] text-white text-xs sm:text-lg w-28 sm:w-48 sm:h-16  shadow-md hover:shadow-lg  mt-5 self-center"
+                >
+                  New Conversation
+                </Button>
+              </div>
+              <div className="flex flex-col items-start">
+                {" "}
+                <span className="text-sm sm:text-2xl md:text-3xl">
+                  {" "}
+                  Do you already have an ID?
+                </span>
+                <Button
+                  variant="default"
+                  size="lg"
+                  onClick={() => joinById()}
+                  className="bg-none border border-[#BE9C3D] text-white text-xs sm:text-lg w-28 sm:w-40 sm:h-16  mt-5 self-center"
+                >
+                  Join by ID
+                </Button>
+              </div>
+            </main>
           </>
         )}
         <main className="flex-1 p-4 w-full">
@@ -168,7 +203,7 @@ const ChatContainer = () => {
             <>
               {" "}
               <div className="relative inline-block">
-                <span className="text-2xl text-start absolute -top-2 left-1 text-[#BE9C3D]">
+                <span className="text-sm sm:text-lg md:text-2xl text-start absolute -top-3 left-0 md:-top-2 md:left-1 text-[#BE9C3D]">
                   {" "}
                   {peerName ? peerName : "waiting for other user..."}
                 </span>
@@ -179,7 +214,7 @@ const ChatContainer = () => {
                   pinClass={pinClass || "text-green-500 "}
                   glow={glow}
                 />{" "}
-                <span className="text-2xl absolute bottom-11 -right-1 left-36 text-[#BE9C3D]">
+                <span className="text-sm sm:text-lg md:text-2xl absolute bottom-9 md:bottom-11 right-11 md:-right-1 md:left-36 text-[#BE9C3D]">
                   {user?.user}
                 </span>
               </div>
@@ -213,7 +248,7 @@ const ChatContainer = () => {
             {lastTheirs && (
               <>
                 {sentiment !== "" && (
-                  <div className=" flex justify-center items-start  mb-5">
+                  <div className=" flex justify-start items-start  my-5">
                     <div
                       className={`w-3 h-3 rounded-full  ${moodColor(
                         sentiment,
@@ -226,8 +261,8 @@ const ChatContainer = () => {
                         energy
                       )}`}
                     />
-                    <span className="text-sm opacity-80 font-thin text-center">
-                      {moodLabel(sentiment, energy)}
+                    <span className="text-sm opacity-80 font-thin text-center self-end">
+                      {moodLabel(sentiment, energy)}Critical
                     </span>
                   </div>
                 )}
@@ -237,7 +272,7 @@ const ChatContainer = () => {
                       variant="subtle"
                       size="md"
                       key={i}
-                      className=" bg-white p-3"
+                      className=" bg-white p-3 text-xs md:text-lg"
                       onClick={() => setNewMessage(t)}
                     >
                       {t}
@@ -254,8 +289,8 @@ const ChatContainer = () => {
                   {" "}
                   <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
                 </span>
-                <p id="ai error" role="alert">
-                  AI Suggestions is currently not available.
+                <p id="ai error" role="alert" className="text-xs md:text-lg">
+                  AI found no message to analyze...
                 </p>
               </>
             )}

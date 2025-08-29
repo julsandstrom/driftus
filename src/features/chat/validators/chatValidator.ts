@@ -3,7 +3,7 @@ import type { ValidatorRule } from "../../../shared/types/ValidatorRule";
 export const ValidatorRules: ValidatorRule[] = [
   {
     fn: (input) => input.trim().length > 0,
-    error: "Empty message not allowed",
+    error: "Empty messages are not allowed",
   },
   {
     fn: (input) => input.length < 40,

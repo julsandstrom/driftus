@@ -135,25 +135,28 @@ const Profile = () => {
         {" "}
         <SideNav>
           <SidebarItem
+            icon={<UserCircle size={20} />}
+            text="Home"
+            to="/chat"
+            end
+          />
+          <SidebarItem
             icon={<BarChart3 size={20} />}
             text="Profile"
             to="/profile"
             end
-          />{" "}
-          <SidebarItem
-            icon={<UserCircle size={20} />}
-            text="Log Out"
-            onClick={logout}
           />
+          <div className="mt-11">
+            <SidebarItem
+              icon={<UserCircle size={20} />}
+              text="Log Out"
+              onClick={logout}
+            />
+          </div>
         </SideNav>{" "}
       </div>
-      <main className="flex flex-col w-full justify-center items-center">
-        <img
-          src={logoUrl}
-          alt="DriftUs — Feel the message."
-          className="block mx-auto w-[min(90vw,720px)]"
-        />
-        <form className="flex flex-col mx-auto gap-8 justify-center items-center mt-11">
+      <main className="flex flex-col justify-end items-center gap-16 pt-24 pl-28 md:pl-24  w-full">
+        <form className="flex flex-col mx-auto gap-8 justify-center items-center">
           {fieldConfig.map((field) => (
             <InputField
               key={field.name}
@@ -169,7 +172,7 @@ const Profile = () => {
             />
           ))}
         </form>
-        <div className="flex gap-11 mt-8">
+        <div className="flex text-xs sm:text-lg gap-11 flex-col md:text-lg">
           <Button onClick={handleSubmit} variant="primary" size="md">
             Save Changes
           </Button>

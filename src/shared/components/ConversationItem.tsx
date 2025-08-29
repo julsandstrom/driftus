@@ -1,5 +1,5 @@
 import type { Conversation } from "../context/ConversationsContext";
-import { Trash2Icon } from "lucide-react";
+import { Trash2Icon, Copy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useConversations } from "../context/ConversationsContext";
 import { Button } from "./Button";
@@ -33,7 +33,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
     <>
       {expanded ? (
         <li
-          className={`w-full rounded-xl h-14  text-[#1A1A1A] pr-4 mb-2 list-none flex justify-between ${
+          className={`w-full rounded-xl h-14  text-[#1A1A1A] p-3 mb-2 list-none flex justify-between ${
             isActive ? "bg-[#BE9C3D]  text-[#1A1A1A] " : ""
           }`}
         >
@@ -43,7 +43,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                 variant={`${!isActive ? "ghost" : "subtle"}`}
                 size="md"
                 onClick={select}
-                className={`w-full text-left rounded-xl h-11 flex justify-center mr-2 place-self-center
+                className={`w-full text-left text-xs sm:text-base rounded-xl h-11 flex justify-center mr-2 place-self-center
                 }`}
                 title={conv.id}
               >
@@ -56,9 +56,16 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                 size="md"
                 onClick={() => copyLink(conv.id)}
                 className="w-full text-left rounded-xl "
+                aria-label={`Copy conversation Link`}
+                title="Copy Link"
               >
-                Copy Link
+                <Copy
+                  aria-hidden="true"
+                  focusable="false"
+                  className="lg:w-8 lg:h-8"
+                />
               </Button>
+
               {onDelete && (
                 <Button
                   variant="destructiveIcon"
@@ -78,7 +85,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                   <Trash2Icon
                     aria-hidden="true"
                     focusable="false"
-                    className="w-8 h-8"
+                    className=" lg:w-8 lg:h-8"
                   />
                 </Button>
               )}

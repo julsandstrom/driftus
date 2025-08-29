@@ -43,7 +43,7 @@ export default function Composer({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Try writing something"
-        classname="w-[310px] h-[50px] "
+        classname="md:w-[200px] lg:w-[310px] md:h-[42px]  lg:h-[50px] "
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       />
@@ -52,24 +52,27 @@ export default function Composer({
         type="submit"
         variant="primary"
         size="md"
-        className="h-[50px]"
+        className="md:h-[42px]   lg:h-[50px]"
         disabled={sendingStatus}
       >
         {sendingStatus ? "Sending" : "Send"}
       </Button>
       <Button
-        variant="primary"
+        variant="ghost"
         size="md"
         onClick={() => {
           if (aiLoading || aiTipRecieved) return;
           onSuggest?.();
           setAiTipRecieved(true);
         }}
-        className=" h-[50px]"
+        className="md:h-[42px]   lg:h-[50px] border border-[#BE9C3D] px-3 py-2"
         disabled={aiLoading || aiTipRecieved}
       >
-        {" "}
-        {aiLoading ? "Analyzing message..." : "AI Suggestions"}
+        {aiLoading ? (
+          "..."
+        ) : (
+          <MainIcon className="h-5 w-5 text-[#BE9C3D]" title="AI suggestions" />
+        )}
       </Button>
 
       {inputError && (
@@ -79,7 +82,7 @@ export default function Composer({
             {" "}
             <MainIcon className={`h-9 w-9 pb-1 text-red-600`} />{" "}
           </span>
-          <p id="chat error" role="alert" className="  mr-48">
+          <p id="chat error" role="alert" className=" text-xs md:text-lg ">
             {inputError}
           </p>
         </div>

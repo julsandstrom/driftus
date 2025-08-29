@@ -9,8 +9,8 @@ type Props = {
 
 export default function MessagePair({ theirs, mine, pinClass, glow }: Props) {
   return (
-    <ul className="flex flex-col gap-11 justify-center items-center">
-      <li className="mr-96 ">
+    <ul className="flex flex-col gap-14 justify-center items-start">
+      <li className="">
         <ChatBubble
           text={theirs}
           side="left"
