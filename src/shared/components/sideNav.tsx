@@ -34,7 +34,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
         <aside
           className={`
         h-full md:h-full shrink-0 
-        transition-[width] duration-200 pr-4 bg-[#1a1a1a]
+        transition-[width] duration-200 pr-4 bg-none
         ${expanded ? "w-36 sm:w-44 md:w-52 lg:w-64 2xl:w-80" : "w-16"}
         h-11
       `}

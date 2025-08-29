@@ -173,7 +173,7 @@ const ChatContainer = () => {
           />
         </div>
       </SideNav>
-      <div className=" grid min-h-dvh place-items-start justify-center  w-full mt-11 2xl:mt-32">
+      <div className=" grid min-h-dvh  place-items-start justify-center  w-full mt-11 2xl:mt-32">
         {" "}
         {conversations.length <= 0 && (
           <>
@@ -248,7 +248,7 @@ const ChatContainer = () => {
                             )}`}
                           />
                           <span className="text-sm opacity-80 font-thin text-center self-end">
-                            {moodLabel(sentiment, energy)}Critical
+                            {moodLabel(sentiment, energy)}
                           </span>
                         </div>
                       )}

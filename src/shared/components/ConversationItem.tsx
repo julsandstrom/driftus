@@ -33,7 +33,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
     <>
       {expanded ? (
         <li
-          className={`w-full rounded-xl h-14  text-[#1A1A1A] p-3 mb-2 list-none flex justify-between ${
+          className={`w-full rounded-xl h-24  text-[#1A1A1A]  list-none flex flex-col items-start ${
             isActive ? "bg-[#BE9C3D]  text-[#1A1A1A] " : ""
           }`}
         >
@@ -50,45 +50,46 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                 {" "}
                 {conv.title}
               </Button>
-
-              <Button
-                variant={`${!isActive ? "ghost" : "subtle"}`}
-                size="md"
-                onClick={() => copyLink(conv.id)}
-                className="w-full text-left rounded-xl "
-                aria-label={`Copy conversation Link`}
-                title="Copy Link"
-              >
-                <Copy
-                  aria-hidden="true"
-                  focusable="false"
-                  className="lg:w-8 lg:h-8"
-                />
-              </Button>
-
-              {onDelete && (
+              <div className="flex  justify-center items-center self-center">
                 <Button
-                  variant="destructiveIcon"
-                  size="icon"
-                  aria-label={`Delete conversation${
-                    conv.title ? ` "${conv.title}"` : ""
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDelete(conv.id);
-                  }}
-                  title="Delete"
-                  className={`bg-none ${
-                    !isActive ? "ghost text-white" : "subtle"
-                  }`}
+                  variant={`${!isActive ? "ghost" : "subtle"}`}
+                  size="md"
+                  onClick={() => copyLink(conv.id)}
+                  className="w-full text-left rounded-xl "
+                  aria-label={`Copy conversation Link`}
+                  title="Copy Link"
                 >
-                  <Trash2Icon
+                  <Copy
                     aria-hidden="true"
                     focusable="false"
-                    className=" lg:w-8 lg:h-8"
+                    className="lg:w-9 lg:h-9"
                   />
                 </Button>
-              )}
+
+                {onDelete && (
+                  <Button
+                    variant="destructiveIcon"
+                    size="icon"
+                    aria-label={`Delete conversation${
+                      conv.title ? ` "${conv.title}"` : ""
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(conv.id);
+                    }}
+                    title="Delete"
+                    className={`bg-none ${
+                      !isActive ? "ghost text-white" : "subtle"
+                    }`}
+                  >
+                    <Trash2Icon
+                      aria-hidden="true"
+                      focusable="false"
+                      className=" lg:w-8 lg:h-8"
+                    />
+                  </Button>
+                )}
+              </div>
             </>
           ) : (
             <>
@@ -105,35 +106,41 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                 {conv.title}
               </Button>
 
-              <Button
-                variant="subtle"
-                size="md"
-                onClick={() => copyLink(conv.id)}
-                className=" rounded-xl text-center w-[60px]"
-              >
-                Copy Link
-              </Button>
-              {onDelete && (
+              <div className="flex  md:gap-11 justify-center items-center self-center ">
                 <Button
-                  variant="destructiveIcon"
-                  size="icon"
-                  aria-label={`Delete conversation${
-                    conv.title ? ` "${conv.title}"` : ""
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDelete(conv.id);
-                  }}
-                  title="Delete"
-                  className="bg-none "
+                  variant="subtle"
+                  size="md"
+                  onClick={() => copyLink(conv.id)}
+                  className=" rounded-xl text-center w-[60px]"
                 >
-                  <Trash2Icon
+                  <Copy
                     aria-hidden="true"
                     focusable="false"
-                    className="w-8 h-8"
+                    className="lg:w-9 lg:h-9"
                   />
                 </Button>
-              )}
+                {onDelete && (
+                  <Button
+                    variant="destructiveIcon"
+                    size="icon"
+                    aria-label={`Delete conversation${
+                      conv.title ? ` "${conv.title}"` : ""
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(conv.id);
+                    }}
+                    title="Delete"
+                    className="bg-none "
+                  >
+                    <Trash2Icon
+                      aria-hidden="true"
+                      focusable="false"
+                      className="w-8 h-8"
+                    />
+                  </Button>
+                )}
+              </div>
             </>
           )}
         </li>

@@ -30,7 +30,7 @@ export default function Composer({
   return (
     <form
       onSubmit={onSend}
-      className="fixed  inset-x-0 bottom-0 z-50 h-[72px] md:h-auto md:static md:z-auto
+      className="fixed  inset-x-0 bottom-10 z-50 h-[72px] md:h-auto md:static md:z-auto
              border-t border-zinc-800 md:border-none bg-[#1A1A1A]/95 backdrop-blur
              [padding-bottom:calc(env(safe-area-inset-bottom,0px)+0.25rem)] "
     >
