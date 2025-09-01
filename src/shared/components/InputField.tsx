@@ -33,20 +33,26 @@ const InputField = ({
     <>
       <div className="flex flex-col justify-between">
         {" "}
-        <div className="flex">
+        <div className="flex justify-start">
           {Icon && <Icon />}
-          {label && (
-            <label htmlFor={name} className="text-xs md:text-xl font-medium">
+          {!errorMessages && (
+            <label
+              htmlFor={name}
+              className="ml-1 text-xs md:text-xl font-medium self-end"
+            >
               {label}
             </label>
           )}{" "}
+          <span className="text-red-600 text-xs md:text-xl self-end">
+            {errorMessages}
+          </span>
         </div>
         <input
           type={type}
           name={name}
           value={value}
           onChange={onChange}
-          placeholder={!errorMessages ? placeholder : `${errorMessages}`}
+          placeholder={placeholder}
           className={`${classname} bg-white text-black font-thin  rounded-lg px-2 text-xl leading-none shadow-sm ring-1 ring-zing-300 placeholder:text-black-400 transition focus:outline-none focus:ring-2 focus: ring-green-500/95`}
           autoComplete={autoComplete}
           onFocus={onFocus}

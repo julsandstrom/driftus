@@ -33,7 +33,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
     <>
       {expanded ? (
         <li
-          className={`w-full rounded-xl h-12 pr-2  text-[#1A1A1A]  list-none flex  items-start ${
+          className={`w-full rounded-xl h-20  px-2  text-[#1A1A1A]  list-none flex flex-col  items-start lg:flex-row lg:items-center lg:h-20 lg:px-4 transition-all duration-1500 ease-out  hover:scale-105 ${
             isActive ? "bg-[#BE9C3D]  text-[#1A1A1A] " : ""
           }`}
         >
@@ -50,7 +50,7 @@ function ConversationItem({ conv, onDelete, expanded }: Props) {
                 {" "}
                 {conv.title}
               </Button>
-              <div className="flex  justify-center items-center self-center">
+              <div className="flex  justify-center items-center self-center lg:gap-5">
                 <Button
                   variant={`${!isActive ? "ghost" : "subtle"}`}
                   size="md"

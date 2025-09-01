@@ -43,7 +43,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
             <img
               src={logo}
               alt="DriftUs — Feel the message."
-              className="h-[50px] sm:h-[60px] p-2 sm:mt-2 md:w-[150px] "
+              className="h-[50px] sm:h-[60px] p-2 sm:mt-2 md:w-[150px] lg:w-[200px]"
             />
 
             <div className="p-4 pb-2 flex justify-between items-center ">
